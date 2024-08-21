@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('imagens/cadastro.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+ }
+
+ header {
+   background-color: white;
+   position: relative;
+}
+
+nav {
+   position: absolute;
+   top: 10px;
+   left: 23px;
+}
+
+.back {
+   text-decoration: none;
+   font-size: 60px;
+   color: black;
+}
+
+ .container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+ }
+ h1 {
+    color: #ff8c00;
+    margin-bottom: 20px;
+ }
+ .login-social {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+ }
+ .botao-social {
+    background: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    font-size: 18px;
+    color: #555;
+    cursor: pointer;
+ }
+ form {
+    display: flex;
+    flex-direction: column;
+ }
+ form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+ }
+ form button {
+    padding: 10px;
+    background-color: #ff8c00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+ }
+ form button:hover {
+    background-color: #e07a00;
+ }
+ 
