@@ -7,34 +7,50 @@
     <link rel="stylesheet" href="css/cadastro.css">
 </head>
 <body>
-    <header class="top-bar">
-        <nav>
-            <a href="/" class="back-button">&#8249;</a>
-        </nav>
-        <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
-    </header>
-    <section class="container">
-        <header>
-            <h2>Cadastro</h2>
-        </header>
-        <section class="social-login">
-            <a href="#"><img src="imagens/google.png" alt="Google" class="google"></a>
-            <a href="#"><img src="imagens/facebook.png" alt="Facebook" class="facebook"></a>
-            <a href="#"><img src="imagens/linkedin.png" alt="LinkedIn" class="Linkedin"></a>
-        </section>
-        <p>ou use seu email para registro</p>
-        <form>
-            <input type="text" placeholder="Nome completo" required>
-            <input type="email" placeholder="nome@gmail.com" required>
-            <input type="password" placeholder="Senha" required>
-            <input type="password" placeholder="Confirmar senha" required>
-            <a href="/cadastro2">
-            <button type="submit">Avançar</button>
-        </a>
+
+    <div class="container">
+
+        <div class="header">
+            <h2>Criar conta</h2>
+        </div>
+
+        <form class="form" id="form">
+
+            <div class="form-control">
+                <label for="username">Nome</label>
+                <input type="text" id="username">
+
+                <small>Error message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="email">Email</label>
+                <input type="email" id="email">
+
+                <small>Error message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="password">Senha</label>
+                <input type="password" id="password">
+
+                <small>Error message</small>
+            </div>
+
+            <div class="form-control">
+                <label for="passwordtwo">Confirme sua senha</label>
+                <input type="password" id="passwordtwo">
+
+                <small>Error message</small>
+            </div>
+
+            <button type="submit">enviar</button>
+
         </form>
-        <footer class="footer">
-            <p>Já tem uma conta? <a href="#">Login</a></p>
-        </footer>
-    </section>
+
+    </div>
+
+    <script src="js/cadastro.js"></script>
+    
 </body>
 </html>
