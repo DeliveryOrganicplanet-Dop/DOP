@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOP - Endereço</title>
-    <link rel="stylesheet" href="css/cadatro2.css">
+    <link rel="stylesheet" href="css/cadastro2.css">
 </head>
 <body>
     <header>
@@ -12,21 +12,33 @@
         <p>DELIVERY ORGANIC PLANT</p>
     </header>
     <main>
-        <form action="#">
+        <form id="form" action="#">
             <label for="cep">CEP</label>
-            <input type="text" id="cep" name="cep">
+            <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+            <small>Error message</small>
+
             <label for="endereco">Endereço</label>
-            <input type="text" id="endereco" name="endereco">
+            <input type="text" id="endereco" name="endereco" required>
+            <small>Error message</small>
+
             <label for="numero">Número</label>
-            <input type="text" id="numero" name="numero">
+            <input type="text" id="numero" name="numero" required>
+            <small>Error message</small>
+
             <label for="cidade">Cidade</label>
-            <input type="text" id="cidade" name="cidade">
+            <input type="text" id="cidade" name="cidade" required>
+            <small>Error message</small>
+
             <label for="bairro">Bairro</label>
-            <input type="text" id="bairro" name="bairro">
+            <input type="text" id="bairro" name="bairro" required>
+            <small>Error message</small>
+
             <label for="complemento">Complemento (opcional)</label>
             <input type="text" id="complemento" name="complemento">
+
             <button type="submit">Criar</button>
         </form>
     </main>
+    <script src="js/cadastro2.js"></script>
 </body>
 </html>

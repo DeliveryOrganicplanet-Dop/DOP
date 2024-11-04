@@ -55,3 +55,15 @@ body {
  button:hover {
     background-color: darkorange;
  }
+ .error {
+   border: 1px solid red;
+}
+
+.success {
+   border: 1px solid green;
+}
+
+small {
+   color: red;
+   font-size: 0.8em;
+}
