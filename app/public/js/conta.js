@@ -2,16 +2,19 @@ window.onload = function() {
     const userData = JSON.parse(localStorage.getItem('userData'));
 
     if (userData) {
-        document.getElementById('nome').innerText = userData.username;
-        document.getElementById('email').innerText = userData.email;
-        document.getElementById('endereco').innerText = userData.endereco;
-        document.getElementById('cidade').innerText = userData.cidade;
-        document.getElementById('bairro').innerText = userData.bairro;
-        document.getElementById('complemento').innerText = userData.complemento;
+        document.getElementById('username').textContent = userData.username;
+        document.getElementById('email').textContent = userData.email;
+        document.getElementById('endereco').textContent = userData.endereco || 'Não informado';
+        document.getElementById('numero').textContent = userData.numero || 'Não informado';
+        document.getElementById('cidade').textContent = userData.cidade || 'Não informado';
+        document.getElementById('bairro').textContent = userData.bairro || 'Não informado';
+        document.getElementById('complemento').textContent = userData.complemento || 'Não informado';
+    } else {
+        window.location.href = '/cadastro'; // Se não houver dados, redireciona de volta para o cadastro
     }
-};
+}
 
 function logout() {
-    localStorage.clear();
-    window.location.href = 'index.html';  // Redirecionar para a página inicial ou login
+    localStorage.removeItem('userData');
+    window.location.href = '/cadastro'; // Redireciona para a página de login ou cadastro
 }

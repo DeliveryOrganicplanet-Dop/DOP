@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DOP</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <section class="container">
+        <section class="header">
+            <h2>Login</h2>
+        </section>
+
+        <form id="login-form">
+
+            <section class="form-control">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Digite seu email" required>
+                <small>Error message</small>
+            </section>
+
+            <section class="form-control">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+                <small>Error message</small>
+            </section>
+
+            <button type="submit">Entrar</button>
+
+            <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+
+        </form>
+    </section>
+
+    <script src="js/login.js"></script>
+
+</body>
+</html>

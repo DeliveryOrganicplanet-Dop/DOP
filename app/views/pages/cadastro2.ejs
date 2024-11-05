@@ -3,45 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOP - Endereço</title>
+    <title>Cadastro - Endereço</title>
     <link rel="stylesheet" href="css/cadastro2.css">
 </head>
 <body>
     <header>
-        <h1>DOP</h1>
-        <p>DELIVERY ORGANIC PLANT</p>
+        <h1>DOP - Endereço</h1>
     </header>
+
     <main>
-        <span id="message"></span> <!-- Mensagem geral de erro -->
-        <form id="form" action="#">
+        <form id="form">
             <label for="cep">CEP</label>
             <input type="text" id="cep" name="cep" placeholder="00000-000" required>
-            <small id="cep-error">Error message</small> <!-- Mensagem de erro do CEP -->
+            <small>Error message</small>
 
             <label for="endereco">Endereço</label>
             <input type="text" id="endereco" name="endereco" required>
-            <small id="endereco-error">Error message</small> <!-- Mensagem de erro do Endereço -->
-
-            
-
-            <label for="cidade">Cidade</label>
-            <input type="text" id="cidade" name="cidade" required>
-            <small id="cidade-error">Error message</small> <!-- Mensagem de erro da Cidade -->
-
-            <label for="bairro">Bairro</label>
-            <input type="text" id="bairro" name="bairro" required>
-            <small id="bairro-error">Error message</small> <!-- Mensagem de erro do Bairro -->
+            <small>Error message</small>
 
             <label for="numero">Número</label>
             <input type="text" id="numero" name="numero" required>
-            <small id="numero-error">Error message</small> <!-- Mensagem de erro do Número -->
+            <small>Error message</small>
+
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" required>
+            <small>Error message</small>
+
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" required>
+            <small>Error message</small>
 
             <label for="complemento">Complemento (opcional)</label>
             <input type="text" id="complemento" name="complemento">
 
-            <button type="submit">Criar</button>
+            <button type="submit">Finalizar Cadastro</button>
         </form>
     </main>
+
     <script src="js/cadastro2.js"></script>
 </body>
 </html>

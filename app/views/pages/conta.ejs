@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Conta - DOP</title>
+    <title>Minha Conta</title>
     <link rel="stylesheet" href="css/conta.css">
 </head>
 <body>
-
     <header>
-        <h1>DOP</h1>
-        <p>DELIVERY ORGANIC PLANT</p>
+        <h1>Minha Conta</h1>
     </header>
 
     <main>
-        <h2>Informações da Conta</h2>
-        
         <div id="userInfo">
-            <p><strong>Nome:</strong> <span id="nome"></span></p>
+            <h2>Informações Pessoais</h2>
+            <p><strong>Nome:</strong> <span id="username"></span></p>
             <p><strong>Email:</strong> <span id="email"></span></p>
+            
+            <h2>Endereço</h2>
             <p><strong>Endereço:</strong> <span id="endereco"></span></p>
+            <p><strong>Número:</strong> <span id="numero"></span></p>
             <p><strong>Cidade:</strong> <span id="cidade"></span></p>
             <p><strong>Bairro:</strong> <span id="bairro"></span></p>
             <p><strong>Complemento:</strong> <span id="complemento"></span></p>
         </div>
 
-        <button onclick="logout()">Sair</button>
+        <button onclick="logout()">Logout</button>
     </main>
 
     <script src="js/conta.js"></script>
-
 </body>
 </html>

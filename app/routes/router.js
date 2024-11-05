@@ -2,11 +2,11 @@ var express = require("express");
 var router = express.Router();
 
 
-router.get("/", function (req, res) {
- res.render("pages/index")
-});
+   router.get("/", function (req, res) {
+   res.render("pages/index")
+   });
 
-router.get("/calendario", function (req, res) {
+   router.get("/calendario", function (req, res) {
     res.render("pages/calendario")
    });
 
@@ -64,6 +64,10 @@ router.get("/calendario", function (req, res) {
 
    router.get("/conta", function (req, res) {
     res.render("pages/conta")
+   });
+
+   router.get("/login", function (req, res) {
+    res.render("pages/login")
    });
 
 
