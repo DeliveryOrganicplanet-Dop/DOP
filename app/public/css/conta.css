@@ -1,0 +1,115 @@
+/* Reset de estilos padrões */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+header p {
+    font-size: 1.2em;
+    margin-top: 0.5em;
+}
+
+/* Main Content */
+main {
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título da página de conta */
+h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* Container para as informações do usuário */
+#userInfo {
+    margin-top: 20px;
+}
+
+#userInfo p {
+    font-size: 1.2em;
+    margin: 15px 0;
+}
+
+#userInfo strong {
+    font-weight: bold;
+    color: #555;
+}
+
+#userInfo span {
+    color: #666;
+}
+
+/* Botão de logout */
+button {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 30px;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+
+/* Responsividade */
+@media screen and (max-width: 600px) {
+    main {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 2em;
+    }
+
+    header p {
+        font-size: 1em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    #userInfo p {
+        font-size: 1em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+}

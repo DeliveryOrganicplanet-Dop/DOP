@@ -62,6 +62,11 @@ router.get("/calendario", function (req, res) {
     res.render("pages/finalizar")
    });
 
+   router.get("/conta", function (req, res) {
+    res.render("pages/conta")
+   });
+
+
 // router.post("???", function (req, res) {
 
 

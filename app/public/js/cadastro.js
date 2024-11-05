@@ -17,21 +17,25 @@ function checkInputs() {
 
     let isValid = true;
 
-    // Username validation
+    // Validação dos campos
     isValid &= validateField(username, usernameValue, 'Preencha esse campo');
-
-    // Email validation
     isValid &= validateEmail(email, emailValue);
-
-    // Password validation
     isValid &= validatePassword(password, passwordValue);
-
-    // Confirm password validation
     isValid &= validateConfirmPassword(passwordtwo, passwordtwoValue, passwordValue);
 
     if (isValid) {
-        // Redirecionar para outra página
-        window.location.href = '/cadastro2'; // Substitua pelo URL desejado
+        // Se os dados forem válidos, salvar no localStorage
+        const userPersonalData = {
+            username: usernameValue,
+            email: emailValue,
+            password: passwordValue
+        };
+
+        // Salva os dados no localStorage
+        localStorage.setItem('userPersonalData', JSON.stringify(userPersonalData));
+
+        // Redireciona para o formulário de endereço
+        window.location.href = '/cadastro2'; // Ajuste para o caminho correto
     }
 }
 
