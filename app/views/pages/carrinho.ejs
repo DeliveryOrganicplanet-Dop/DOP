@@ -9,48 +9,28 @@
 <body>
     <header class="top-bar">
         <a href="/">
-        <span class="back-icon">&#10094;</span>
-    </a>
+            <span class="back-icon">&#10094;</span>
+        </a>
         <h1 class="logo">Meu Carrinho</h1>
     </header>
+
     <main class="carrinho-container">
         <section class="itens-carrinho">
             <h2>Itens no Carrinho</h2>
-            <article class="produto">
-                <figure>
-                    <img src="imagens/brocolis.png" alt="Brócolis ninja">
-                    <figcaption>Brócolis Ninja</figcaption>
-                </figure>
-                <header class="produto-header">
-                    <h3>Brócolis Ninja</h3>
-                    <p>R$ 9,70 <span class="unidade">Unidade 250g</span></p>
-                </header>
-                <footer class="produto-footer">
-                    <input type="number" value="1" class="quantidade">
-                    <button class="btn-remover">Remover</button>
-                </footer>
-            </article>
-            <article class="produto">
-                <figure>
-                    <img src="imagens/abacaxi.png" alt="Abacaxi Pérola">
-                    <figcaption>Abacaxi Pérola</figcaption>
-                </figure>
-                <header class="produto-header">
-                    <h3>Abacaxi Pérola</h3>
-                    <p>R$ 9,85 <span class="unidade">1kg cada</span></p>
-                </header>
-                <footer class="produto-footer">
-                    <input type="number" value="1" class="quantidade">
-                    <button class="btn-remover">Remover</button>
-                </footer>
-            </article>
+            <!-- Mensagem exibida quando o carrinho está vazio -->
+            <p id="mensagem-carrinho-vazio">Seu carrinho está vazio.</p>
+            <!-- Lista de itens no carrinho, adicionados dinamicamente -->
+            <div id="lista-carrinho"></div>
         </section>
+
         <aside class="resumo-compra">
             <h2>Resumo da Compra</h2>
-            <p>Total de itens: 2</p>
-            <p>Total: R$ 19,55</p>
-            <button class="btn-finalizar">Finalizar Compra</button>
+            <p id="total-itens">Total de itens: 0</p>
+            <p id="total-preco">Total: R$ 0,00</p>
+            <button class="btn-finalizar" disabled>Finalizar Compra</button>
         </aside>
     </main>
+
+    <script src="js/carrinho.js"></script>
 </body>
 </html>

@@ -5,55 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produto - DOP</title>
     <link rel="stylesheet" href="css/broscolis.css">
+    <script src="js/brocolis.js" defer></script> <!-- Arquivo JS externo -->
 </head>
 <body>
     <header class="top-bar">
         <a href="/" class="back">
-        <span class="back-icon">&#10094;</span>
-    </a>
+            <span class="back-icon">&#10094;</span>
+        </a>
         <h1 class="logo">DOP</h1>
     </header>
     <section class="produto-container">
         <img src="imagens/brocolis.png" alt="Brócolis ninja" class="produto-img">
         <h2>Brócolis ninja</h2>
         <p class="preco">R$ 9,70 <span class="unidade">Unidade 250g</span></p>
-        <a href="/brocolisf">
-        <button class="btn-carrinho">Adicionar no carrinho</button>
-    </a>
+        <!-- Botão para adicionar ao carrinho -->
+        <button class="btn-carrinho" onclick="adicionarAoCarrinho()">Adicionar no carrinho</button>
     </section>
+    
     <section class="peca-tambem">
         <h3>Peça também</h3>
         <ul class="produtos-sugeridos">
             <li>
                 <a href="/abacaxi" class="abacaxi-button">
-                <img src="imagens/abacaxi.png" alt="Abacaxi">
-                <p class="offer-price">R$ 9,85</p>
-                <p class="offer-name">Abacaxi Pérola<br>1,00kg cada</p>
-            </a>
+                    <img src="imagens/abacaxi.png" alt="Abacaxi">
+                    <p class="offer-price">R$ 9,85</p>
+                    <p class="offer-name">Abacaxi Pérola<br>1,00kg cada</p>
+                </a>
             </li>
             <li>
                 <a href="/ameixa" class="ameixa-button">
-                <img src="imagens/ameixa.png" alt="Ameixa">
-                <p class="offer-price">R$ 2,99</p>
-                <p class="offer-name">Ameixa importada unidade 150g</p>
-            </a>
+                    <img src="imagens/ameixa.png" alt="Ameixa">
+                    <p class="offer-price">R$ 2,99</p>
+                    <p class="offer-name">Ameixa importada unidade 150g</p>
+                </a>
             </li>
             <li>
                 <a href="/alface" class="alface-button">
-                <img src="imagens/alface.png" alt="Alface">
-                <p class="offer-price">R$ 2,99</p>
-                <p class="offer-name">Alface crespa<br>a unidade</p>
-            </a>
+                    <img src="imagens/alface.png" alt="Alface">
+                    <p class="offer-price">R$ 2,99</p>
+                    <p class="offer-name">Alface crespa<br>a unidade</p>
+                </a>
             </li>
         </ul>
     </section>
+
     <section class="vendedor-info">
         <h4>Vendedor</h4>
         <p>Cleuson<br><a href="#">Ver perfil</a></p>
-        <div class="vendedor-detalhes">
-            <p><img src="location-icon.png" alt="Localização"> Barueri - São Paulo</p>
-            <p><img src="clock-icon.png" alt="Na DOP desde"> Na DOP desde 2024</p>
-        </div>
+        <p><img src="location-icon.png" alt="Localização"> Barueri - São Paulo</p>
+        <p><img src="clock-icon.png" alt="Na DOP desde"> Na DOP desde 2024</p>
         <a href="#" class="denunciar-link">Denunciar item</a>
     </section>
 </body>

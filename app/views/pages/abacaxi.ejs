@@ -9,41 +9,40 @@
 <body>
     <header class="top-bar">
         <a href="/" class="back">
-        <span class="back-icon">&#10094;</span>
-    </a>
+            <span class="back-icon">&#10094;</span>
+        </a>
         <h1 class="logo">DOP</h1>
     </header>
     <section class="produto-container">
         <img src="imagens/abacaxi.png" alt="Abacaxi Perola" class="produto-img">
         <h2>Abacaxi Perola</h2>
         <p class="preco">R$ 9,85 <span class="unidade">Unidade 250g</span></p>
-        <a href="/abacaxif">
-        <button class="btn-carrinho">Adicionar no carrinho</button>
-    </a>
+        <!-- Botão para adicionar ao carrinho -->
+        <button class="btn-carrinho" onclick="adicionarProduto('Abacaxi Perola', 9.85, 'imagens/abacaxi.png')">Adicionar no carrinho</button>
     </section>
     <section class="peca-tambem">
         <h3>Peça também</h3>
         <ul class="produtos-sugeridos">
             <li>
                 <a href="/ameixa" class="ameixa-button">
-                <img src="imagens/ameixa.png" alt="Ameixa">
-                <p class="offer-price">R$ 2,99</p>
-                <p class="offer-name">Ameixa importada unidade 150g</p>
-            </a>
+                    <img src="imagens/ameixa.png" alt="Ameixa">
+                    <p class="offer-price">R$ 2,99</p>
+                    <p class="offer-name">Ameixa importada unidade 150g</p>
+                </a>
             </li>
             <li>
                 <a href="/Brocolis" class="brocolis-button">
-                <img src="imagens/brocolis.png" alt="Brócolis">
-                <p class="offer-price">R$ 9,70</p>
-                <p class="offer-name">Brócolis ninja<br>unidade 250g</p>
-            </a>
+                    <img src="imagens/brocolis.png" alt="Brócolis">
+                    <p class="offer-price">R$ 9,70</p>
+                    <p class="offer-name">Brócolis ninja<br>unidade 250g</p>
+                </a>
             </li>
             <li>
                 <a href="/alface" class="alface-button">
-                <img src="imagens/alface.png" alt="Alface">
-                <p class="offer-price">R$ 2,99</p>
-                <p class="offer-name">Alface crespa<br>a unidade</p>
-            </a>
+                    <img src="imagens/alface.png" alt="Alface">
+                    <p class="offer-price">R$ 2,99</p>
+                    <p class="offer-name">Alface crespa<br>a unidade</p>
+                </a>
             </li>
         </ul>
     </section>
@@ -56,5 +55,8 @@
         </div>
         <a href="#" class="denunciar-link">Denunciar item</a>
     </section>
+
+    <!-- Inclusão do arquivo JS -->
+    <script src="js/abacaxi.js"></script>
 </body>
 </html>
