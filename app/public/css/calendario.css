@@ -1,3 +1,4 @@
+/* Resetando margens e padding */
 body, html { 
     margin: 0; 
     padding: 0; 
@@ -5,43 +6,49 @@ body, html {
     background-color: #ffffff; 
 } 
 
+/* Estilo do header */
 header { 
     text-align: center;
     padding: 20px 0; 
     position: relative; 
 } 
 
+/* Navegação */
 nav { 
     position: absolute; 
     top: 10px; 
     left: 23px; 
 } 
 
+/* Estilo do botão de voltar */
 .back-button { 
     text-decoration: none; 
     font-size: 60px; 
     color: black; 
-    
 } 
 
+/* Estilo do logo */
 .logo { 
     width: 112px; 
     height: auto;
     margin: -11px; 
 } 
 
+/* Estilo do banner */
 .banner { 
     position: relative; 
     text-align: center;
     color: white; 
 } 
 
+/* Imagem do banner */
 .banner-img { 
     max-width: 1700px;
     width: 100%; 
     height: auto; 
 } 
 
+/* Títulos do banner */
 .banner h1 { 
     position: absolute; 
     top: 10%; 
@@ -60,35 +67,41 @@ nav {
     margin: auto; 
 } 
 
+/* Estilo do conteúdo principal */
 main { 
-    padding: 20px; 
+    padding: 40px 20px; 
     text-align: center; 
 } 
 
+/* Estilo do título principal */
 main h3 {
     font-family: Georgia, 'Times New Roman', Times, serif; 
-    font-size: 28px;
+    font-size: 32px;
     color: #333333; 
     margin-bottom: 30px; 
 } 
 
+/* Imagem do produto */
 .broccoli-img { 
     width: 100%; 
     height: auto; 
     max-width: 600px; 
 } 
 
+/* Estilo do texto no main */
 main p { 
-    font-size: 16px; 
+    font-size: 18px; 
     color: #555555; 
     margin: 15px 0; 
 } 
 
+/* Estilo do rodapé */
 footer { 
     text-align: center; 
-    margin-top: 20px; 
+    margin-top: 40px; 
 } 
 
+/* Estilo do botão de compra */
 .buy-button { 
     display: inline-block; 
     background-color: #FFA500; 
@@ -96,6 +109,111 @@ footer {
     padding: 15px 30px; 
     text-decoration: none; 
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 20px;
     margin: auto; 
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    /* Ajustes para telas maiores (computadores de médio porte) */
+    .banner h1 {
+        font-size: 28px;
+        transform: translate(40%, -20%);
+    }
+
+    .banner h2 {
+        font-size: 22px;
+        transform: translate(55%, -10%);
+    }
+
+    main h3 {
+        font-size: 30px;
+    }
+
+    .buy-button {
+        font-size: 18px;
+        padding: 12px 25px;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Ajustes para telas de tablets grandes ou computadores pequenos */
+    main {
+        padding: 30px 20px;
+    }
+
+    .banner h1 {
+        font-size: 24px;
+        transform: translate(40%, -20%);
+    }
+
+    .banner h2 {
+        font-size: 20px;
+        transform: translate(55%, -10%);
+    }
+
+    main h3 {
+        font-size: 28px;
+    }
+
+    .buy-button {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustes para telas de tablets ou dispositivos móveis grandes */
+    .banner h1 {
+        font-size: 20px;
+        transform: translate(40%, -10%);
+    }
+
+    .banner h2 {
+        font-size: 18px;
+        transform: translate(50%, -10%);
+    }
+
+    main h3 {
+        font-size: 24px;
+    }
+
+    .broccoli-img {
+        max-width: 80%;
+    }
+
+    .buy-button {
+        font-size: 16px;
+        padding: 12px 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para smartphones */
+    header {
+        padding: 15px 0;
+    }
+
+    .banner h1 {
+        font-size: 18px;
+        transform: translate(30%, -10%);
+    }
+
+    .banner h2 {
+        font-size: 16px;
+        transform: translate(40%, -10%);
+    }
+
+    main h3 {
+        font-size: 20px;
+    }
+
+    .broccoli-img {
+        max-width: 90%;
+    }
+
+    .buy-button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
 }
