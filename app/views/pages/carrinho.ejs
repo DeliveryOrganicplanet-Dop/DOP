@@ -17,17 +17,15 @@
     <main class="carrinho-container">
         <section class="itens-carrinho">
             <h2>Itens no Carrinho</h2>
-            <!-- Mensagem exibida quando o carrinho está vazio -->
             <p id="mensagem-carrinho-vazio">Seu carrinho está vazio.</p>
-            <!-- Lista de itens no carrinho, adicionados dinamicamente -->
-            <div id="lista-carrinho"></div>
+            <section id="lista-carrinho"></section>
         </section>
 
         <aside class="resumo-compra">
             <h2>Resumo da Compra</h2>
             <p id="total-itens">Total de itens: 0</p>
             <p id="total-preco">Total: R$ 0,00</p>
-            <button class="btn-finalizar" disabled>Finalizar Compra</button>
+            <button class="btn-finalizar" id="btn-finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
         </aside>
     </main>
 

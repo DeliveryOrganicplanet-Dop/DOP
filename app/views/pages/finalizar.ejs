@@ -1,64 +1,26 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finalizar Compra</title>
-<link rel="stylesheet" href="css/finalizar.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra Finalizada</title>
+    <link rel="stylesheet" href="css/finalizar.css">
 </head>
 <body>
-<header>
-<h1>Finalizar Compra</h1>
-</header>
-<main>
-<section>
-<h2>Formas de Pagamento</h2>
-<form action="#">
-<!-- Opções de pagamento -->
-<label for="pagamento-cartao">
-<input type="radio" id="pagamento-cartao" name="forma-pagamento" value="cartao" checked>
-                   Cartão de Crédito
-</label>
-<label for="pagamento-pix">
-<input type="radio" id="pagamento-pix" name="forma-pagamento" value="pix">
-                   PIX
-</label>
-<label for="pagamento-entrega">
-<input type="radio" id="pagamento-entrega" name="forma-pagamento" value="entrega">
-                   Pagar na Entrega
-</label>
-<!-- Detalhes do pagamento com cartão -->
-<section id="detalhes-cartao">
-<h3>Informações do Cartão</h3>
-<label for="nome-cartao">Nome no Cartão</label>
-<input type="text" id="nome-cartao" name="nome-cartao" required>
-<label for="numero-cartao">Número do Cartão</label>
-<input type="text" id="numero-cartao" name="numero-cartao" required>
-<label for="validade">Data de Validade (MM/AA)</label>
-<input type="text" id="validade" name="validade" required>
-<label for="cvv">CVV</label>
-<input type="text" id="cvv" name="cvv" required>
-<label for="parcelas">Número de Parcelas</label>
-<select id="parcelas" name="parcelas">
-<option value="1">1x sem juros</option>
-<option value="3">3x sem juros</option>
-<option value="6">6x sem juros</option>
-<option value="12">12x sem juros</option>
-</select>
-</section>
-<!-- Botão de finalização -->
-<button type="submit">Finalizar Compra</button>
-</form>
-</section>
-<!-- Resumo do pedido -->
-<section>
-<h2>Resumo do Pedido</h2>
-<p>Produto: <strong>Nome do Produto</strong></p>
-<p>Quantidade: <strong>1</strong></p>
-<p>Preço: <strong>R$ 100,00</strong></p>
-<p>Frete: <strong>R$ 20,00</strong></p>
-<p><strong>Total: R$ 120,00</strong></p>
-</section>
-</main>
+    <header class="top-bar">
+        <a href="/" class="back">
+            <span class="back-icon">&#10094;</span>
+        </a>
+        <h1 class="logo">Compra Finalizada</h1>
+    </header>
+
+    <main class="finalizacao-compra">
+        <h2>Obrigado pela sua compra!</h2>
+        <p>Seu pedido foi finalizado com sucesso.</p>
+        <p id="detalhes-compra"></p>
+        <a href="/" class="btn-voltar">Voltar para a loja</a>
+    </main>
+
+    <script src="js/finalizar.js"></script>
 </body>
 </html>

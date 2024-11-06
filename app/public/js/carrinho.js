@@ -3,65 +3,17 @@ function formatarPreco(preco) {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
 }
 
-// Função para adicionar um produto ao carrinho
-function adicionarProduto(nome, preco, imagem) {
-    // Recupera o carrinho do localStorage ou cria um array vazio
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-
-    // Verifica se o produto já está no carrinho
-    const itemExistente = carrinho.find(item => item.nome === nome);
-
-    if (itemExistente) {
-        itemExistente.quantidade += 1;
-    } else {
-        carrinho.push({ nome, preco, imagem, quantidade: 1 });
-    }
-
-    // Atualiza o carrinho no localStorage
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-    // Atualiza o carrinho na tela
-    atualizarCarrinho();
-}
-
-// Função para remover um item do carrinho
-function removerItem(nome) {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-
-    // Filtra o item a ser removido
-    carrinho = carrinho.filter(item => item.nome !== nome);
-
-    // Atualiza o carrinho no localStorage
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-    // Atualiza o carrinho na tela
-    atualizarCarrinho();
-}
-
-// Função para atualizar a quantidade de um item
-function atualizarQuantidade(nome, quantidade) {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-
-    // Encontra o item no carrinho e atualiza a quantidade
-    const item = carrinho.find(item => item.nome === nome);
-    if (item) {
-        item.quantidade = parseInt(quantidade);
-        localStorage.setItem('carrinho', JSON.stringify(carrinho));
-        atualizarCarrinho();
-    }
-}
+// Recupera o carrinho do localStorage ou cria um array vazio
+let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 
 // Função para atualizar o carrinho na tela
 function atualizarCarrinho() {
     const listaCarrinho = document.getElementById('lista-carrinho');
     const mensagemCarrinhoVazio = document.getElementById('mensagem-carrinho-vazio');
-    const btnFinalizar = document.querySelector('.btn-finalizar');
+    const btnFinalizar = document.getElementById('btn-finalizar');
 
     // Limpa o conteúdo atual da lista do carrinho
     listaCarrinho.innerHTML = '';
-
-    // Recupera o carrinho do localStorage
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 
     // Se o carrinho estiver vazio, exibe a mensagem de carrinho vazio e desabilita o botão
     if (carrinho.length === 0) {
@@ -97,7 +49,9 @@ function atualizarCarrinho() {
                 <p>${formatarPreco(item.preco)} <span class="unidade">Unidade</span></p>
             </header>
             <footer class="produto-footer">
-                <input type="number" value="${item.quantidade}" min="1" class="quantidade" onchange="atualizarQuantidade('${item.nome}', this.value)">
+                <button class="btn-quantidade" onclick="alterarQuantidade('${item.nome}', -1)">-</button>
+                <span class="quantidade">${item.quantidade}</span>
+                <button class="btn-quantidade" onclick="alterarQuantidade('${item.nome}', 1)">+</button>
                 <button class="btn-remover" onclick="removerItem('${item.nome}')">Remover</button>
             </footer>
         `;
@@ -107,7 +61,71 @@ function atualizarCarrinho() {
     // Atualiza o resumo do carrinho
     document.getElementById('total-itens').textContent = `Total de itens: ${totalItens}`;
     document.getElementById('total-preco').textContent = `Total: ${formatarPreco(totalPreco)}`;
+
+    // Salva o carrinho no localStorage após a atualização
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
 }
 
-// Inicializa o carrinho vazio ao carregar
+// Função para alterar a quantidade de um item (com os botões + e -)
+function alterarQuantidade(nome, delta) {
+    const item = carrinho.find(item => item.nome === nome);
+    if (item) {
+        item.quantidade += delta;
+        if (item.quantidade < 1) {
+            item.quantidade = 1;  // Garante que a quantidade não seja menor que 1
+        }
+        atualizarCarrinho();
+    }
+}
+
+// Função para remover um item do carrinho
+function removerItem(nome) {
+    carrinho = carrinho.filter(item => item.nome !== nome);
+    atualizarCarrinho();
+}
+
+// Função para adicionar um produto ao carrinho
+function adicionarProduto(nome, preco, imagem) {
+    const produtoExistente = carrinho.find(item => item.nome === nome);
+    if (produtoExistente) {
+        produtoExistente.quantidade += 1;
+    } else {
+        carrinho.push({
+            nome: nome,
+            preco: preco,
+            imagem: imagem,
+            quantidade: 1
+        });
+    }
+    atualizarCarrinho();
+}
+
+// Função para finalizar a compra
+function finalizarCompra() {
+    // Verifica se o carrinho está vazio
+    if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
+        return;
+    }
+
+    // Simulação de pagamento com sucesso
+    alert("Compra finalizada com sucesso! Obrigado pela sua compra.");
+
+    // Salva os detalhes da compra no localStorage (opcional)
+    const detalhesCompra = {
+        itens: carrinho,
+        totalItens: carrinho.reduce((acc, item) => acc + item.quantidade, 0),
+        totalPreco: carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0)
+    };
+    localStorage.setItem('detalhesCompra', JSON.stringify(detalhesCompra));
+
+    // Limpa o carrinho e o localStorage após a compra
+    carrinho = [];
+    localStorage.removeItem('carrinho');
+
+    // Redireciona para a página de sucesso (finalizar-compra.html)
+    window.location.href = '/finalizar';
+}
+
+// Inicializa o carrinho
 atualizarCarrinho();
