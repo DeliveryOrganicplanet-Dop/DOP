@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport"content="width=device-width, initial-scale=1.0"> 
-    <title>Delivery Organic Plant</title> 
-    <link rel="stylesheet"href="css/dop.css"> 
-</head> 
-<body> 
-    <!-- Cabeçalho --> 
-    <header> 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Organic Plant</title>
+    <link rel="stylesheet" href="css/dop.css">
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
         <nav>
             <ul class="nav-list">
                 <li><a href="/">Inicio</a></li>
-                <li><a href="/cadlog">Conta</a></li>
+                <!-- O link de conta será modificado dinamicamente via JS -->
+                <li><a href="#" id="btn-conta">Conta</a></li>
                 <li><a href="/calendario">Calendario</a></li>
-                <li><a href="/carrinho">carrinho</a></li>
+                <li><a href="/carrinho">Carrinho</a></li>
             </ul>
             <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
             <div class="mobile-menu">
@@ -22,63 +23,65 @@
                 <div class="line2"></div>
                 <div class="line3"></div>
             </div>  
-        </nav> 
-    </header> 
+        </nav>
+    </header>
     
-    <!-- Conteúdo Principal --> 
-    <main> 
-        <!-- Banner --> 
-        <section class="banner"> 
-            <section class="banner-text"> 
+    <!-- Conteúdo Principal -->
+    <main>
+        <!-- Banner -->
+        <section class="banner">
+            <section class="banner-text">
                 <h2>COMPRA<br>E VENDA<br>ALIMENTOS<br>ORGÂNICOS</h2> <br>
-                <a href="#" class="banner-button">Saiba mais →</a> 
-            </section> 
-            <figure> 
+                <a href="#" class="banner-button">Saiba mais →</a>
+            </section>
+            <figure>
                 <img src="imagens/path-to-image.png" class="img-responsiva" alt="Descrição da Imagem">
-            </figure> 
-        </section> 
-        <!-- Ofertas do Dia --> 
-        <section class="daily-offers"> 
-            <h2>Ofertas do dia</h2> 
-            <section class="offers-grid"> 
+            </figure>
+        </section>
+        <!-- Ofertas do Dia -->
+        <section class="daily-offers">
+            <h2>Ofertas do dia</h2>
+            <section class="offers-grid">
+                <!-- Cards de produtos -->
                 <article class="offer-card">
-                    <a href="/Brocolis" class="brocolis-button"> 
-                    <img src="imagens/brocolis.png" class ="img-responsiva">  
+                    <a href="/Brocolis" class="brocolis-button">
+                    <img src="imagens/brocolis.png" class="img-responsiva">  
                     <p class="offer-price">R$ 9,70</p> 
                     <p class="offer-name">Brócolis ninja<br>unidade 250g</p>
-                </a> 
-                </article> 
+                    </a> 
+                </article>
                 <article class="offer-card">
                     <a href="/ameixa" class="ameixa-button"> 
-                    <img src="imagens/ameixa.png" class ="img-responsiva"> 
-                    <p class="offer-price">R$ 2,99</p> 
-                    <p class="offer-name">Ameixa importada<br>unidade 150g</p> 
-                </a>
-                </article> 
+                    <img src="imagens/ameixa.png" class="img-responsiva"> 
+                    <p class="offer-price">R$ 2,99</p>
+                    <p class="offer-name">Ameixa importada<br>unidade 150g</p>
+                    </a>
+                </article>
                 <article class="offer-card">
                     <a href="/abacaxi" class="abacaxi-button"> 
-                    <img src="imagens/abacaxi.png" class ="img-responsiva"> 
-                    <p class="offer-price">R$ 9,85</p> 
+                    <img src="imagens/abacaxi.png" class="img-responsiva"> 
+                    <p class="offer-price">R$ 9,85</p>
                     <p class="offer-name">Abacaxi Pérola<br>1,00kg cada</p>
                     </a> 
-                </article> 
+                </article>
                 <article class="offer-card">
                     <a href="/alface" class="alface-button"> 
-                    <img src="imagens/alface.png" class ="img-responsiva"> 
-                    <p class="offer-price">R$ 2,99</p> 
+                    <img src="imagens/alface.png" class="img-responsiva"> 
+                    <p class="offer-price">R$ 2,99</p>
                     <p class="offer-name">Alface crespa<br>a unidade</p>
                     </a> 
-                </article> 
-            </section> 
-            <a href="#"class="see-more">Ver mais</a> 
-        </section> 
-    </main> 
+                </article>
+            </section>
+            <a href="#" class="see-more">Ver mais</a>
+        </section>
+    </main>
     
-    <!-- Rodapé --> 
-    <footer> 
-        <p>&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p> 
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
     </footer>
 
     <script src="js/mobile-navbar.js"></script>
-</body> 
+    <script src="js/inicio.js"></script> <!-- Novo script -->
+</body>
 </html>
