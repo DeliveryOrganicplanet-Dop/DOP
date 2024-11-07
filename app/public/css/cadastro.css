@@ -112,6 +112,25 @@ body {
     transition: 0.3s;
 }
 
+.password-requirements {
+    display: none;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.password-requirements .requirement {
+    color: #999;
+}
+
+.password-requirements .valid {
+    color: green;
+}
+
+
 /* Responsividade */
 @media (max-width: 768px) {
     .container {

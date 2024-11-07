@@ -8,48 +8,48 @@
 </head>
 <body>
 
-
-    <section class="container">
-        <section class="header">
-            <h2>Cadastro</h2>
-        </section>
-
-        <form class="form" id="form">
-
-            <section class="form-control">
-                <label for="username">Nome</label>
-                <input type="text" id="username" placeholder="Nome">
-
-                <small>Error message</small>
-            </section>
-
-            <section class="form-control">
-                <label for="email">Email</label>
-                <input type="email" id="email">
-
-                <small>Error message</small>
-            </section>
-
-            <section class="form-control">
-                <label for="password">Senha</label>
-                <input type="password" id="password">
-
-                <small>Error message</small>
-            </section>
-
-            <section class="form-control">
-                <label for="passwordtwo">Confirme sua senha</label>
-                <input type="password" id="passwordtwo">
-
-                <small>Error message</small>
-            </section>
-
-            <button type="submit">Criar Conta</button>
-
-        </form>
+<section class="container">
+    <section class="header">
+        <h2>Cadastro</h2>
     </section>
 
-    <script src="js/cadastro.js"></script>
-    
+    <form class="form" id="form">
+        <section class="form-control">
+            <label for="username">Nome</label>
+            <input type="text" id="username" placeholder="Nome">
+            <small>Error message</small>
+        </section>
+
+        <section class="form-control">
+            <label for="email">Email</label>
+            <input type="email" id="email">
+            <small>Error message</small>
+        </section>
+
+        <section class="form-control">
+            <label for="password">Senha</label>
+            <input type="password" id="password" onfocus="mostrarRequisitos()" onblur="esconderRequisitos()" oninput="validarSenha()">
+            <small>Error message</small>
+            
+            <!-- Caixa de Requisitos da Senha -->
+            <div id="password-requirements" class="password-requirements">
+                <p class="requirement" id="length">✔ 8 caracteres no mínimo</p>
+                <p class="requirement" id="uppercase">✔ Pelo menos uma letra maiúscula</p>
+                <p class="requirement" id="special">✔ Pelo menos um caractere especial</p>
+            </div>
+        </section>
+
+        <section class="form-control">
+            <label for="passwordtwo">Confirme sua senha</label>
+            <input type="password" id="passwordtwo">
+            <small>Error message</small>
+        </section>
+
+        <button type="submit">Criar Conta</button>
+    </form>
+</section>
+
+<script src="js/cadastro.js"></script>
+
 </body>
 </html>

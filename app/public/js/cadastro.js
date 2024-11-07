@@ -106,3 +106,41 @@ function successValidation(input) {
     const formControl = input.parentElement;
     formControl.className = 'form-control success';
 }
+
+// Funções para mostrar e esconder a caixa de requisitos
+function mostrarRequisitos() {
+    document.getElementById('password-requirements').style.display = 'block';
+}
+
+function esconderRequisitos() {
+    document.getElementById('password-requirements').style.display = 'none';
+}
+
+// Função para validar a senha e atualizar os requisitos
+function validarSenha() {
+    const password = document.getElementById('password').value;
+    const lengthRequirement = document.getElementById('length');
+    const uppercaseRequirement = document.getElementById('uppercase');
+    const specialRequirement = document.getElementById('special');
+
+    // Verifica se a senha tem pelo menos 8 caracteres
+    if (password.length >= 8) {
+        lengthRequirement.classList.add('valid');
+    } else {
+        lengthRequirement.classList.remove('valid');
+    }
+
+    // Verifica se a senha tem pelo menos uma letra maiúscula
+    if (/[A-Z]/.test(password)) {
+        uppercaseRequirement.classList.add('valid');
+    } else {
+        uppercaseRequirement.classList.remove('valid');
+    }
+
+    // Verifica se a senha tem pelo menos um caractere especial
+    if (/[\W_]/.test(password)) {
+        specialRequirement.classList.add('valid');
+    } else {
+        specialRequirement.classList.remove('valid');
+    }
+}
