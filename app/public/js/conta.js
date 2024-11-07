@@ -10,11 +10,17 @@ window.onload = function() {
         document.getElementById('bairro').textContent = userData.bairro || 'Não informado';
         document.getElementById('complemento').textContent = userData.complemento || 'Não informado';
     } else {
-        window.location.href = '/cadastro'; // Se não houver dados, redireciona de volta para o cadastro
+        // Se o usuário não estiver logado, redireciona para a página de cadastro/login
+        window.location.href = '/cadastro'; // Ou outra página de login/cadastro
     }
-}
 
-function logout() {
-    localStorage.removeItem('userData');
-    window.location.href = '/cadastro'; // Redireciona para a página de login ou cadastro
+    // Função para voltar à página inicial
+    document.getElementById('backButton').addEventListener('click', function() {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            // Se estiver logado, mantém os dados no localStorage
+            localStorage.setItem('userData', JSON.stringify(userData));
+        }
+        window.location.href = '/'; // Volta para a página inicial
+    });
 }

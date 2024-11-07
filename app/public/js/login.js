@@ -39,8 +39,10 @@ function login(email, password) {
     const storedUser = JSON.parse(localStorage.getItem('userData'));
 
     if (storedUser) {
+        // Verifica se as credenciais inseridas correspondem às armazenadas
         if (storedUser.email === email && storedUser.password === password) {
             // Login bem-sucedido
+            alert('Login bem-sucedido!');
             window.location.href = '/conta'; // Redireciona para a página de conta
         } else {
             // Erro: credenciais inválidas
@@ -52,8 +54,16 @@ function login(email, password) {
 }
 
 function showError(message) {
-    const formControl = document.querySelector('.form-control.error');
-    const small = formControl.querySelector('small');
-    small.innerText = message;
-    formControl.className = 'form-control error';
+    const errorMessage = document.querySelector('.error-message');
+    
+    // Se ainda não houver uma mensagem de erro, cria uma nova
+    if (!errorMessage) {
+        const small = document.createElement('small');
+        small.classList.add('error-message');
+        small.innerText = message;
+        form.appendChild(small);
+    } else {
+        // Se já houver uma mensagem de erro, atualiza o texto
+        errorMessage.innerText = message;
+    }
 }

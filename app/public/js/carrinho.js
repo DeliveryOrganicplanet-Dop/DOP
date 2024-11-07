@@ -108,23 +108,30 @@ function finalizarCompra() {
         return;
     }
 
-    // Simulação de pagamento com sucesso
-    alert("Compra finalizada com sucesso! Obrigado pela sua compra.");
+    // Verifica se o usuário está logado
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+        // Simulação de pagamento com sucesso
+        alert("Compra finalizada com sucesso! Obrigado pela sua compra.");
 
-    // Salva os detalhes da compra no localStorage (opcional)
-    const detalhesCompra = {
-        itens: carrinho,
-        totalItens: carrinho.reduce((acc, item) => acc + item.quantidade, 0),
-        totalPreco: carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0)
-    };
-    localStorage.setItem('detalhesCompra', JSON.stringify(detalhesCompra));
+        // Salva os detalhes da compra no localStorage (opcional)
+        const detalhesCompra = {
+            itens: carrinho,
+            totalItens: carrinho.reduce((acc, item) => acc + item.quantidade, 0),
+            totalPreco: carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0)
+        };
+        localStorage.setItem('detalhesCompra', JSON.stringify(detalhesCompra));
 
-    // Limpa o carrinho e o localStorage após a compra
-    carrinho = [];
-    localStorage.removeItem('carrinho');
+        // Limpa o carrinho e o localStorage após a compra
+        carrinho = [];
+        localStorage.removeItem('carrinho');
 
-    // Redireciona para a página de sucesso (finalizar-compra.html)
-    window.location.href = '/finalizar';
+        // Redireciona para a página de sucesso (finalizar-compra.html)
+        window.location.href = '/finalizar'; // Redireciona para a página de finalização de compra
+    } else {
+        // Usuário não está logado, redireciona para a página de login/cadastro
+        window.location.href = "/cadlog"; // Substitua com a URL real para login/cadastro
+    }
 }
 
 // Inicializa o carrinho
