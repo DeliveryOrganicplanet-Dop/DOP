@@ -24,3 +24,15 @@ window.onload = function() {
         window.location.href = '/'; // Volta para a página inicial
     });
 }
+
+// Função para voltar à página inicial mantendo o login
+function voltarPaginaInicial() {
+    window.location.href = '/';
+}
+
+// Função para deslogar e redirecionar para a página de login
+function deslogar() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    window.location.href = '/cadlog'; // Redireciona para a página de login/cadastro
+}
