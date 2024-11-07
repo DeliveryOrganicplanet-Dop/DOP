@@ -68,24 +68,39 @@ h2 {
     color: #666;
 }
 
-/* Botão de logout */
-button {
-    display: block;
-    width: 100%;
-    padding: 10px 0;
-    margin-top: 30px;
-    background-color: #FF9900;
-    color: white;
-    font-size: 1.2em;
+/* Estilização para a seção de botões */
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Estilização dos botões */
+.button-group button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50; /* Verde */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #c0392b;
+.button-group button:hover {
+    background-color: #45a049;
 }
+
+/* Estilização específica para o botão de "Deslogar" */
+.button-group button:last-child {
+    background-color: #f44336; /* Vermelho */
+}
+
+.button-group button:last-child:hover {
+    background-color: #d32f2f;
+}
+
 
 /* Responsividade */
 @media screen and (max-width: 600px) {

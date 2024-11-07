@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="css/conta.css">
 </head>
 <body>
+    <!-- Cabeçalho -->
     <header>
         <h1>Minha Conta</h1>
     </header>
 
+    <!-- Informações Pessoais e Endereço -->
     <main>
-        <div id="userInfo">
+        <section id="userInfo">
             <h2>Informações Pessoais</h2>
             <p><strong>Nome:</strong> <span id="username"></span></p>
             <p><strong>Email:</strong> <span id="email"></span></p>
@@ -23,10 +25,13 @@
             <p><strong>Cidade:</strong> <span id="cidade"></span></p>
             <p><strong>Bairro:</strong> <span id="bairro"></span></p>
             <p><strong>Complemento:</strong> <span id="complemento"></span></p>
-        </div>
+        </section>
 
-        <!-- Botão de Voltar -->
-        <button id="backButton">Voltar</button>
+        <!-- Botões de Voltar e Deslogar -->
+        <nav class="button-group">
+            <button onclick="voltarPaginaInicial()">Voltar</button>
+            <button onclick="deslogar()">Deslogar</button>
+        </nav>
     </main>
 
     <script src="js/conta.js"></script>
