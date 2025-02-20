@@ -71,10 +71,10 @@ function validateEmail(input, value) {
 
 function validatePassword(input, value) {
     if (value === '') {
-        errorValidation(input, 'Preencha esse campo');
+        errorValidation(input, '');
         return false;
     } else if (value.length < 8) {
-        errorValidation(input, 'A senha deve ter mais de 8 caracteres');
+        errorValidation(input, '');
         return false;
     } else {
         successValidation(input);
