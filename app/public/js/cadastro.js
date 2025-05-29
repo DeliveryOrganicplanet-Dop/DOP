@@ -4,7 +4,7 @@ const email = document.getElementById('email');
 const cpf = document.getElementById('cpf');
 const password = document.getElementById('password');
 const passwordtwo = document.getElementById('passwordtwo');
-const telefone = document.getElementById('telefone')
+const telefone = document.getElementById('telefone');
 
 
 form.addEventListener('submit', (e) => {
@@ -43,6 +43,7 @@ function checkInputs() {
     const passwordtwoValue = passwordtwo.value.trim();
     const telefoneValue = telefone.value.trim();
 
+
     let isValid = true;
 
     // Username validation
@@ -61,12 +62,13 @@ function checkInputs() {
 
     isValid &= validateTelefone(telefone, telefoneValue);
 
+
     if (isValid) {
         // Armazenando os dados no localStorage
         const userData = {
             username: usernameValue,
             email: emailValue,
-            cpf: cpfOculto(cpfValue),
+            cpf: cpfValue,
             password: passwordValue,  // A senha também pode ser armazenada aqui, mas tenha em mente a segurança
             telefone: telefoneValue,
         };
@@ -138,11 +140,6 @@ function isValidCPF(cpf) {
     if (resto !== parseInt(cpf.charAt(10))) return false;
 
     return true;
-}
-
-function cpfOculto(cpf) {
-    cpf = formatarCPF(cpf);
-    return '***' + cpf.substring(4);
 }
 
 function validateTelefone(input, value) {
