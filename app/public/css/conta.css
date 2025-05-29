@@ -15,7 +15,7 @@ body {
 
 /* Cabeçalho */
 header {
-    background-color: #333;
+    background-color: #FF9900;
     color: #fff;
     padding: 20px 0;
     text-align: center;
@@ -45,7 +45,7 @@ main {
 h2 {
     font-size: 2em;
     margin-bottom: 20px;
-    color: #333;
+    color: rgb(88, 88, 88);
     text-align: center;
 }
 
