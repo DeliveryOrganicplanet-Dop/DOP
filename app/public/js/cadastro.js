@@ -4,6 +4,7 @@ const email = document.getElementById('email');
 const cpf = document.getElementById('cpf');
 const password = document.getElementById('password');
 const passwordtwo = document.getElementById('passwordtwo');
+const telefone = document.getElementById('telefone')
 
 
 form.addEventListener('submit', (e) => {
@@ -24,6 +25,15 @@ cpf.addEventListener('input', () => {
         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 });
 
+telefone.addEventListener('input', () => {
+    let tel = telefone.value.replace(/\D/g, '');
+    if (tel.length > 11) tel = tel.substring(0, 11);
+
+    telefone.value = tel
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2');
+});
+
 
 function checkInputs() {
     const usernameValue = username.value.trim();
@@ -31,6 +41,7 @@ function checkInputs() {
     const cpfValue = cpf.value.trim();
     const passwordValue = password.value.trim();
     const passwordtwoValue = passwordtwo.value.trim();
+    const telefoneValue = telefone.value.trim();
 
     let isValid = true;
 
@@ -48,6 +59,8 @@ function checkInputs() {
     // Confirm password validation
     isValid &= validateConfirmPassword(passwordtwo, passwordtwoValue, passwordValue);
 
+    isValid &= validateTelefone(telefone, telefoneValue);
+
     if (isValid) {
         // Armazenando os dados no localStorage
         const userData = {
@@ -55,6 +68,7 @@ function checkInputs() {
             email: emailValue,
             cpf: cpfOculto(cpfValue),
             password: passwordValue,  // A senha também pode ser armazenada aqui, mas tenha em mente a segurança
+            telefone: telefoneValue,
         };
 
         // Salvando os dados no localStorage
@@ -129,6 +143,20 @@ function isValidCPF(cpf) {
 function cpfOculto(cpf) {
     cpf = formatarCPF(cpf);
     return '***' + cpf.substring(4);
+}
+
+function validateTelefone(input, value) {
+    const telefoneValue = value.replace(/\D/g, '');
+    if (telefoneValue === '') {
+        errorValidation(input, 'Preencha esse campo');
+        return false;
+    } else if (telefoneValue.length !== 11) {
+        errorValidation(input, 'Telefone inválido');
+        return false;
+    } else {
+        successValidation(input);
+        return true;
+    }
 }
 
 function validatePassword(input, value) {
