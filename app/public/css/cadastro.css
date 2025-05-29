@@ -97,6 +97,7 @@ body {
 
 .form button {
     background-color: #ffa600; /* Cor roxa para o botão */
+    border: #ffa600;
     border-radius: 5px;
     color: #fff;
     padding: 15px;

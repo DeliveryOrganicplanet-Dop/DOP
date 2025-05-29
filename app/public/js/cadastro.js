@@ -1,17 +1,34 @@
 const form = document.getElementById('form');
 const username = document.getElementById('username');
 const email = document.getElementById('email');
+const cpf = document.getElementById('cpf');
 const password = document.getElementById('password');
 const passwordtwo = document.getElementById('passwordtwo');
+
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     checkInputs();
 });
 
+cpf.addEventListener('input', () => {
+    let cpfValue = cpf.value.replace(/\D/g, ''); // Remove tudo que não for número
+
+    if (cpfValue.length > 11) {
+        cpfValue = cpfValue.substring(0, 11);
+    }
+
+    cpf.value = cpfValue
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+});
+
+
 function checkInputs() {
     const usernameValue = username.value.trim();
     const emailValue = email.value.trim();
+    const cpfValue = cpf.value.trim();
     const passwordValue = password.value.trim();
     const passwordtwoValue = passwordtwo.value.trim();
 
@@ -22,6 +39,8 @@ function checkInputs() {
 
     // Email validation
     isValid &= validateEmail(email, emailValue);
+
+    isValid &= validateCPF(cpf, cpfValue);
 
     // Password validation
     isValid &= validatePassword(password, passwordValue);
@@ -34,6 +53,7 @@ function checkInputs() {
         const userData = {
             username: usernameValue,
             email: emailValue,
+            cpf: cpfOculto(cpfValue),
             password: passwordValue,  // A senha também pode ser armazenada aqui, mas tenha em mente a segurança
         };
 
@@ -67,6 +87,48 @@ function validateEmail(input, value) {
         successValidation(input);
         return true;
     }
+}
+
+function validateCPF(input, value) {
+    if (value === '') {
+        errorValidation(input, 'Preencha esse campo');
+        return false;
+    } else if (!isValidCPF(value)) {
+        errorValidation(input, 'CPF inválido');
+        return false;
+    } else {
+        successValidation(input);
+        return true;
+    }
+}
+
+// Função para validar CPF
+function isValidCPF(cpf) {
+    cpf = cpf.replace(/[^\d]+/g, '');
+
+    if (cpf.length !== 11 || 
+        /^(\d)\1+$/.test(cpf)) return false;
+
+    let soma = 0;
+    for (let i = 0; i < 9; i++)
+        soma += parseInt(cpf.charAt(i)) * (10 - i);
+    let resto = 11 - (soma % 11);
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(9))) return false;
+
+    soma = 0;
+    for (let i = 0; i < 10; i++)
+        soma += parseInt(cpf.charAt(i)) * (11 - i);
+    resto = 11 - (soma % 11);
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(10))) return false;
+
+    return true;
+}
+
+function cpfOculto(cpf) {
+    cpf = formatarCPF(cpf);
+    return '***' + cpf.substring(4);
 }
 
 function validatePassword(input, value) {
@@ -144,3 +206,4 @@ function validarSenha() {
         specialRequirement.classList.remove('valid');
     }
 }
+
