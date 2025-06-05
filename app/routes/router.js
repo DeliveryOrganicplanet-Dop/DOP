@@ -1,81 +1,78 @@
-var express = require("express");
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const usuarioController = require('../controllers/usuarioController');
+const produtoController = require('../controllers/produtoController');
 
+router.get('/', (req, res) => {
+  res.render('pages/index', { errors: null });
+});
 
-   router.get("/", function (req, res) {
-   res.render("pages/index")
-   });
+router.get('/login', (req, res) => {
+  res.render('pages/login', { errors: null });
+});
 
-   router.get("/calendario", function (req, res) {
-    res.render("pages/calendario")
-   });
+router.post('/login', usuarioController.login);
 
-   router.get("/cadastro", function (req, res) {
-    res.render("pages/cadastro")
-   });
+router.get('/cadastro', (req, res) => {
+  res.render('pages/cadastro', { errors: null });
+});
 
-   router.get("/cadlog", function (req, res) {
-    res.render("pages/cadlog")
-   });
-   
-   router.get("/Brocolis", function (req, res) {
-    res.render("pages/Brocolis")
-   });
+router.post('/cadastro', usuarioController.create);
 
-   router.get("/ameixa", function (req, res) {
-    res.render("pages/ameixa")
-   });
+router.get('/carrinho', (req, res) => {
+  res.render('pages/carrinho', { errors: null });
+});
 
-   router.get("/abacaxi", function (req, res) {
-    res.render("pages/abacaxi")
-   });
+router.get('/calendario', (req, res) => {
+  res.render('pages/calendario', { errors: null });
+});
 
-   router.get("/alface", function (req, res) {
-    res.render("pages/alface")
-   });
+router.get('/abacaxi', (req, res) => {
+  res.render('pages/abacaxi', { errors: null });
+});
 
-   router.get("/alfacef", function (req, res) {
-    res.render("pages/alfacef")
-   });
+router.get('/alface', (req, res) => {
+  res.render('pages/alface', { errors: null });
+});
 
-   router.get("/abacaxif", function (req, res) {
-    res.render("pages/abacaxif")
-   });
+router.get('/ameixa', (req, res) => {
+  res.render('pages/ameixa', { errors: null });
+});
 
-   router.get("/ameixaf", function (req, res) {
-    res.render("pages/ameixaf")
-   });
+router.get('/Brocolis', (req, res) => {
+  res.render('pages/Brocolis', { errors: null });
+});
 
-   router.get("/brocolisf", function (req, res) {
-    res.render("pages/brocolisf")
-   });
+router.get('/cadastro2', (req, res) => {
+  res.render('pages/cadastro2', { errors: null });
+});
 
-   router.get("/carrinho", function (req, res) {
-    res.render("pages/carrinho")
-   });
+router.get('/cadlog', (req, res) => {
+  res.render('pages/cadlog', { errors: null });
+});
 
-   router.get("/cadastro2", function (req, res) {
-    res.render("pages/cadastro2")
-   });
+router.get('/conta', (req, res) => {
+  res.render('pages/conta', { errors: null });
+});
 
-   router.get("/finalizar", function (req, res) {
-    res.render("pages/finalizar")
-   });
+router.get('/finalizar', (req, res) => {
+  res.render('pages/finalizar', { errors: null });
+});
 
-   router.get("/conta", function (req, res) {
-    res.render("pages/conta")
-   });
+router.get('/produtos/:nome', (req, res) => {
+  const produto = req.params.nome;
+  res.render(`pages/${produto}`, { errors: null });
+});
 
-   router.get("/login", function (req, res) {
-    res.render("pages/login")
-   });
+router.get('/api/usuarios', usuarioController.findAll);
+router.get('/api/usuarios/:id', usuarioController.findById);
+router.put('/api/usuarios/:id', usuarioController.update);
+router.delete('/api/usuarios/:id', usuarioController.delete);
 
-
-// router.post("???", function (req, res) {
-
-
-// });
-
-
+router.get('/api/produtos', produtoController.findAll);
+router.post('/api/produtos', produtoController.create);
+router.get('/api/produtos/:id', produtoController.findById);
+router.put('/api/produtos/:id', produtoController.update);
+router.delete('/api/produtos/:id', produtoController.delete);
 
 module.exports = router;

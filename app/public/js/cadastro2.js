@@ -39,17 +39,23 @@ function saveAddress() {
 
     const userData = JSON.parse(localStorage.getItem('userData'));
 
-    if (userData) {
-        const updatedData = {
-            ...userData,
-            endereco,
+     if (userData) {
+         const updatedData = {
+        ...userData,
+             endereco,
             numero,
             cidade,
             bairro,
-            complemento,
-        };
+    complemento,
+         };
+
+    //     console.log(updatedData)
+
+    //usar getElementById para inserir os dados nos campos hidden
+
+    // getElementById form e executar
 
         localStorage.setItem('userData', JSON.stringify(updatedData));
-        window.location.href = '/conta'; // Redireciona para a página de conta
+        // window.location.href = '/conta'; // Redireciona para a página de conta
     }
 }
