@@ -24,20 +24,28 @@
                 <div class="line3"></div>
             </div>  
         </nav>
+        <nav>
+            <button id="toggle-dark" style="margin-left: 20px;">🌙 Alternar Tema</button>
+        </nav>
     </header>
     
     <!-- Conteúdo Principal -->
     <main>
         <!-- Banner -->
-        <section class="banner">
-            <section class="banner-text">
-                <h2>COMPRA<br>E VENDA<br>ALIMENTOS<br>ORGÂNICOS</h2> <br>
-                <a href="#" class="banner-button">Saiba mais →</a>
+        <section class="carrossel-wrapper">
+            <button class="arrow left" id="prev">&#10094;</button>
+        
+            <section class="carrossel">
+                <section class="container">
+                    <img src="imagens/box.png" class="img-carrossel">
+                    <img src="imagens/organico.png" class="img-carrossel">
+                    <img src="imagens/organico2.png" class="img-carrossel">
+                </section>
             </section>
-            <figure>
-                <img src="imagens/path-to-image.png" class="img-responsiva" alt="Descrição da Imagem">
-            </figure>
+        
+            <button class="arrow right" id="next">&#10095;</button>
         </section>
+        
         <!-- Ofertas do Dia -->
         <section class="daily-offers">
             <h2>Ofertas do dia</h2>
@@ -83,5 +91,7 @@
 
     <script src="js/mobile-navbar.js"></script>
     <script src="js/inicio.js"></script> <!-- Novo script -->
+    <script src="js/dark.js"></script>
+    <script src="js/carrossel.js"></script>
 </body>
 </html>
