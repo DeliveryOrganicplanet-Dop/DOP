@@ -6,11 +6,6 @@ const cidadeInput = document.getElementById('cidade');
 const bairroInput = document.getElementById('bairro');
 const complementoInput = document.getElementById('complemento');
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    saveAddress();
-});
-
 cepInput.addEventListener('focusout', async () => {
     try {
         const cepValue = cepInput.value.trim().replace("-", "");
@@ -21,13 +16,18 @@ cepInput.addEventListener('focusout', async () => {
         }
 
         const data = await response.json();
-        enderecoInput.value = data.logradouro;
-        cidadeInput.value = data.localidade;
-        bairroInput.value = data.bairro;
+        enderecoInput.value = data.logradouro || '';
+        cidadeInput.value = data.localidade || '';
+        bairroInput.value = data.bairro || '';
     } catch (error) {
         console.log(error);
         alert('Erro ao buscar o CEP');
     }
+});
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Impede o envio imediato
+    saveAddress();
 });
 
 function saveAddress() {
@@ -37,25 +37,16 @@ function saveAddress() {
     const bairro = bairroInput.value.trim();
     const complemento = complementoInput.value.trim();
 
-    const userData = JSON.parse(localStorage.getItem('userData'));
+    const userData = {
+        endereco,
+        numero,
+        cidade,
+        bairro,
+        complemento,
+    };
 
-     if (userData) {
-         const updatedData = {
-        ...userData,
-             endereco,
-            numero,
-            cidade,
-            bairro,
-    complemento,
-         };
+    localStorage.setItem('userData', JSON.stringify(userData));
 
-    //     console.log(updatedData)
-
-    //usar getElementById para inserir os dados nos campos hidden
-
-    // getElementById form e executar
-
-        localStorage.setItem('userData', JSON.stringify(updatedData));
-        // window.location.href = '/conta'; // Redireciona para a página de conta
-    }
+    // Agora sim: envia o formulário manualmente
+    form.submit();
 }
