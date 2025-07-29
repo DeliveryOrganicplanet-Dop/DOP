@@ -103,35 +103,59 @@ nav {
     transform: rotate(45deg) translate(-5px, -7px);
 }
 
+.carrossel {
+    overflow: hidden;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
 
-.banner {
-    display: flex; 
-    align-items: center; 
-    padding: 10px; 
-    background-color: #d3d3d3; 
-    margin-top: 10px;
-} 
+.container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 300%; /* 3 imagens, 100% cada */
+}
 
-.banner-text { 
-    flex: 1; 
-    font-size: 13px;
-    font-weight: bold; 
-    margin-right: -20px; 
-} 
+.img-carrossel {
+    width: 15%;
+    height: auto;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+.carrossel-wrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+}
 
-.banner-text h2 { 
-    margin: 0;
-} 
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    border: none;
+    color: white;
+    font-size: 32px;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    user-select: none;
+}
 
-.banner-button { 
-    background-color: #FF9900;;
-    color: white; 
-    padding: 8px 12px; 
-    border: none; 
-    border-radius: 5px; 
-    text-decoration: none; 
-    font-size: 14px; 
-} 
+.arrow.left {
+    left: 10px;
+}
+
+.arrow.right {
+    right: 10px;
+}
+
+.arrow:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
 
 @media (max-width: 768px) {
     .img-responsiva {
@@ -258,4 +282,39 @@ footer {
     .offers-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+
+}
+body.dark {
+    background-color: #121212;
+    color: #f0f0f0;
+}
+
+body.dark a {
+    color: #FFBB33;
+}
+
+body.dark nav {
+    background-color: #1e1e1e;
+}
+
+body.dark .banner {
+    background-color: #222;
+}
+
+body.dark .daily-offers {
+    background-color: #1e1e1e;
+}
+
+body.dark .offer-card {
+    background-color: #2c2c2c;
+    border-color: #444;
+}
+
+body.dark .offer-name {
+    color: #ccc;
+}
+
+body.dark footer {
+    background-color: #111;
+    color: #ccc;
 }
