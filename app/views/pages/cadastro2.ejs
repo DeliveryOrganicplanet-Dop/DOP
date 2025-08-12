@@ -9,7 +9,7 @@
 <body>
 
     <main>
-        <form id="form" method="post" action="/cadastro">
+        <form id="form">
 
             <input type="hidden" id="username" placeholder="Nome"> 
             <label for="cep">CEP</label>
@@ -23,6 +23,8 @@
             <label for="cidade">Cidade</label>
             <input type="text" id="cidade" name="cidade" required>
             
+            <label for="uf">UF</label>
+            <input type="text" id="uf" name="uf" maxlength="2" required>
 
             <label for="bairro">Bairro</label>
             <input type="text" id="bairro" name="bairro" required>
