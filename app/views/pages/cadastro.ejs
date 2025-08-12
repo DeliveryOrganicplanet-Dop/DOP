@@ -13,37 +13,36 @@
         <h2>Cadastro</h2>
     </section>
 
-    <form class="form" id="form">
+    <form class="form" id="form" method="POST" action="/cadastro2">
         <section class="form-control">
             <label for="username">Nome</label>
-            <input type="text" id="username" placeholder="Nome">
+            <input type="text" id="username" name="nome_usuario" placeholder="Nome">
             <small>Error message</small>
         </section>
 
         <section class="form-control">
             <label for="email">Email</label>
-            <input type="email" id="email" placeholder="nome@gmail.com">
+            <input type="email" id="email" name="email_usuario" placeholder="nome@gmail.com">
             <small>Error message</small>
         </section>
 
         <section class="form-control">
             <label for="telefone">Telefone</label>
-            <input type="text" id="telefone" placeholder="(00) 00000-0000">
+            <input type="text" id="telefone" name="celular_usuario" placeholder="(00) 00000-0000">
             <small>Error message</small>
         </section>        
 
         <section class="form-control">
             <label for="cpf">CPF</label>
-            <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
+            <input type="text" id="cpf" name="cpf_usuario" placeholder="000.000.000-00" maxlength="14">
             <small>Error message</small>
         </section>
 
         <section class="form-control">
             <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="********" onfocus="mostrarRequisitos()" onblur="esconderRequisitos()" oninput="validarSenha()">
+            <input type="password" id="password" name="senha_usuario" placeholder="********" onfocus="mostrarRequisitos()" onblur="esconderRequisitos()" oninput="validarSenha()">
             <small>Error message</small>
             
-            <!-- Caixa de Requisitos da Senha -->
             <div id="password-requirements" class="password-requirements">
                 <p class="requirement" id="length">✔ 8 caracteres no mínimo</p>
                 <p class="requirement" id="uppercase">✔ Pelo menos uma letra maiúscula</p>
@@ -56,9 +55,6 @@
             <input type="password" id="passwordtwo" placeholder="********">
             <small>Error message</small>
         </section>
-
-        
-        
 
         <button type="submit">Criar Conta</button>
     </form>

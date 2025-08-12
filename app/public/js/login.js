@@ -18,7 +18,8 @@ function checkInputs() {
     isValid &= validateField(passwordInput, passwordValue, 'Preencha esse campo');
 
     if (isValid) {
-        login(emailValue, passwordValue);
+        // login(emailValue, passwordValue);
+        form.submit();
     }
 }
 
@@ -35,23 +36,31 @@ function validateField(input, value, message) {
     }
 }
 
-function login(email, password) {
-    const storedUser = JSON.parse(localStorage.getItem('userData'));
+async function login(email, password) {
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nome_usu: email, // nome do campo usado no controller
+                senha_usu: password
+            })
+        });
 
-    if (storedUser) {
-        // Verifica se as credenciais inseridas correspondem às armazenadas
-        if (storedUser.email === email && storedUser.password === password) {
-            // Login bem-sucedido
-            alert('Login bem-sucedido!');
-            window.location.href = '/conta'; // Redireciona para a página de conta
-        } else {
-            // Erro: credenciais inválidas
-            showError('Email ou senha inválidos');
-        }
-    } else {
-        showError('Nenhuma conta encontrada');
+        // if (response.ok) {
+        //     window.location.href = '/conta'; // Redireciona em caso de sucesso
+        // } else {
+        //     const result = await response.text();
+        //     showError(result || 'Email ou senha inválidos');
+        // }
+    } catch (error) {
+        showError('Erro ao tentar fazer login');
+        console.error(error);
     }
 }
+
 
 function showError(message) {
     const errorMessage = document.querySelector('.error-message');

@@ -13,17 +13,17 @@
             <h2>Login</h2>
         </section>
 
-        <form id="login-form">
+        <form id="login-form" method="post" action="/login">
 
             <section class="form-control">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Digite seu email" required>
+                <input type="email" id="email"  name="email"  placeholder="Digite seu email" required>
                 <small>Error message</small>
             </section>
 
             <section class="form-control">
                 <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha" required>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
                 <small>Error message</small>
             </section>
 
@@ -34,7 +34,7 @@
         </form>
     </section>
 
-    <script src="js/login.js"></script>
+    <!-- <script src="js/login.js"></script> -->
 
 </body>
 </html>
