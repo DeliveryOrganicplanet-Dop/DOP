@@ -14,27 +14,28 @@
         </section>
 
         <form id="login-form" method="post" action="/login">
-
+            <input type="hidden" name="redirectTo" value="<%= typeof redirectTo !== 'undefined' ? redirectTo : '/' %>">
+        
             <section class="form-control">
                 <label for="email">Email</label>
-                <input type="email" id="email"  name="email"  placeholder="Digite seu email" required>
+                <input type="email" id="email" name="email" placeholder="Digite seu email" required>
                 <small>Error message</small>
             </section>
-
+        
             <section class="form-control">
                 <label for="password">Senha</label>
                 <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
                 <small>Error message</small>
             </section>
-
+        
             <button type="submit">Entrar</button>
-
+        
             <p>Não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
-
         </form>
+        
     </section>
 
-    <!-- <script src="js/login.js"></script> -->
+    <script src="js/login.js"></script> 
 
 </body>
 </html>

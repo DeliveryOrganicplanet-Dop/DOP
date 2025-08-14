@@ -1,78 +1,60 @@
 const form = document.getElementById('login-form');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const redirectInput = document.getElementById('redirectTo');
 
-form.addEventListener('submit', (e) => {
+// 🔹 Preenche o campo hidden com o redirectTo salvo ou referrer
+(function () {
+    const redirectValue = localStorage.getItem('redirectTo') || document.referrer || '/';
+    if (redirectInput) {
+        redirectInput.value = redirectValue;
+    }
+})();
+
+// Validação e envio
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    checkInputs();
-});
 
-function checkInputs() {
-    const emailValue = emailInput.value.trim();
-    const passwordValue = passwordInput.value.trim();
+    const emailValue = email.value.trim();
+    const passwordValue = password.value.trim();
+    const redirectTo = redirectInput.value || '/';
 
-    let isValid = true;
-
-    // Verifica se o email e a senha foram preenchidos
-    isValid &= validateField(emailInput, emailValue, 'Preencha esse campo');
-    isValid &= validateField(passwordInput, passwordValue, 'Preencha esse campo');
-
-    if (isValid) {
-        // login(emailValue, passwordValue);
-        form.submit();
+    if (!emailValue || !passwordValue) {
+        alert("Preencha todos os campos.");
+        return;
     }
-}
 
-function validateField(input, value, message) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
-    if (value === '') {
-        small.innerText = message;
-        formControl.className = 'form-control error';
-        return false;
-    } else {
-        formControl.className = 'form-control success';
-        return true;
-    }
-}
-
-async function login(email, password) {
     try {
         const response = await fetch('/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nome_usu: email, // nome do campo usado no controller
-                senha_usu: password
+                email: emailValue,
+                password: passwordValue,
+                redirectTo
             })
         });
 
-        // if (response.ok) {
-        //     window.location.href = '/conta'; // Redireciona em caso de sucesso
-        // } else {
-        //     const result = await response.text();
-        //     showError(result || 'Email ou senha inválidos');
-        // }
-    } catch (error) {
-        showError('Erro ao tentar fazer login');
-        console.error(error);
-    }
-}
+        const contentType = response.headers.get('content-type') || '';
 
-
-function showError(message) {
-    const errorMessage = document.querySelector('.error-message');
-    
-    // Se ainda não houver uma mensagem de erro, cria uma nova
-    if (!errorMessage) {
-        const small = document.createElement('small');
-        small.classList.add('error-message');
-        small.innerText = message;
-        form.appendChild(small);
-    } else {
-        // Se já houver uma mensagem de erro, atualiza o texto
-        errorMessage.innerText = message;
+        if (response.ok) {
+            if (contentType.includes('application/json')) {
+                const data = await response.json();
+                const destino = data.redirectTo || redirectTo || '/';
+                localStorage.removeItem('redirectTo');
+                window.location.href = destino;
+            } else {
+                // Caso o servidor responda com HTML (formulário tradicional)
+                window.location.href = redirectTo;
+            }
+        } else {
+            const errMsg = contentType.includes('application/json')
+                ? (await response.json()).message
+                : await response.text();
+            alert("Erro no login: " + errMsg);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Erro interno ao tentar fazer login.");
     }
-}
+});
