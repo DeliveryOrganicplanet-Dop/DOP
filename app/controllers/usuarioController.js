@@ -17,76 +17,74 @@ const usuarioController = {
   ],
 
   async login(req, res) {
-
     const errors = validationResult(req);
+    const isJson = req.headers['content-type'] && req.headers['content-type'].includes('application/json');
     if (!errors.isEmpty()) {
-      return res.render('pages/login', { errors: errors.array() });
+      if (isJson) return res.status(400).json({ errors: errors.array() });
+      return res.render('pages/login', { errors: errors.array(), redirectTo: req.body.redirectTo || req.query.redirectTo || '/' });
     }
-    console.log(req.body);
+  
+    // aceita várias variações de nomes de campo
+    const email = req.body.email || req.body.nome_usu || req.body.email_usuario;
+    const password = req.body.password || req.body.senha_usu || req.body.senha_usuario;
+  
     try {
-      const usuario = await usuarioModel.findUserEmail({ email_usuario: req.body.email });
-      console.log(usuario);
-      if (usuario && bcrypt.compareSync(req.body.password, usuario.senha_usuario)) {
-
-        return res.redirect('/'); // Redireciona para a página inicial sem sessão
+      const usuario = await usuarioModel.findUserEmail({ email_usuario: email });
+      if (usuario && bcrypt.compareSync(password, usuario.senha_usuario)) {
+        const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
+        if (isJson) return res.status(200).json({ message: 'ok', redirectTo });
+        return res.redirect(redirectTo);
       } else {
-        return res.render('pages/login', { errors: [{ msg: 'Email ou senha inválidos' }] });
+        if (isJson) return res.status(401).json({ message: 'Email ou senha inválidos' });
+        return res.render('pages/login', { errors: [{ msg: 'Email ou senha inválidos' }], redirectTo: req.body.redirectTo || req.query.redirectTo || '/' });
       }
     } catch (error) {
-      res.render('pages/error', { errors: [{ msg: error.message }] });
+      console.error('Erro no login:', error);
+      if (isJson) return res.status(500).json({ message: error.message });
+      return res.render('pages/error', { errors: [{ msg: error.message }] });
     }
   },
-
+  
   async create(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    // Se for fetch (JSON), responde com JSON
-    if (req.headers['content-type'] === 'application/json') {
-      return res.status(400).json({ errors: errors.array() });
-    } else {
-      return res.render('pages/cadastro', { errors: errors.array() });
+    const errors = validationResult(req);
+    const isJson = req.headers['content-type'] && req.headers['content-type'].includes('application/json');
+    if (!errors.isEmpty()) {
+      if (isJson) return res.status(400).json({ errors: errors.array() });
+      return res.render('pages/cadastro', { errors: errors.array(), redirectTo: req.body.redirectTo || '/' });
     }
-  }
-
-  try {
-    if (!req.body.senha_usuario) {
-      return res.status(400).json({ message: 'Senha não fornecida.' });
-    }
-
-    const hashedPassword = bcrypt.hashSync(req.body.senha_usuario, 10);
-    const dados = {
-      NOME_USUARIO: req.body.nome_usuario,
-      EMAIL_USUARIO: req.body.email_usuario,
-      CELULAR_USUARIO: req.body.celular_usuario,
-      CPF_USUARIO: req.body.cpf_usuario,
-      LOGRADOURO_USUARIO: req.body.logradouro_usuario,
-      BAIRRO_USUARIO: req.body.bairro_usuario,
-      CIDADE_USUARIO: req.body.cidade_usuario,
-      UF_USUARIO: req.body.uf_usuario || '', // evita erro se não for enviado
-      CEP_USUARIO: req.body.cep_usuario,
-      SENHA_USUARIO: hashedPassword,
-      TIPO_USUARIO: req.body.tipo_usuario || 'C',
-    };
-
-    await usuarioModel.create(dados);
-
-    // Se for fetch (JSON), responde com status
-    if (req.headers['content-type'] === 'application/json') {
-      return res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
-    } else {
-      return res.redirect('/login');
-    }
-
-  } catch (error) {
-    console.error('Erro ao cadastrar:', error.message);
-
-    if (req.headers['content-type'] === 'application/json') {
-      return res.status(500).json({ message: error.message });
-    } else {
+  
+    try {
+      if (!req.body.senha_usuario) {
+        if (isJson) return res.status(400).json({ message: 'Senha não fornecida.' });
+        return res.render('pages/cadastro', { message: 'Senha não fornecida.' });
+      }
+  
+      const hashedPassword = bcrypt.hashSync(req.body.senha_usuario, 10);
+      const dados = {
+        NOME_USUARIO: req.body.nome_usuario,
+        EMAIL_USUARIO: req.body.email_usuario,
+        CELULAR_USUARIO: req.body.celular_usuario,
+        CPF_USUARIO: req.body.cpf_usuario,
+        LOGRADOURO_USUARIO: req.body.logradouro_usuario,
+        BAIRRO_USUARIO: req.body.bairro_usuario,
+        CIDADE_USUARIO: req.body.cidade_usuario,
+        UF_USUARIO: req.body.uf_usuario || '',
+        CEP_USUARIO: req.body.cep_usuario,
+        SENHA_USUARIO: hashedPassword,
+        TIPO_USUARIO: req.body.tipo_usuario || 'C',
+      };
+  
+      await usuarioModel.create(dados);
+  
+      const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
+      if (isJson) return res.status(200).json({ message: 'Usuário cadastrado com sucesso', redirectTo });
+      return res.redirect(redirectTo);
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+      if (isJson) return res.status(500).json({ message: error.message });
       return res.render('pages/error', { message: error.message });
     }
-  }
-},
+  },
 
 
   async findAll(req, res) {

@@ -9,7 +9,8 @@
 <body>
 
     <main>
-        <form id="form">
+        <form id="form" method="post">
+            <input type="hidden" id="redirectTo" name="redirectTo" value="<%= typeof redirectTo !== 'undefined' ? redirectTo : '/' %>">
 
             <input type="hidden" id="username" placeholder="Nome"> 
             <label for="cep">CEP</label>

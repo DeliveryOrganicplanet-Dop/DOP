@@ -1,3 +1,9 @@
+if (!localStorage.getItem('redirectTo')) {
+    try {
+        localStorage.setItem('redirectTo', document.referrer || window.location.pathname || '/');
+    } catch (e) {}
+}
+
 const form = document.getElementById('form');
 const username = document.getElementById('username');
 const email = document.getElementById('email');

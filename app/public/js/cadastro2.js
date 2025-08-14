@@ -59,7 +59,7 @@ form.addEventListener('submit', async (e) => {
         if (response.ok) {
             alert("Cadastro realizado com sucesso!");
             localStorage.removeItem('userData');
-            window.location.href = '/login';
+            window.location.href = '/';
         } else {
             const erro = await response.text();
             alert("Erro ao cadastrar: " + erro);
