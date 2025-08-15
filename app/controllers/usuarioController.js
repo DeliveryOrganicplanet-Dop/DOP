@@ -74,7 +74,14 @@ const usuarioController = {
         TIPO_USUARIO: req.body.tipo_usuario || 'C',
       };
   
-      await usuarioModel.create(dados);
+      const novoUsuario = await usuarioModel.create(dados);
+
+      req.session.usuario = {
+        id: novoUsuario.ID_USUARIO,
+        nome: dados.NOME_USUARIO,
+        email: dados.EMAIL_USUARIO,
+        tipo: dados.TIPO_USUARIO
+      };
   
       const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
       if (isJson) return res.status(200).json({ message: 'Usuário cadastrado com sucesso', redirectTo });
@@ -83,9 +90,11 @@ const usuarioController = {
       console.error('Erro ao cadastrar:', error);
       if (isJson) return res.status(500).json({ message: error.message });
       return res.render('pages/error', { message: error.message });
+      
     }
   },
 
+  
 
   async findAll(req, res) {
     try {
