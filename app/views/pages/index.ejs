@@ -1,97 +1,101 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Delivery Organic Plant</title>
-    <link rel="stylesheet" href="css/dop.css">
+    <link rel="stylesheet" href="css/dop.css" />
 </head>
 <body>
     <!-- Cabeçalho -->
     <header>
-        <nav>
+        <nav aria-label="Menu principal">
+            <img src="imagens/dopimg.png" alt="Logotipo Delivery Organic Plant" class="logo" />
             <ul class="nav-list">
-                <li><a href="/">Inicio</a></li>
-                <!-- O link de conta será modificado dinamicamente via JS -->
-                <li><a href="#" id="btn-conta">Conta</a></li>
-                <li><a href="/calendario">Calendario</a></li>
-                <li><a href="/carrinho">Carrinho</a></li>
+                <li><a href="/" title="Página inicial">Início</a></li>
+                <li><a href="#" id="btn-conta" title="Sua conta">Conta</a></li>
+                <li><a href="/calendario" title="Calendário de entregas">Calendário</a></li>
+                <li><a href="/carrinho" title="Carrinho de compras">Carrinho</a></li>
             </ul>
-            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
-            <div class="mobile-menu">
+            <button class="mobile-menu" aria-label="Abrir menu">
                 <div class="line1"></div>
                 <div class="line2"></div>
                 <div class="line3"></div>
-            </div>  
+            </button>
         </nav>
-        <nav>
-            <button id="toggle-dark" style="margin-left: 20px;">🌙 Alternar Tema</button>
+ 
+        <nav aria-label="Alternar tema">
+            <button id="toggle-dark" aria-pressed="false" style="margin-left: 20px;">🌙 Alternar Tema</button>
         </nav>
     </header>
-    
+ 
     <!-- Conteúdo Principal -->
     <main>
         <!-- Banner -->
-        <section class="carrossel-wrapper">
-            <button class="arrow left" id="prev">&#10094;</button>
-        
+        <section class="carrossel-wrapper" aria-label="Carrossel de imagens promocionais">
+            <button class="arrow left" id="prev" aria-label="Imagem anterior">&#10094;</button>
+ 
             <section class="carrossel">
                 <section class="container">
-                    <img src="imagens/box.png" class="img-carrossel">
-                    <img src="imagens/organico.png" class="img-carrossel">
-                    <img src="imagens/organico2.png" class="img-carrossel">
+                    <img src="imagens/box.png" class="img-carrossel" alt="Box com produtos orgânicos" />
+                    <img src="imagens/organico.png" class="img-carrossel" alt="Imagem orgânicos" />
+                    <img src="imagens/organico2.png" class="img-carrossel" alt="Mais produtos orgânicos" />
                 </section>
             </section>
-        
-            <button class="arrow right" id="next">&#10095;</button>
+ 
+            <button class="arrow right" id="next" aria-label="Próxima imagem">&#10095;</button>
         </section>
-        
+ 
         <!-- Ofertas do Dia -->
         <section class="daily-offers">
             <h2>Ofertas do dia</h2>
             <section class="offers-grid">
-                <!-- Cards de produtos -->
                 <article class="offer-card">
-                    <a href="/Brocolis" class="brocolis-button">
-                    <img src="imagens/brocolis.png" class="img-responsiva">  
-                    <p class="offer-price">R$ 9,70</p> 
-                    <p class="offer-name">Brócolis ninja<br>unidade 250g</p>
-                    </a> 
-                </article>
-                <article class="offer-card">
-                    <a href="/ameixa" class="ameixa-button"> 
-                    <img src="imagens/ameixa.png" class="img-responsiva"> 
-                    <p class="offer-price">R$ 2,99</p>
-                    <p class="offer-name">Ameixa importada<br>unidade 150g</p>
+                    <a href="/Brocolis" class="brocolis-button" title="Comprar Brócolis ninja, 250g">
+                        <img src="imagens/brocolis.png" class="img-responsiva" alt="Brócolis ninja" />
+                        <p class="offer-price">R$ 9,70</p>
+                        <p class="offer-name">Brócolis ninja<br />unidade 250g</p>
                     </a>
                 </article>
+ 
                 <article class="offer-card">
-                    <a href="/abacaxi" class="abacaxi-button"> 
-                    <img src="imagens/abacaxi.png" class="img-responsiva"> 
-                    <p class="offer-price">R$ 9,85</p>
-                    <p class="offer-name">Abacaxi Pérola<br>1,00kg cada</p>
-                    </a> 
+                    <a href="/ameixa" class="ameixa-button" title="Comprar Ameixa importada, 150g">
+                        <img src="imagens/ameixa.png" class="img-responsiva" alt="Ameixa importada" />
+                        <p class="offer-price">R$ 2,99</p>
+                        <p class="offer-name">Ameixa importada<br />unidade 150g</p>
+                    </a>
                 </article>
+ 
                 <article class="offer-card">
-                    <a href="/alface" class="alface-button"> 
-                    <img src="imagens/alface.png" class="img-responsiva"> 
-                    <p class="offer-price">R$ 2,99</p>
-                    <p class="offer-name">Alface crespa<br>a unidade</p>
-                    </a> 
+                    <a href="/abacaxi" class="abacaxi-button" title="Comprar Abacaxi Pérola, 1kg">
+                        <img src="imagens/abacaxi.png" class="img-responsiva" alt="Abacaxi Pérola" />
+                        <p class="offer-price">R$ 9,85</p>
+                        <p class="offer-name">Abacaxi Pérola<br />1,00kg cada</p>
+                    </a>
+                </article>
+ 
+                <article class="offer-card">
+                    <a href="/alface" class="alface-button" title="Comprar Alface crespa, unidade">
+                        <img src="imagens/alface.png" class="img-responsiva" alt="Alface crespa" />
+                        <p class="offer-price">R$ 2,99</p>
+                        <p class="offer-name">Alface crespa<br />a unidade</p>
+                    </a>
                 </article>
             </section>
-            <a href="#" class="see-more">Ver mais</a>
+            <a href="#" class="see-more" title="Ver mais ofertas">Ver mais</a>
         </section>
     </main>
-    
+ 
     <!-- Rodapé -->
     <footer>
         <p>&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
     </footer>
-
+ 
     <script src="js/mobile-navbar.js"></script>
-    <script src="js/inicio.js"></script> <!-- Novo script -->
+    <script src="js/inicio.js"></script>
     <script src="js/dark.js"></script>
     <script src="js/carrossel.js"></script>
 </body>
 </html>
+ 
+ 
