@@ -1,7 +1,17 @@
 const express = require('express');
+const session = require('express-session'); // 👈 importe aqui
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 const produtoController = require('../controllers/produtoController');
+
+// configuração da sessão (válida só neste router)
+router.use(session({
+  secret: process.env.SESSION_SECRET || 'chave_super_secreta',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // se usar HTTPS, troque para true
+}));
+
 
 router.get('/', (req, res) => {
   res.render('pages/index', { errors: null });
