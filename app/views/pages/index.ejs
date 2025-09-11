@@ -1,101 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Delivery Organic Plant</title>
-    <link rel="stylesheet" href="css/dop.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Organic Plant - Premium Organic Delivery</title>
+    <link rel="stylesheet" href="css/dop.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Cabeçalho -->
-    <header>
-        <nav aria-label="Menu principal">
-            <img src="imagens/dopimg.png" alt="Logotipo Delivery Organic Plant" class="logo" />
+    <header class="main-header">
+        <nav class="nav-container" aria-label="Menu principal">
+            <section class="logo-section">
+                <h1 class="brand-logo">
+                    <span class="logo-icon">🌿</span>
+                    <span class="logo-text">Delivery Organic</span>
+                </h1>
+            </section>
+            
             <ul class="nav-list">
-                <li><a href="/" title="Página inicial">Início</a></li>
-                <li><a href="#" id="btn-conta" title="Sua conta">Conta</a></li>
-                <li><a href="/calendario" title="Calendário de entregas">Calendário</a></li>
-                <li><a href="/carrinho" title="Carrinho de compras">Carrinho</a></li>
+                <li class="nav-item">
+                    <a href="/" class="nav-link" title="Página inicial">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="btn-conta" class="nav-link" title="Sua conta">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text">Conta</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/calendario" class="nav-link" title="Calendário de entregas">
+                        <span class="nav-icon">📅</span>
+                        <span class="nav-text">Calendário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
+                        <span class="nav-icon">🛒</span>
+                        <span class="nav-text">Carrinho</span>
+                    </a>
+                </li>
             </ul>
-            <button class="mobile-menu" aria-label="Abrir menu">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
-            </button>
-        </nav>
- 
-        <nav aria-label="Alternar tema">
-            <button id="toggle-dark" aria-pressed="false" style="margin-left: 20px;">🌙 Alternar Tema</button>
+
+            <section class="header-controls">
+                <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                
+                <button class="mobile-menu" aria-label="Abrir menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </section>
         </nav>
     </header>
- 
-    <!-- Conteúdo Principal -->
-    <main>
-        <!-- Banner -->
-        <section class="carrossel-wrapper" aria-label="Carrossel de imagens promocionais">
-            <button class="arrow left" id="prev" aria-label="Imagem anterior">&#10094;</button>
- 
-            <section class="carrossel">
-                <section class="container">
-                    <img src="imagens/box.png" class="img-carrossel" alt="Box com produtos orgânicos" />
-                    <img src="imagens/organico.png" class="img-carrossel" alt="Imagem orgânicos" />
-                    <img src="imagens/organico2.png" class="img-carrossel" alt="Mais produtos orgânicos" />
+
+    <main class="main-content">
+        <section class="hero-section" aria-label="Carrossel promocional">
+            <article class="carousel-wrapper">
+                <button class="carousel-arrow carousel-prev" id="prev-slide" aria-label="Slide anterior">
+                    <span class="arrow-icon">‹</span>
+                </button>
+                
+                <section class="carousel-container">
+                    <ul class="carousel-track">
+                        <li class="carousel-slide active">
+                            <picture class="slide-content">
+                                <h2 class="slide-title">Produtos Orgânicos Premium</h2>
+                                <p class="slide-subtitle">Seleção exclusiva de produtos orgânicos certificados</p>
+                            </picture>
+                        </li>
+                        <li class="carousel-slide">
+                            <picture class="slide-content">
+                                <h2 class="slide-title">Entrega Rápida e Segura</h2>
+                                <p class="slide-subtitle">Receba seus produtos frescos em casa</p>
+                            </picture>
+                        </li>
+                        <li class="carousel-slide">
+                            <picture class="slide-content">
+                                <h2 class="slide-title">Qualidade Garantida</h2>
+                                <p class="slide-subtitle">100% orgânico, 100% fresco, 100% saudável</p>
+                            </picture>
+                        </li>
+                    </ul>
                 </section>
-            </section>
- 
-            <button class="arrow right" id="next" aria-label="Próxima imagem">&#10095;</button>
+                
+                <button class="carousel-arrow carousel-next" id="next-slide" aria-label="Próximo slide">
+                    <span class="arrow-icon">›</span>
+                </button>
+            </article>
         </section>
- 
-        <!-- Ofertas do Dia -->
-        <section class="daily-offers">
-            <h2>Ofertas do dia</h2>
-            <section class="offers-grid">
-                <article class="offer-card">
-                    <a href="/Brocolis" class="brocolis-button" title="Comprar Brócolis ninja, 250g">
-                        <img src="imagens/brocolis.png" class="img-responsiva" alt="Brócolis ninja" />
-                        <p class="offer-price">R$ 9,70</p>
-                        <p class="offer-name">Brócolis ninja<br />unidade 250g</p>
+
+        <section class="offers-section">
+            <header class="section-header">
+                <h2 class="section-title">Ofertas Selecionadas</h2>
+                <p class="section-subtitle">Produtos premium com preços especiais</p>
+            </header>
+
+            <article class="products-grid">
+                <section class="product-card">
+                    <a href="/brocolis" class="product-link" title="Brócolis Ninja Premium">
+                        <figure class="product-image">
+                            <span class="product-icon">🥦</span>
+                            <figcaption class="product-badge">Premium</figcaption>
+                        </figure>
+                        <header class="product-info">
+                            <h3 class="product-name">Brócolis Ninja</h3>
+                            <p class="product-description">Unidade 250g</p>
+                            <span class="product-price">R$ 9,70</span>
+                        </header>
                     </a>
-                </article>
- 
-                <article class="offer-card">
-                    <a href="/ameixa" class="ameixa-button" title="Comprar Ameixa importada, 150g">
-                        <img src="imagens/ameixa.png" class="img-responsiva" alt="Ameixa importada" />
-                        <p class="offer-price">R$ 2,99</p>
-                        <p class="offer-name">Ameixa importada<br />unidade 150g</p>
+                </section>
+
+                <section class="product-card">
+                    <a href="/ameixa" class="product-link" title="Ameixa Importada Premium">
+                        <figure class="product-image">
+                            <span class="product-icon">🫐</span>
+                            <figcaption class="product-badge">Importado</figcaption>
+                        </figure>
+                        <header class="product-info">
+                            <h3 class="product-name">Ameixa Importada</h3>
+                            <p class="product-description">Unidade 150g</p>
+                            <span class="product-price">R$ 2,99</span>
+                        </header>
                     </a>
-                </article>
- 
-                <article class="offer-card">
-                    <a href="/abacaxi" class="abacaxi-button" title="Comprar Abacaxi Pérola, 1kg">
-                        <img src="imagens/abacaxi.png" class="img-responsiva" alt="Abacaxi Pérola" />
-                        <p class="offer-price">R$ 9,85</p>
-                        <p class="offer-name">Abacaxi Pérola<br />1,00kg cada</p>
+                </section>
+
+                <section class="product-card">
+                    <a href="/abacaxi" class="product-link" title="Abacaxi Pérola Premium">
+                        <figure class="product-image">
+                            <span class="product-icon">🍍</span>
+                            <figcaption class="product-badge">Especial</figcaption>
+                        </figure>
+                        <header class="product-info">
+                            <h3 class="product-name">Abacaxi Pérola</h3>
+                            <p class="product-description">1,00kg cada</p>
+                            <span class="product-price">R$ 9,85</span>
+                        </header>
                     </a>
-                </article>
- 
-                <article class="offer-card">
-                    <a href="/alface" class="alface-button" title="Comprar Alface crespa, unidade">
-                        <img src="imagens/alface.png" class="img-responsiva" alt="Alface crespa" />
-                        <p class="offer-price">R$ 2,99</p>
-                        <p class="offer-name">Alface crespa<br />a unidade</p>
+                </section>
+
+                <section class="product-card">
+                    <a href="/alface" class="product-link" title="Alface Crespa Premium">
+                        <figure class="product-image">
+                            <span class="product-icon">🥬</span>
+                            <figcaption class="product-badge">Orgânico</figcaption>
+                        </figure>
+                        <header class="product-info">
+                            <h3 class="product-name">Alface Crespa</h3>
+                            <p class="product-description">A unidade</p>
+                            <span class="product-price">R$ 2,99</span>
+                        </header>
                     </a>
-                </article>
-            </section>
-            <a href="#" class="see-more" title="Ver mais ofertas">Ver mais</a>
+                </section>
+            </article>
+
+            <footer class="section-footer">
+                <a href="/produtos" class="view-more-btn" title="Ver todos os produtos">
+                    <span class="btn-text">Ver Mais Produtos</span>
+                    <span class="btn-icon">→</span>
+                </a>
+            </footer>
         </section>
     </main>
- 
-    <!-- Rodapé -->
-    <footer>
-        <p>&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
+
+    <footer class="main-footer">
+        <p class="footer-text">&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
     </footer>
- 
-    <script src="js/mobile-navbar.js"></script>
+
     <script src="js/inicio.js"></script>
-    <script src="js/dark.js"></script>
-    <script src="js/carrossel.js"></script>
 </body>
 </html>
- 
- 
