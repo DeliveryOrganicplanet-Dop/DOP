@@ -9,8 +9,10 @@ router.use(session({
   secret: process.env.SESSION_SECRET || 'chave_super_secreta',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // se usar HTTPS, troque para true
+  cookie: { secure: false, sameSite: 'lax' } // se usar HTTPS, troque para true
 }));
+
+
 
 
 router.get('/', (req, res) => {

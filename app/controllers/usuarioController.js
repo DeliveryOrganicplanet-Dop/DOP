@@ -58,6 +58,12 @@ const usuarioController = {
         if (isJson) return res.status(400).json({ message: 'Senha não fornecida.' });
         return res.render('pages/cadastro', { message: 'Senha não fornecida.' });
       }
+
+      const existente = await usuarioModel.findUserEmail({ email_usuario: req.body.email_usuario });
+    if (existente) {
+      if (isJson) return res.status(400).json({ message: 'Email já cadastrado.' });
+      return res.render('pages/cadastro', { errors: [{ msg: 'Email já cadastrado.' }] });
+    }
   
       const hashedPassword = bcrypt.hashSync(req.body.senha_usuario, 10);
       const dados = {
@@ -86,8 +92,16 @@ const usuarioController = {
       const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
       if (isJson) return res.status(200).json({ message: 'Usuário cadastrado com sucesso', redirectTo });
       return res.redirect(redirectTo);
+
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
+
+      if (error.code === 'ER_DUP_ENTRY') {
+        if (isJson) return res.status(400).json({ message: 'Email já cadastrado.' });
+        return res.render('pages/cadastro', { errors: [{ msg: 'Email já cadastrado.' }] });
+      }
+  
+
       if (isJson) return res.status(500).json({ message: error.message });
       return res.render('pages/error', { message: error.message });
       
