@@ -70,20 +70,31 @@ function checkInputs() {
 
 
     if (isValid) {
+        console.log('Formulário válido, salvando dados...');
+        
         // Armazenando os dados no localStorage
         const userData = {
             username: usernameValue,
             email: emailValue,
             cpf: cpfValue,
-            password: passwordValue,  // A senha também pode ser armazenada aqui, mas tenha em mente a segurança
+            password: passwordValue,
             telefone: telefoneValue,
         };
 
+        console.log('Dados para salvar:', userData);
+        
         // Salvando os dados no localStorage
         localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Verificando se foi salvo
+        const saved = localStorage.getItem('userData');
+        console.log('Dados salvos no localStorage:', saved);
 
         // Redirecionando para o próximo formulário
-        window.location.href = '/cadastro2'; // Substitua pelo URL da próxima página
+        console.log('Redirecionando para /cadastro2');
+        window.location.href = '/cadastro2';
+    } else {
+        console.log('Formulário inválido');
     }
 }
 

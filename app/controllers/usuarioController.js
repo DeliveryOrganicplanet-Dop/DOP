@@ -11,7 +11,13 @@ const usuarioController = {
   validateCreate: [
     body('nome_usuario').notEmpty().withMessage('Nome é obrigatório'),
     body('email_usuario').isEmail().withMessage('Email inválido'),
-    body('cpf_usuario').isLength({ min: 11, max: 11 }).withMessage('CPF deve ter 11 dígitos'),
+    body('cpf_usuario').custom((value) => {
+      const cpfLimpo = value.replace(/\D/g, '');
+      if (cpfLimpo.length !== 11) {
+        throw new Error('CPF deve ter 11 dígitos');
+      }
+      return true;
+    }),
     body('senha_usuario').isLength({ min: 6 }).withMessage('Senha deve ter pelo menos 6 caracteres'),
     body('tipo_usuario').isIn(['C', 'V', 'A']).withMessage('Tipo de usuário inválido'),
   ],
@@ -48,6 +54,7 @@ const usuarioController = {
   async create(req, res) {
     const errors = validationResult(req);
     const isJson = req.headers['content-type'] && req.headers['content-type'].includes('application/json');
+    
     if (!errors.isEmpty()) {
       if (isJson) return res.status(400).json({ errors: errors.array() });
       return res.render('pages/cadastro', { errors: errors.array(), redirectTo: req.body.redirectTo || '/' });
@@ -70,7 +77,7 @@ const usuarioController = {
         NOME_USUARIO: req.body.nome_usuario,
         EMAIL_USUARIO: req.body.email_usuario,
         CELULAR_USUARIO: req.body.celular_usuario,
-        CPF_USUARIO: req.body.cpf_usuario,
+        CPF_USUARIO: req.body.cpf_usuario.replace(/\D/g, ''),
         LOGRADOURO_USUARIO: req.body.logradouro_usuario,
         BAIRRO_USUARIO: req.body.bairro_usuario,
         CIDADE_USUARIO: req.body.cidade_usuario,
@@ -88,10 +95,22 @@ const usuarioController = {
         email: dados.EMAIL_USUARIO,
         tipo: dados.TIPO_USUARIO
       };
+      
+      console.log('Sessão criada para usuário:', req.session.usuario);
   
-      const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
-      if (isJson) return res.status(200).json({ message: 'Usuário cadastrado com sucesso', redirectTo });
-      return res.redirect(redirectTo);
+      // Forçar salvamento da sessão
+      req.session.save((err) => {
+        if (err) {
+          console.error('Erro ao salvar sessão:', err);
+        }
+        
+        const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
+        
+        if (isJson) {
+          return res.status(201).json({ message: 'Usuário cadastrado com sucesso', redirectTo, usuario: { id: novoUsuario.ID_USUARIO, nome: dados.NOME_USUARIO, email: dados.EMAIL_USUARIO } });
+        }
+        return res.redirect(redirectTo);
+      });
 
     } catch (error) {
       console.error('Erro ao cadastrar:', error);

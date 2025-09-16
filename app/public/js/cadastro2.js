@@ -22,8 +22,22 @@ cepInput.addEventListener('focusout', async () => {
     }
 });
 
+// Verificar dados ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Página cadastro2 carregada');
+    const userData = localStorage.getItem('userData');
+    console.log('Dados no localStorage ao carregar:', userData);
+    
+    if (!userData || userData === '{}') {
+        console.error('Nenhum dado encontrado no localStorage!');
+        alert('Erro: Dados do primeiro formulário não encontrados. Redirecionando...');
+        window.location.href = '/cadastro';
+    }
+});
+
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log('Formulário de endereço submetido');
 
     const ufInput = document.getElementById('uf');
     const enderecoData = {
@@ -35,8 +49,12 @@ form.addEventListener('submit', async (e) => {
         bairro_usuario: bairroInput.value.trim(),
         complemento_usuario: complementoInput.value.trim()
     };
+    
+    console.log('Dados de endereço:', enderecoData);
 
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    console.log('Dados do localStorage:', userData);
+    
     const dadosCompletos = {
         nome_usuario: userData.username,
         email_usuario: userData.email,
@@ -47,6 +65,8 @@ form.addEventListener('submit', async (e) => {
         tipo_usuario: 'C'
     };
     
+    console.log('Dados completos para envio:', dadosCompletos);
+    
     try {
         const response = await fetch('/cadastro', {
             method: 'POST',
@@ -54,16 +74,21 @@ form.addEventListener('submit', async (e) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(dadosCompletos),
-            credentials: 'include'
+            credentials: 'same-origin'
         });
 
+        console.log('Status da resposta:', response.status);
+        
         if (response.ok) {
+            const resultado = await response.json();
+            console.log('Resultado do cadastro:', resultado);
             alert("Cadastro realizado com sucesso!");
             localStorage.removeItem('userData');
-            window.location.href = '/';
+            window.location.href = resultado.redirectTo || '/';
         } else {
-            const erro = await response.text();
-            alert("Erro ao cadastrar: " + erro);
+            const erro = await response.json().catch(() => ({ message: 'Erro desconhecido' }));
+            console.log('Erro no cadastro:', erro);
+            alert("Erro ao cadastrar: " + (erro.message || erro.errors?.[0]?.msg || 'Erro desconhecido'));
         }
     } catch (err) {
         console.error(err);

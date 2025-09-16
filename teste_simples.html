@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Simples</title>
+</head>
+<body>
+    <h1>Teste Cadastro Simples</h1>
+    <button onclick="alert('JavaScript funcionando!'); console.log('Teste básico OK');">Testar JavaScript</button><br><br>
+    
+    <form id="formTeste">
+        <input type="text" id="nome" placeholder="Nome" required><br><br>
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="text" id="telefone" placeholder="Telefone" required><br><br>
+        <input type="text" id="cpf" placeholder="CPF" required><br><br>
+        <input type="password" id="senha" placeholder="Senha" required><br><br>
+        <input type="text" id="endereco" placeholder="Endereço" required><br><br>
+        <input type="text" id="cidade" placeholder="Cidade" required><br><br>
+        <input type="text" id="bairro" placeholder="Bairro" required><br><br>
+        <input type="text" id="uf" placeholder="UF" required><br><br>
+        <input type="text" id="cep" placeholder="CEP" required><br><br>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        console.log('Script carregado!');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado!');
+            
+            const form = document.getElementById('formTeste');
+            console.log('Form encontrado:', form);
+            
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    console.log('Form submetido!');
+                    e.preventDefault();
+                    
+                    document.getElementById('resultado').innerHTML = '<p style="color: blue;">Processando...</p>';
+                    
+                    const dados = {
+                        nome_usuario: document.getElementById('nome').value,
+                        email_usuario: document.getElementById('email').value,
+                        celular_usuario: document.getElementById('telefone').value,
+                        cpf_usuario: document.getElementById('cpf').value,
+                        senha_usuario: document.getElementById('senha').value,
+                        logradouro_usuario: document.getElementById('endereco').value,
+                        cidade_usuario: document.getElementById('cidade').value,
+                        bairro_usuario: document.getElementById('bairro').value,
+                        uf_usuario: document.getElementById('uf').value,
+                        cep_usuario: document.getElementById('cep').value,
+                        tipo_usuario: 'C'
+                    };
+
+                    console.log('Dados coletados:', dados);
+
+                    try {
+                        console.log('Enviando requisição...');
+                        const response = await fetch('/cadastro', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(dados)
+                        });
+
+                        console.log('Resposta recebida. Status:', response.status);
+                        
+                        if (response.ok) {
+                            const resultado = await response.json();
+                            console.log('Sucesso:', resultado);
+                            document.getElementById('resultado').innerHTML = 
+                                '<p style="color: green;">Cadastro realizado com sucesso! ID: ' + resultado.usuario.id + '</p>';
+                        } else {
+                            const erro = await response.json();
+                            console.log('Erro na resposta:', erro);
+                            document.getElementById('resultado').innerHTML = 
+                                '<p style="color: red;">Erro: ' + JSON.stringify(erro) + '</p>';
+                        }
+                    } catch (error) {
+                        console.error('Erro de rede:', error);
+                        document.getElementById('resultado').innerHTML = 
+                            '<p style="color: red;">Erro de rede: ' + error.message + '</p>';
+                    }
+                });
+            } else {
+                console.error('Form não encontrado!');
+            }
+        });
+    </script>
+</body>
+</html>
