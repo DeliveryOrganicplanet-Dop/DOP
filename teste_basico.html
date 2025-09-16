@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Básico</title>
+</head>
+<body>
+    <h1>Teste Básico de JavaScript</h1>
+    
+    <button onclick="testeBasico()">Teste 1: Alert</button><br><br>
+    <button onclick="testeConsole()">Teste 2: Console</button><br><br>
+    <button onclick="testeFetch()">Teste 3: Fetch</button><br><br>
+    
+    <div id="resultado"></div>
+
+    <script>
+        function testeBasico() {
+            alert('JavaScript funcionando!');
+        }
+        
+        function testeConsole() {
+            console.log('Console funcionando!');
+            document.getElementById('resultado').innerHTML = '<p>Console testado - veja F12</p>';
+        }
+        
+        async function testeFetch() {
+            console.log('Testando fetch...');
+            document.getElementById('resultado').innerHTML = '<p>Testando conexão...</p>';
+            
+            try {
+                const response = await fetch('/');
+                console.log('Fetch funcionou! Status:', response.status);
+                document.getElementById('resultado').innerHTML = '<p style="color: green;">Fetch funcionando! Status: ' + response.status + '</p>';
+            } catch (error) {
+                console.error('Erro no fetch:', error);
+                document.getElementById('resultado').innerHTML = '<p style="color: red;">Erro no fetch: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>
