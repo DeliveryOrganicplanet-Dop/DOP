@@ -6,9 +6,16 @@ const produtoController = require('../controllers/produtoController');
 
 // Middleware para verificar autenticação
 function verificarAuth(req, res, next) {
+  console.log('Verificando autenticação para:', req.url);
+  console.log('Sessão:', req.session);
+  console.log('Usuário na sessão:', req.session?.usuario);
+  
   if (req.session && req.session.usuario) {
+    console.log('Usuário autenticado, prosseguindo...');
     return next();
   }
+  
+  console.log('Usuário não autenticado, redirecionando para /cadlog');
   return res.redirect('/cadlog');
 }
 
@@ -112,7 +119,7 @@ router.get('/cadlog', (req, res) => {
 });
 
 router.get('/conta', verificarAuth, (req, res) => {
-  res.render('pages/conta', { errors: null });
+  res.render('pages/conta', { errors: null, usuario: req.session.usuario });
 });
 
 router.get('/finalizar', verificarAuth, (req, res) => {

@@ -16,15 +16,12 @@
     <main>
         <section id="userInfo">
             <h2>Informações Pessoais</h2>
-            <p><strong>Nome:</strong> <span id="username"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
+            <p><strong>Nome:</strong> <%= usuario.nome %></p>
+            <p><strong>Email:</strong> <%= usuario.email %></p>
+            <p><strong>ID:</strong> <%= usuario.id %></p>
             
-            <h2>Endereço</h2>
-            <p><strong>Endereço:</strong> <span id="endereco"></span></p>
-            <p><strong>Número:</strong> <span id="numero"></span></p>
-            <p><strong>Cidade:</strong> <span id="cidade"></span></p>
-            <p><strong>Bairro:</strong> <span id="bairro"></span></p>
-            <p><strong>Complemento:</strong> <span id="complemento"></span></p>
+            <h2>Dados da Conta</h2>
+            <p><strong>Tipo:</strong> <%= usuario.tipo === 'C' ? 'Cliente' : usuario.tipo === 'V' ? 'Vendedor' : 'Administrador' %></p>
         </section>
 
         <!-- Botões de Voltar e Deslogar -->
