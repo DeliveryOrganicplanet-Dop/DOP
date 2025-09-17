@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendedores - DOP</title>
+    <link rel="stylesheet" href="css/vendedores.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="top-bar">
+        <a href="/" class="back">
+            <span class="back-icon">&#10094;</span>
+        </a>
+        <h1 class="logo">Nossos Vendedores</h1>
+    </header>
+
+    <main class="vendedores-container">
+        <section class="hero-section">
+            <h2>Conheça Nossos Parceiros</h2>
+            <p>Produtores locais comprometidos com qualidade e sustentabilidade</p>
+        </section>
+
+        <section class="vendedores-grid">
+            <% vendedores.forEach(vendedor => { %>
+                <article class="vendedor-card">
+                    <header class="vendedor-avatar">
+                        <span class="avatar-icon">👨‍🌾</span>
+                    </header>
+                    <section class="vendedor-info">
+                        <h3 class="vendedor-nome"><%= vendedor.NOME_USUARIO %></h3>
+                        <p class="vendedor-tipo">
+                            <%= vendedor.tipo_pessoa === 'PF' ? 'Pessoa Física' : 'Pessoa Jurídica' %>
+                        </p>
+                        <p class="vendedor-documento">
+                            <%= vendedor.tipo_pessoa === 'PF' ? 'CPF' : 'CNPJ' %>: 
+                            <%= vendedor.digito_pessoa %>
+                        </p>
+                        <address class="vendedor-localizacao">
+                            <span class="location-icon">📍</span>
+                            <%= vendedor.CIDADE_USUARIO %> - <%= vendedor.UF_USUARIO %>
+                        </address>
+                        <address class="vendedor-contato">
+                            <span class="phone-icon">📞</span>
+                            <%= vendedor.CELULAR_USUARIO %>
+                        </address>
+                        <aside class="vendedor-stats">
+                            <figure class="stat">
+                                <span class="stat-number">4.8</span>
+                                <figcaption class="stat-label">⭐ Avaliação</figcaption>
+                            </figure>
+                            <figure class="stat">
+                                <span class="stat-number">2024</span>
+                                <figcaption class="stat-label">📅 Desde</figcaption>
+                            </figure>
+                        </aside>
+                        <button class="btn-contatar" onclick="contatarVendedor('<%= vendedor.EMAIL_USUARIO %>', '<%= vendedor.NOME_USUARIO %>')">
+                            Entrar em Contato
+                        </button>
+                    </section>
+                </article>
+            <% }); %>
+        </section>
+
+        <section class="cta-section">
+            <article class="cta-content">
+                <h3>Quer se tornar um vendedor?</h3>
+                <p>Junte-se à nossa rede de produtores orgânicos</p>
+                <button class="btn-cadastrar-vendedor" onclick="cadastrarVendedor()">
+                    Cadastrar como Vendedor
+                </button>
+            </article>
+        </section>
+    </main>
+
+    <script src="js/vendedores.js"></script>
+</body>
+</html>

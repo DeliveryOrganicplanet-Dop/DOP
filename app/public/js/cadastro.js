@@ -1,8 +1,4 @@
-if (!localStorage.getItem('redirectTo')) {
-    try {
-        localStorage.setItem('redirectTo', document.referrer || window.location.pathname || '/');
-    } catch (e) {}
-}
+// RedirectTo será gerenciado pelo servidor
 
 const form = document.getElementById('form');
 const username = document.getElementById('username');
@@ -12,36 +8,65 @@ const password = document.getElementById('password');
 const passwordtwo = document.getElementById('passwordtwo');
 const telefone = document.getElementById('telefone');
 
+// Inicializar placeholders estruturados
+document.addEventListener('DOMContentLoaded', () => {
+    cpf.placeholder = '___.___.___-__';
+    telefone.placeholder = '(__) _____-____';
+});
+
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     checkInputs();
 });
 
-cpf.addEventListener('input', () => {
-    let cpfValue = cpf.value.replace(/\D/g, ''); // Remove tudo que não for número
-
-    if (cpfValue.length > 11) {
-        cpfValue = cpfValue.substring(0, 11);
+cpf.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 11) {
+        value = value.substring(0, 11);
     }
-
-    cpf.value = cpfValue
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    
+    let formatted = '';
+    if (value.length > 0) {
+        formatted = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        if (value.length <= 9) {
+            formatted = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+        }
+        if (value.length <= 6) {
+            formatted = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+        }
+        if (value.length <= 3) {
+            formatted = value;
+        }
+    }
+    
+    e.target.value = formatted;
 });
 
-telefone.addEventListener('input', () => {
-    let tel = telefone.value.replace(/\D/g, '');
-    if (tel.length > 11) tel = tel.substring(0, 11);
-
-    telefone.value = tel
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d)/, '$1-$2');
+telefone.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 11) {
+        value = value.substring(0, 11);
+    }
+    
+    let formatted = '';
+    if (value.length > 0) {
+        if (value.length <= 2) {
+            formatted = `(${value}`;
+        } else if (value.length <= 7) {
+            formatted = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+        } else {
+            formatted = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+        }
+    }
+    
+    e.target.value = formatted;
 });
 
 
-function checkInputs() {
+async function checkInputs() {
     const usernameValue = username.value.trim();
     const emailValue = email.value.trim();
     const cpfValue = cpf.value.trim();
@@ -72,7 +97,7 @@ function checkInputs() {
     if (isValid) {
         console.log('Formulário válido, salvando dados...');
         
-        // Armazenando os dados no localStorage
+        // Enviando dados diretamente para o servidor
         const userData = {
             username: usernameValue,
             email: emailValue,
@@ -81,18 +106,29 @@ function checkInputs() {
             telefone: telefoneValue,
         };
 
-        console.log('Dados para salvar:', userData);
+        console.log('Enviando dados para o servidor:', userData);
         
-        // Salvando os dados no localStorage
-        localStorage.setItem('userData', JSON.stringify(userData));
-        
-        // Verificando se foi salvo
-        const saved = localStorage.getItem('userData');
-        console.log('Dados salvos no localStorage:', saved);
-
-        // Redirecionando para o próximo formulário
-        console.log('Redirecionando para /cadastro2');
-        window.location.href = '/cadastro2';
+        // Salvando dados temporários na sessão do servidor
+        try {
+            const response = await fetch('/api/cadastro-temp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            
+            if (response.ok) {
+                console.log('Dados salvos no servidor, redirecionando para /cadastro2');
+                window.location.href = '/cadastro2';
+            } else {
+                alert('Erro ao salvar dados. Tente novamente.');
+            }
+        } catch (e) {
+            console.error('Erro ao enviar dados:', e);
+            alert('Erro ao salvar dados. Tente novamente.');
+            return;
+        }
     } else {
         console.log('Formulário inválido');
     }

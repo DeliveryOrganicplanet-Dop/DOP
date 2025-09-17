@@ -3,9 +3,13 @@ const email = document.getElementById('email');
 const password = document.getElementById('password');
 const redirectInput = document.getElementById('redirectTo');
 
-// 🔹 Preenche o campo hidden com o redirectTo salvo ou referrer
+// 🔹 Preenche o campo hidden com o redirectTo
 (function () {
-    const redirectValue = localStorage.getItem('redirectTo') || document.referrer || '/';
+    // Se vier de cadlog, redireciona para home, senão mantém referrer
+    let redirectValue = document.referrer || '/';
+    if (redirectValue.includes('/cadlog') || redirectValue.includes('/login')) {
+        redirectValue = '/';
+    }
     if (redirectInput) {
         redirectInput.value = redirectValue;
     }
@@ -41,7 +45,6 @@ form.addEventListener('submit', async (e) => {
             if (contentType.includes('application/json')) {
                 const data = await response.json();
                 const destino = data.redirectTo || redirectTo || '/';
-                localStorage.removeItem('redirectTo');
                 window.location.href = destino;
             } else {
                 // Caso o servidor responda com HTML (formulário tradicional)

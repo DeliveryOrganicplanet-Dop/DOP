@@ -3,20 +3,21 @@ const path = require('path');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 const produtoController = require('../controllers/produtoController');
+const carrinhoController = require('../controllers/carrinhoController');
 
 // Middleware para verificar autenticação
 function verificarAuth(req, res, next) {
   console.log('Verificando autenticação para:', req.url);
-  console.log('Sessão:', req.session);
+  console.log('Session ID:', req.sessionID);
   console.log('Usuário na sessão:', req.session?.usuario);
   
   if (req.session && req.session.usuario) {
-    console.log('Usuário autenticado, prosseguindo...');
+    console.log('Usuário autenticado:', req.session.usuario.nome);
     return next();
   }
   
-  console.log('Usuário não autenticado, redirecionando para /cadlog');
-  return res.redirect('/cadlog');
+  console.log('Usuário não autenticado, redirecionando para login');
+  return res.redirect('/login');
 }
 
 // Middleware para passar dados do usuário para todas as views
@@ -47,10 +48,12 @@ router.get('/teste-basico', (req, res) => {
 
 // Endpoint para verificar sessão
 router.get('/verificar-sessao', (req, res) => {
+  console.log('Verificando sessão:', req.session);
   res.json({ 
     sessao: req.session.usuario || null,
     sessionId: req.sessionID,
-    cookies: req.headers.cookie
+    cookies: req.headers.cookie,
+    sessionData: req.session
   });
 });
 
@@ -86,9 +89,44 @@ router.get('/cadastro', (req, res) => {
 
 router.post('/cadastro', usuarioController.validateCreate, usuarioController.create);
 
-router.get('/carrinho', verificarAuth, (req, res) => {
-  res.render('pages/carrinho', { errors: null });
+// Rotas para gerenciar dados temporários do cadastro
+router.post('/api/cadastro-temp', (req, res) => {
+  req.session.dadosTemporarios = req.body;
+  res.json({ success: true });
 });
+
+router.get('/api/verificar-dados-temp', (req, res) => {
+  if (req.session.dadosTemporarios) {
+    res.json({ exists: true });
+  } else {
+    res.status(404).json({ exists: false });
+  }
+});
+
+router.get('/api/obter-dados-temp', (req, res) => {
+  if (req.session.dadosTemporarios) {
+    res.json(req.session.dadosTemporarios);
+  } else {
+    res.status(404).json({ error: 'Dados não encontrados' });
+  }
+});
+
+router.delete('/api/limpar-dados-temp', (req, res) => {
+  delete req.session.dadosTemporarios;
+  res.json({ success: true });
+});
+
+router.get('/carrinho', verificarAuth, (req, res) => {
+  const carrinho = req.session.carrinho || [];
+  res.render('pages/carrinho', { errors: null, carrinho });
+});
+
+// Rotas da API do carrinho
+router.post('/api/carrinho/adicionar', verificarAuth, carrinhoController.adicionarProduto);
+router.get('/api/carrinho', verificarAuth, carrinhoController.obterCarrinho);
+router.put('/api/carrinho/quantidade', verificarAuth, carrinhoController.alterarQuantidade);
+router.delete('/api/carrinho/remover', verificarAuth, carrinhoController.removerItem);
+router.delete('/api/carrinho/limpar', verificarAuth, carrinhoController.limparCarrinho);
 
 router.get('/calendario', verificarAuth, (req, res) => {
   res.render('pages/calendario', { errors: null });
@@ -123,7 +161,32 @@ router.get('/conta', verificarAuth, (req, res) => {
 });
 
 router.get('/finalizar', verificarAuth, (req, res) => {
-  res.render('pages/finalizar', { errors: null });
+  const carrinho = req.session.carrinho || [];
+  const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
+  const totalPreco = carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0);
+  res.render('pages/finalizar', { errors: null, carrinho, totalItens, totalPreco });
+});
+
+router.get('/produtos', async (req, res) => {
+  try {
+    const produtos = await produtoController.findAll(req, res);
+    // Como o controller já envia a resposta, vamos criar uma versão que retorna os dados
+    const produtoModel = require('../models/produtoModel');
+    const produtosList = await produtoModel.findAll();
+    res.render('pages/produtos', { errors: null, produtos: produtosList });
+  } catch (error) {
+    res.render('pages/error', { errors: [{ msg: 'Erro ao carregar produtos' }] });
+  }
+});
+
+router.get('/vendedores', async (req, res) => {
+  try {
+    const vendedorController = require('../controllers/vendedorController');
+    const vendedores = await vendedorController.getVendedoresWithUsers();
+    res.render('pages/vendedores', { errors: null, vendedores });
+  } catch (error) {
+    res.render('pages/error', { errors: [{ msg: 'Erro ao carregar vendedores' }] });
+  }
 });
 
 router.get('/produtos/:nome', (req, res) => {

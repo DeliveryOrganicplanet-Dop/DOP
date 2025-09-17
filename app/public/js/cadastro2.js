@@ -23,14 +23,20 @@ cepInput.addEventListener('focusout', async () => {
 });
 
 // Verificar dados ao carregar a página
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Página cadastro2 carregada');
-    const userData = localStorage.getItem('userData');
-    console.log('Dados no localStorage ao carregar:', userData);
     
-    if (!userData || userData === '{}') {
-        console.error('Nenhum dado encontrado no localStorage!');
-        alert('Erro: Dados do primeiro formulário não encontrados. Redirecionando...');
+    // Verificar se há dados temporários no servidor
+    try {
+        const response = await fetch('/api/verificar-dados-temp');
+        if (!response.ok) {
+            console.error('Nenhum dado encontrado no servidor!');
+            alert('Erro: Dados do primeiro formulário não encontrados. Redirecionando...');
+            window.location.href = '/cadastro';
+        }
+    } catch (e) {
+        console.error('Erro ao verificar dados no servidor:', e);
+        alert('Erro ao carregar dados. Redirecionando...');
         window.location.href = '/cadastro';
     }
 });
@@ -52,8 +58,22 @@ form.addEventListener('submit', async (e) => {
     
     console.log('Dados de endereço:', enderecoData);
 
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    console.log('Dados do localStorage:', userData);
+    // Buscar dados temporários do servidor
+    let userData = {};
+    try {
+        const response = await fetch('/api/obter-dados-temp');
+        if (response.ok) {
+            userData = await response.json();
+            console.log('Dados do servidor:', userData);
+        } else {
+            alert('Erro ao carregar dados do usuário.');
+            return;
+        }
+    } catch (e) {
+        console.error('Erro ao buscar dados do servidor:', e);
+        alert('Erro ao carregar dados do usuário.');
+        return;
+    }
     
     const dadosCompletos = {
         nome_usuario: userData.username,
@@ -83,7 +103,12 @@ form.addEventListener('submit', async (e) => {
             const resultado = await response.json();
             console.log('Resultado do cadastro:', resultado);
             alert("Cadastro realizado com sucesso!");
-            localStorage.removeItem('userData');
+            // Limpar dados temporários do servidor
+            try {
+                await fetch('/api/limpar-dados-temp', { method: 'DELETE' });
+            } catch (e) {
+                console.warn('Erro ao limpar dados temporários:', e);
+            }
             window.location.href = resultado.redirectTo || '/';
         } else {
             const erro = await response.json().catch(() => ({ message: 'Erro desconhecido' }));
