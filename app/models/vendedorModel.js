@@ -37,6 +37,17 @@ const vendedorModel = {
   async delete(id) {
     await pool.query('DELETE FROM VENDEDORES WHERE id_vendedores = ?', [id]);
   },
+
+  async findAllWithUsers() {
+    const [results] = await pool.query(`
+      SELECT v.*, u.NOME_USUARIO, u.EMAIL_USUARIO, u.CELULAR_USUARIO, 
+             u.CIDADE_USUARIO, u.UF_USUARIO, u.BAIRRO_USUARIO
+      FROM VENDEDORES v 
+      JOIN USUARIOS u ON v.id_usuario = u.ID_USUARIO 
+      WHERE u.TIPO_USUARIO = 'V'
+    `);
+    return results;
+  },
 };
 
 module.exports = vendedorModel;

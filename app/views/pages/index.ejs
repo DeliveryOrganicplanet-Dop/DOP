@@ -21,48 +21,15 @@
                     <span class="logo-text"></span>
                 </h1>
             </section>
-           
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="/" class="nav-link" title="Página inicial">
-                        <span class="nav-icon">🏠</span>
-                        <span class="nav-text">Início</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <% if (usuario) { %>
-                        <a href="/conta" class="nav-link" title="Sua conta">
-                            <span class="nav-icon">👤</span>
-                            <span class="nav-text">Olá, <%= usuario.nome %></span>
-                        </a>
-                    <% } else { %>
-                        <a href="#" id="btn-conta" class="nav-link" title="Sua conta">
-                            <span class="nav-icon">👤</span>
-                            <span class="nav-text">Conta</span>
-                        </a>
-                    <% } %>
-                </li>
-                <% if (usuario) { %>
-                <li class="nav-item">
-                    <a href="/logout" class="nav-link" title="Sair">
-                        <span class="nav-icon">🚪</span>
-                        <span class="nav-text">Sair</span>
-                    </a>
-                </li>
-                <% } %>
-                <li class="nav-item">
-                    <a href="/calendario" class="nav-link" title="Calendário de entregas">
-                        <span class="nav-icon">📅</span>
-                        <span class="nav-text">Calendário</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
-                        <span class="nav-icon">🛒</span>
-                        <span class="nav-text">Carrinho</span>
-                    </a>
-                </li>
-            </ul>
+
+            <section class="search-section">
+                <form class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Buscar produtos...">
+                    <button type="button" class="search-btn" onclick="buscarProdutos()">
+                        <span class="search-icon">🔍</span>
+                    </button>
+                </form>
+            </section>
  
             <section class="header-controls">
                 <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
@@ -75,6 +42,56 @@
                     <span class="hamburger-line"></span>
                 </button>
             </section>
+        </nav>
+
+        <nav class="bottom-nav" aria-label="Menu de navegação">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/" class="nav-link" title="Página inicial">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <% if (usuario) { %>
+                        <a href="/conta" class="nav-link" title="Sua conta">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">Olá, <%= usuario.nome.split(' ')[0] %></span>
+                        </a>
+                    <% } else { %>
+                        <a href="#" id="btn-conta" class="nav-link" title="Sua conta">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">Conta</span>
+                        </a>
+                    <% } %>
+                </li>
+                <li class="nav-item">
+                    <a href="/vendedores" class="nav-link" title="Área do Vendedor">
+                        <span class="nav-icon">🌱</span>
+                        <span class="nav-text">Vendedores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/calendario" class="nav-link" title="Calendário de entregas">
+                        <span class="nav-icon">📅</span>
+                        <span class="nav-text">Calendário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
+                        <span class="nav-icon">🛒</span>
+                        <span class="nav-text">Carrinho</span>
+                    </a>
+                </li>
+                <% if (usuario) { %>
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link" title="Sair">
+                        <span class="nav-icon">🚪</span>
+                        <span class="nav-text">Sair</span>
+                    </a>
+                </li>
+                <% } %>
+            </ul>
         </nav>
     </header>
  
@@ -191,6 +208,10 @@
         <p class="footer-text">&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
     </footer>
  
+    <script>
+        // Dados do usuário vindos do servidor
+        window.usuario = <%- JSON.stringify(usuario) %>;
+    </script>
     <script src="js/inicio.js"></script>
 </body>
 </html>

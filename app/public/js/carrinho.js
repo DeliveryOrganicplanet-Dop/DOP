@@ -3,8 +3,8 @@ function formatarPreco(preco) {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
 }
 
-// Recupera o carrinho do localStorage ou cria um array vazio
-let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+// Carrinho será carregado do servidor
+let carrinho = window.carrinhoData || [];
 
 // Função para atualizar o carrinho na tela
 function atualizarCarrinho() {
@@ -62,75 +62,92 @@ function atualizarCarrinho() {
     document.getElementById('total-itens').textContent = `Total de itens: ${totalItens}`;
     document.getElementById('total-preco').textContent = `Total: ${formatarPreco(totalPreco)}`;
 
-    // Salva o carrinho no localStorage após a atualização
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    // Carrinho é atualizado automaticamente no servidor
 }
 
 // Função para alterar a quantidade de um item (com os botões + e -)
-function alterarQuantidade(nome, delta) {
+async function alterarQuantidade(nome, delta) {
     const item = carrinho.find(item => item.nome === nome);
     if (item) {
-        item.quantidade += delta;
-        if (item.quantidade < 1) {
-            item.quantidade = 1;  // Garante que a quantidade não seja menor que 1
+        const novaQuantidade = Math.max(1, item.quantidade + delta);
+        
+        try {
+            const response = await fetch('/api/carrinho/quantidade', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome, quantidade: novaQuantidade })
+            });
+            
+            if (response.ok) {
+                item.quantidade = novaQuantidade;
+                atualizarCarrinho();
+            } else {
+                alert('Erro ao atualizar quantidade');
+            }
+        } catch (error) {
+            console.error('Erro ao alterar quantidade:', error);
+            alert('Erro ao atualizar quantidade');
         }
-        atualizarCarrinho();
     }
 }
 
 // Função para remover um item do carrinho
-function removerItem(nome) {
-    carrinho = carrinho.filter(item => item.nome !== nome);
-    atualizarCarrinho();
+async function removerItem(nome) {
+    try {
+        const response = await fetch('/api/carrinho/remover', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome })
+        });
+        
+        if (response.ok) {
+            carrinho = carrinho.filter(item => item.nome !== nome);
+            atualizarCarrinho();
+        } else {
+            alert('Erro ao remover item');
+        }
+    } catch (error) {
+        console.error('Erro ao remover item:', error);
+        alert('Erro ao remover item');
+    }
 }
 
-// Função para adicionar um produto ao carrinho
+// Função para adicionar um produto ao carrinho (não usada nesta página)
 function adicionarProduto(nome, preco, imagem) {
-    const produtoExistente = carrinho.find(item => item.nome === nome);
-    if (produtoExistente) {
-        produtoExistente.quantidade += 1;
-    } else {
-        carrinho.push({
-            nome: nome,
-            preco: preco,
-            imagem: imagem,
-            quantidade: 1
-        });
-    }
-    atualizarCarrinho();
+    // Esta função não é usada na página do carrinho
+    console.log('Função não utilizada nesta página');
 }
 
 // Função para finalizar a compra
-function finalizarCompra() {
+async function finalizarCompra() {
     // Verifica se o carrinho está vazio
     if (carrinho.length === 0) {
         alert("Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
         return;
     }
 
-    // Verifica se o usuário está logado
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (userData) {
+    try {
         // Simulação de pagamento com sucesso
         alert("Compra finalizada com sucesso! Obrigado pela sua compra.");
 
-        // Salva os detalhes da compra no localStorage (opcional)
-        const detalhesCompra = {
-            itens: carrinho,
-            totalItens: carrinho.reduce((acc, item) => acc + item.quantidade, 0),
-            totalPreco: carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0)
-        };
-        localStorage.setItem('detalhesCompra', JSON.stringify(detalhesCompra));
-
-        // Limpa o carrinho e o localStorage após a compra
-        carrinho = [];
-        localStorage.removeItem('carrinho');
-
-        // Redireciona para a página de sucesso (finalizar-compra.html)
-        window.location.href = '/finalizar'; // Redireciona para a página de finalização de compra
-    } else {
-        // Usuário não está logado, redireciona para a página de login/cadastro
-        window.location.href = "/cadlog"; // Substitua com a URL real para login/cadastro
+        // Limpa o carrinho no servidor
+        const response = await fetch('/api/carrinho/limpar', {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            // Redireciona para a página de finalização
+            window.location.href = '/finalizar';
+        } else {
+            alert('Erro ao finalizar compra');
+        }
+    } catch (error) {
+        console.error('Erro ao finalizar compra:', error);
+        alert('Erro ao finalizar compra');
     }
 }
 

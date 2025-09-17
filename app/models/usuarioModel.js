@@ -3,7 +3,7 @@ const pool = require('../../config/pool_conexoes');
 const usuarioModel = {
   async findUserEmail(dadosForm) {
     const [results] = await pool.query(
-      'SELECT ID_USUARIO AS id_usuario, NOME_USUARIO AS usuario, SENHA_USUARIO AS senha_usuario, TIPO_USUARIO AS tipo_usuario FROM USUARIOS WHERE EMAIL_USUARIO = ?',
+      'SELECT ID_USUARIO, NOME_USUARIO, EMAIL_USUARIO, SENHA_USUARIO, TIPO_USUARIO FROM USUARIOS WHERE EMAIL_USUARIO = ?',
       [dadosForm.email_usuario]
     );
     return results[0];

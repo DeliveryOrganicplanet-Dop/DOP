@@ -92,6 +92,95 @@ body.dark .main-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--spacing-lg);
+}
+
+/* Search Section */
+.search-section {
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background: var(--shadow-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all var(--transition-smooth);
+}
+
+.search-container:focus-within {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-btn {
+    background: var(--accent-gold);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-btn:hover {
+    background: #e6940a;
+}
+
+.search-icon {
+    color: white;
+    font-size: 1rem;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    background: var(--shadow-soft);
+    border-top: 1px solid var(--border-subtle);
+    padding: var(--spacing-sm) 0;
+}
+
+.bottom-nav .nav-list {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+}
+
+.bottom-nav .nav-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-width: 60px;
+    text-align: center;
+}
+
+.bottom-nav .nav-icon {
+    font-size: 1.2rem;
+}
+
+.bottom-nav .nav-text {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
 }
  
 /* Logo */
@@ -591,37 +680,36 @@ body.dark .main-header {
 }
  
 @media (max-width: 768px) {
-    .mobile-menu {
-        display: flex;
-    }
-   
-    .nav-list {
-        position: fixed;
-        top: 81px;
-        right: -100%;
-        width: 80vw;
-        height: calc(100vh - 81px);
-        background: var(--primary-light);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding: var(--spacing-2xl);
-        gap: var(--spacing-lg);
-        transition: right var(--transition-smooth);
-        border-left: 1px solid var(--border-subtle);
-        box-shadow: -10px 0 30px var(--shadow-soft);
-    }
-   
-    .nav-list.active {
-        right: 0;
-    }
-   
-    .nav-link {
-        width: 100%;
-        justify-content: flex-start;
+    .nav-container {
+        flex-wrap: wrap;
+        height: auto;
         padding: var(--spacing-md);
-        font-size: var(--font-size-base);
+    }
+    
+    .search-section {
+        order: 3;
+        flex: 1 1 100%;
+        margin-top: var(--spacing-sm);
+        max-width: none;
+    }
+    
+    .header-controls {
+        order: 2;
+    }
+    
+    .mobile-menu {
+        display: none;
+    }
+    
+    .bottom-nav .nav-list {
+        padding: 0 var(--spacing-sm);
+        gap: var(--spacing-sm);
+        flex-wrap: wrap;
+    }
+    
+    .bottom-nav .nav-link {
+        min-width: 45px;
+        padding: var(--spacing-xs);
     }
    
     .logo-text {
@@ -683,8 +771,7 @@ body.dark .main-header {
  
 @media (max-width: 480px) {
     .nav-container {
-        padding: 0 var(--spacing-md);
-        height: 70px;
+        padding: var(--spacing-sm);
     }
    
     .brand-logo {
@@ -692,8 +779,20 @@ body.dark .main-header {
     }
    
     .logo-image {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .bottom-nav .nav-list {
+        gap: var(--spacing-xs);
+    }
+    
+    .bottom-nav .nav-text {
+        font-size: 0.65rem;
+    }
+    
+    .bottom-nav .nav-link {
+        min-width: 40px;
     }
    
     .hero-section {

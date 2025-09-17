@@ -21,6 +21,13 @@
         <a href="/" class="btn-voltar">Voltar para a loja</a>
     </main>
 
+    <script>
+        // Dados da compra vindos do servidor
+        window.detalhesCompra = {
+            totalItens: <%= totalItens || 0 %>,
+            totalPreco: <%= totalPreco || 0 %>
+        };
+    </script>
     <script src="js/finalizar.js"></script>
 </body>
 </html>

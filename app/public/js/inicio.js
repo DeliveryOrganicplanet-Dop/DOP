@@ -16,6 +16,7 @@ class DeliveryApp {
         this.initializeTheme();
         this.initializeMobileMenu();
         this.initializeAccountButton();
+        this.initializeSearch();
         this.addScrollEffects();
         this.addProductCardEffects();
     }
@@ -138,7 +139,13 @@ class DeliveryApp {
     }
 
     initializeTheme() {
-        const savedTheme = localStorage.getItem('theme');
+        let savedTheme = null;
+        try {
+            savedTheme = localStorage.getItem('theme');
+        } catch (e) {
+            console.warn('Erro ao carregar tema:', e);
+        }
+        
         const themeToggle = document.getElementById('toggle-dark');
         
         if (savedTheme === 'dark') {
@@ -162,7 +169,11 @@ class DeliveryApp {
         }
         
         // Save theme preference
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        try {
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch (e) {
+            console.warn('Erro ao salvar tema:', e);
+        }
         
         // Add transition class temporarily
         body.style.transition = 'all 0.3s ease';
@@ -208,8 +219,8 @@ class DeliveryApp {
         const btnConta = document.getElementById('btn-conta');
         
         if (btnConta) {
-            // Check if user is logged in (simulate with localStorage)
-            const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+            // Check if user is logged in (dados do servidor)
+            const userData = window.usuario || null;
             
             btnConta.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -418,6 +429,29 @@ class DeliveryApp {
         };
     }
 
+    // Função de busca
+    initializeSearch() {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.buscarProdutos();
+                }
+            });
+        }
+    }
+    
+    buscarProdutos() {
+        const searchInput = document.getElementById('search-input');
+        const termo = searchInput.value.trim();
+        
+        if (termo) {
+            window.location.href = `/produtos?busca=${encodeURIComponent(termo)}`;
+        } else {
+            window.location.href = '/produtos';
+        }
+    }
+
     // Enhanced accessibility
     setupAccessibility() {
         // Add skip link
@@ -465,6 +499,18 @@ class DeliveryApp {
             const img = new Image();
             img.src = src;
         });
+    }
+}
+
+// Função global para busca
+function buscarProdutos() {
+    const searchInput = document.getElementById('search-input');
+    const termo = searchInput.value.trim();
+    
+    if (termo) {
+        window.location.href = `/produtos?busca=${encodeURIComponent(termo)}`;
+    } else {
+        window.location.href = '/produtos';
     }
 }
 

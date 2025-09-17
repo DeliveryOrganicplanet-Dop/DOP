@@ -23,24 +23,37 @@ const usuarioController = {
   ],
 
   async login(req, res) {
-    const errors = validationResult(req);
     const isJson = req.headers['content-type'] && req.headers['content-type'].includes('application/json');
-    if (!errors.isEmpty()) {
-      if (isJson) return res.status(400).json({ errors: errors.array() });
-      return res.render('pages/login', { errors: errors.array(), redirectTo: req.body.redirectTo || req.query.redirectTo || '/' });
-    }
   
-    // aceita várias variações de nomes de campo
-    const email = req.body.email || req.body.nome_usu || req.body.email_usuario;
-    const password = req.body.password || req.body.senha_usu || req.body.senha_usuario;
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    if (!email || !password) {
+      if (isJson) return res.status(400).json({ message: 'Email e senha são obrigatórios' });
+      return res.render('pages/login', { errors: [{ msg: 'Email e senha são obrigatórios' }], redirectTo: req.body.redirectTo || '/' });
+    }
   
     try {
       const usuario = await usuarioModel.findUserEmail({ email_usuario: email });
-      if (usuario && bcrypt.compareSync(password, usuario.senha_usuario)) {
+      console.log('Usuário encontrado:', usuario);
+      
+      if (usuario && bcrypt.compareSync(password, usuario.SENHA_USUARIO)) {
+        // Criar sessão do usuário
+        req.session.usuario = {
+          id: usuario.ID_USUARIO,
+          nome: usuario.NOME_USUARIO,
+          email: usuario.EMAIL_USUARIO,
+          tipo: usuario.TIPO_USUARIO
+        };
+        
+        console.log('Login realizado com sucesso para:', usuario.EMAIL_USUARIO);
+        console.log('Sessão criada:', req.session.usuario);
+        
         const redirectTo = req.body.redirectTo || req.query.redirectTo || '/';
         if (isJson) return res.status(200).json({ message: 'ok', redirectTo });
         return res.redirect(redirectTo);
       } else {
+        console.log('Falha na autenticação');
         if (isJson) return res.status(401).json({ message: 'Email ou senha inválidos' });
         return res.render('pages/login', { errors: [{ msg: 'Email ou senha inválidos' }], redirectTo: req.body.redirectTo || req.query.redirectTo || '/' });
       }

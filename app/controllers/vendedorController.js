@@ -48,3 +48,12 @@ exports.deleteVendedor = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.getVendedoresWithUsers = async () => {
+  try {
+    const vendedores = await vendedorModel.findAllWithUsers();
+    return vendedores;
+  } catch (error) {
+    throw error;
+  }
+};

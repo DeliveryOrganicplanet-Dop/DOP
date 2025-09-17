@@ -65,3 +65,28 @@ ALTER TABLE USUARIOS MODIFY EMAIL_USUARIO VARCHAR(100) NOT NULL;
 ALTER TABLE USUARIOS MODIFY CELULAR_USUARIO VARCHAR(100) NOT NULL;
 ALTER TABLE USUARIOS MODIFY CPF_USUARIO VARCHAR(15) NOT NULL;
 ALTER TABLE USUARIOS MODIFY CEP_USUARIO VARCHAR(15) NOT NULL;
+
+-- Inserir categorias
+INSERT INTO CATEGORIAS (nome_categoria) VALUES 
+('Frutas'),
+('Verduras'),
+('Legumes');
+
+-- Inserir produtos
+INSERT INTO PRODUTOS (nome_prod, valor_unitario, qtde_estoque, img_prod, id_categoria) VALUES 
+('Abacaxi Pérola', 9.85, 50, 'imagens/abacaxi.png', 1),
+('Ameixa Importada', 2.99, 100, 'imagens/ameixa.png', 1),
+('Alface Crespa', 2.99, 80, 'imagens/alface.png', 2),
+('Brócolis Ninja', 9.70, 60, 'imagens/brocolis.png', 3);
+
+-- Inserir usuários vendedores
+INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, CELULAR_USUARIO, CPF_USUARIO, LOGRADOURO_USUARIO, BAIRRO_USUARIO, CIDADE_USUARIO, UF_USUARIO, CEP_USUARIO, SENHA_USUARIO, TIPO_USUARIO) VALUES 
+('João Silva', 'joao@fazendaorganica.com', '11987654321', '12345678901', 'Estrada Rural 123', 'Zona Rural', 'Ibiuna', 'SP', '18150000', '$2b$10$example1', 'V'),
+('Maria Santos', 'maria@verdurasfrescas.com', '11876543210', '98765432109', 'Sítio das Flores', 'Centro', 'Piedade', 'SP', '18170000', '$2b$10$example2', 'V'),
+('Carlos Oliveira', 'carlos@frutasdocampo.com', '11765432109', '11122233344', 'Fazenda Boa Vista', 'Rural', 'Tapiraí', 'SP', '18180000', '$2b$10$example3', 'V');
+
+-- Inserir vendedores
+INSERT INTO VENDEDORES (tipo_pessoa, digito_pessoa, id_usuario) VALUES 
+('PF', '123.456.789-01', (SELECT ID_USUARIO FROM USUARIOS WHERE EMAIL_USUARIO = 'joao@fazendaorganica.com')),
+('PJ', '12.345.678/0001-90', (SELECT ID_USUARIO FROM USUARIOS WHERE EMAIL_USUARIO = 'maria@verdurasfrescas.com')),
+('PF', '111.222.333-44', (SELECT ID_USUARIO FROM USUARIOS WHERE EMAIL_USUARIO = 'carlos@frutasdocampo.com'));

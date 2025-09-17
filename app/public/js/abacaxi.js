@@ -1,20 +1,22 @@
 // Função para adicionar um produto ao carrinho
-function adicionarProduto(nome, preco, imagem) {
-    // Recupera o carrinho do localStorage ou cria um array vazio
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+async function adicionarProduto(nome, preco, imagem) {
+    try {
+        const response = await fetch('/api/carrinho/adicionar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, preco, imagem })
+        });
 
-    // Verifica se o produto já está no carrinho
-    const itemExistente = carrinho.find(item => item.nome === nome);
-
-    if (itemExistente) {
-        itemExistente.quantidade += 1;
-    } else {
-        carrinho.push({ nome, preco, imagem, quantidade: 1 });
+        if (response.ok) {
+            window.location.href = '/carrinho';
+        } else {
+            const error = await response.json();
+            alert('Erro ao adicionar produto: ' + (error.error || 'Erro desconhecido'));
+        }
+    } catch (error) {
+        console.error('Erro ao adicionar produto:', error);
+        alert('Erro ao adicionar produto ao carrinho. Tente novamente.');
     }
-
-    // Atualiza o carrinho no localStorage
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-    // Redireciona para a página do carrinho
-    window.location.href = '/carrinho';  // Substitua '/carrinho.html' pelo caminho correto da sua página de carrinho
 }
