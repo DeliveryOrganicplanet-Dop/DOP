@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Favoritos - Delivery Organic Plant</title>
+    <link rel="stylesheet" href="css/favoritos.css">
+</head>
+<body>
+    <header>
+        <nav aria-label="Navegação principal">
+            <a href="/" aria-label="Voltar à página inicial">
+                <span>←</span> Voltar
+            </a>
+            <h1>❤️ Meus Favoritos</h1>
+            <button id="clear-favorites" aria-label="Limpar favoritos">🗑️</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="favorites-content">
+            <header>
+                <h2>Produtos Favoritos</h2>
+                <span id="favorites-count">0 produtos</span>
+            </header>
+
+            <section id="empty-favorites" class="empty-state">
+                <figure>
+                    <span>💔</span>
+                </figure>
+                <h3>Você ainda não tem favoritos</h3>
+                <p>Adicione produtos aos seus favoritos para encontrá-los facilmente</p>
+                <a href="/">Explorar Produtos →</a>
+            </section>
+
+            <section class="products-grid" id="favorites-grid">
+                <!-- Produtos favoritos serão inseridos dinamicamente -->
+            </section>
+        </section>
+
+        <aside class="favorites-actions">
+            <header>
+                <h2>Ações Rápidas</h2>
+            </header>
+
+            <section class="action-buttons">
+                <button id="add-all-to-cart" disabled>
+                    🛒 Adicionar Todos ao Carrinho
+                </button>
+                <button onclick="window.location.href='/carrinho'">
+                    💳 Ver Carrinho
+                </button>
+                <button onclick="window.location.href='/'">
+                    🛍️ Continuar Comprando
+                </button>
+            </section>
+
+            <section class="favorites-stats">
+                <article>
+                    <span>Total de favoritos:</span>
+                    <span id="total-favorites">0</span>
+                </article>
+                <article>
+                    <span>Valor total:</span>
+                    <span id="total-value">R$ 0,00</span>
+                </article>
+            </section>
+        </aside>
+
+        <section class="recommendations">
+            <header>
+                <h2>Produtos Similares</h2>
+                <p>Baseado nos seus favoritos</p>
+            </header>
+
+            <article class="products-grid">
+                <section class="product-card">
+                    <figure>
+                        <img src="imagens/brocolis.png" alt="Brócolis">
+                    </figure>
+                    <header>
+                        <h3>Brócolis Premium</h3>
+                        <span>R$ 9,70</span>
+                    </header>
+                    <section class="product-actions">
+                        <button class="favorite-btn" data-product="brocolis">❤️</button>
+                        <button class="add-cart-btn" data-product="brocolis">🛒</button>
+                    </section>
+                </section>
+
+                <section class="product-card">
+                    <figure>
+                        <img src="imagens/alface.png" alt="Alface">
+                    </figure>
+                    <header>
+                        <h3>Alface Orgânica</h3>
+                        <span>R$ 2,99</span>
+                    </header>
+                    <section class="product-actions">
+                        <button class="favorite-btn" data-product="alface">❤️</button>
+                        <button class="add-cart-btn" data-product="alface">🛒</button>
+                    </section>
+                </section>
+
+                <section class="product-card">
+                    <figure>
+                        <img src="imagens/ameixa.png" alt="Ameixa">
+                    </figure>
+                    <header>
+                        <h3>Ameixa Importada</h3>
+                        <span>R$ 2,99</span>
+                    </header>
+                    <section class="product-actions">
+                        <button class="favorite-btn" data-product="ameixa">❤️</button>
+                        <button class="add-cart-btn" data-product="ameixa">🛒</button>
+                    </section>
+                </section>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Delivery Organic Plant. Compra segura e entrega garantida.</p>
+    </footer>
+
+    <section id="loading" class="loading" aria-hidden="true">
+        <article>
+            <span class="spinner"></span>
+            <p>Carregando...</p>
+        </article>
+    </section>
+
+    <section id="toast-container" aria-live="polite">
+        <!-- Notificações serão inseridas aqui -->
+    </section>
+
+    <script>
+        window.favoritosData = [];
+    </script>
+    <script src="js/favoritos.js"></script>
+</body>
+</html>
