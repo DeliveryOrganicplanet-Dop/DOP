@@ -1,33 +1,136 @@
-<!DOCTYPE html> 
-<html lang="pt-BR"> 
-    <head> 
-        <meta charset="UTF-8"> 
-        <meta name="viewport"content="width=device-width, initial-scale=1.0"> 
-        <title>Alimentos que previnem o câncer de próstata</title> 
-        <link rel="stylesheet" href="css/calendario.css"> 
-    </head> 
-    <body> 
-        <header> 
-            <nav> 
-                <a href="/" class="back-button">&#8249;</a>
-            </nav> 
-            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo"> 
-        </header> 
-        <section class="banner"> 
-            <img src="imagens/calendario1.png" alt="Vegetais" class="banner-img"> 
-            <h1>05 de junho de 2025</h1> 
-            <h2>Alimentos que previnem <br>o câncer de próstata</h2> 
-        </section> 
-        <main> 
-            <h3>Brócolis</h3> 
-            <img src="imagens/calendario2.png" alt="Brócolis"class="broccoli-img"> 
-            <p> Estudo realizado pelo Institute of Food Research (IFR), no Reino Unido, sugere que comer três ou quatro porções de brócolis por semana pode evitar o crescimento do tumor em pacientes recém-diagnosticadas.
-            </p> 
-            <p> De acordo com os pesquisadores, a molécula responsável pelo efeito protetor se chama sulforafano. 
-            </p>
-        </main> 
-        <footer> 
-            <a href="/Brocolis" class="buy-button">Comprar</a> 
-        </footer> 
-    </body> 
-    </html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Nutricional - DOP</title>
+    <link rel="stylesheet" href="css/calendario.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="back-button">&#8249;</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </nav>
+        <figure>
+            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
+        </figure>
+        <h1>Calendário Nutricional</h1>
+    </header>
+
+    <main>
+        <section class="calendar-section">
+            <header class="calendar-header">
+                <button onclick="previousMonth()" class="nav-btn">‹</button>
+                <h2 id="monthYear"></h2>
+                <button onclick="nextMonth()" class="nav-btn">›</button>
+            </header>
+            <table class="calendar-grid">
+                <thead>
+                    <tr>
+                        <th>Dom</th>
+                        <th>Seg</th>
+                        <th>Ter</th>
+                        <th>Qua</th>
+                        <th>Qui</th>
+                        <th>Sex</th>
+                        <th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarDays"></tbody>
+            </table>
+        </section>
+
+        <section class="content-section">
+            <article class="daily-tip" id="dailyTip">
+                <header>
+                    <h3>Dica do Dia</h3>
+                </header>
+                <figure class="tip-content">
+                    <img id="tipImage" src="imagens/calendario2.png" alt="Alimento do dia">
+                    <figcaption class="tip-text">
+                        <h4 id="tipTitle">Brócolis</h4>
+                        <p id="tipDescription">Rico em sulforafano, ajuda na prevenção do câncer de próstata. Consuma 3-4 porções por semana.</p>
+                        <aside class="benefits" id="tipBenefits">
+                            <mark class="benefit-tag">Antioxidante</mark>
+                            <mark class="benefit-tag">Anti-inflamatório</mark>
+                        </aside>
+                        <a href="/Brocolis" class="buy-button" id="buyButton">Comprar Brócolis</a>
+                    </figcaption>
+                </figure>
+            </article>
+
+            <section class="nutrition-calendar">
+                <header>
+                    <h3>Calendário Nutricional Mensal</h3>
+                </header>
+                <ul class="nutrition-grid">
+                    <li class="nutrition-item" data-day="1">
+                        <time class="day-num">1</time>
+                        <strong class="food-name">Brócolis</strong>
+                        <small class="benefit">Prevenção câncer</small>
+                    </li>
+                    <li class="nutrition-item" data-day="5">
+                        <time class="day-num">5</time>
+                        <strong class="food-name">Abacaxi</strong>
+                        <small class="benefit">Digestão</small>
+                    </li>
+                    <li class="nutrition-item" data-day="10">
+                        <time class="day-num">10</time>
+                        <strong class="food-name">Alface</strong>
+                        <small class="benefit">Hidratação</small>
+                    </li>
+                    <li class="nutrition-item" data-day="15">
+                        <time class="day-num">15</time>
+                        <strong class="food-name">Ameixa</strong>
+                        <small class="benefit">Fibras</small>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="health-stats">
+                <header>
+                    <h3>Seus Benefícios Este Mês</h3>
+                </header>
+                <dl class="stats-grid">
+                    <dt class="stat-card">
+                        <data class="stat-number" value="12">12</data>
+                        <dd class="stat-label">Dias Saudáveis</dd>
+                    </dt>
+                    <dt class="stat-card">
+                        <data class="stat-number" value="8">8</data>
+                        <dd class="stat-label">Alimentos Diferentes</dd>
+                    </dt>
+                    <dt class="stat-card">
+                        <data class="stat-number" value="95">95%</data>
+                        <dd class="stat-label">Meta Nutricional</dd>
+                    </dt>
+                </dl>
+            </section>
+        </section>
+    </main>
+
+    <dialog class="modal" id="foodModal">
+        <article class="modal-content">
+            <button class="close" onclick="closeModal()">&times;</button>
+            <section class="modal-body">
+                <figure>
+                    <img id="modalImage" src="" alt="">
+                    <figcaption class="modal-text">
+                        <h3 id="modalTitle"></h3>
+                        <p id="modalDescription"></p>
+                        <aside class="modal-benefits" id="modalBenefits"></aside>
+                        <details class="nutrition-facts">
+                            <summary>Informações Nutricionais</summary>
+                            <dl id="nutritionFacts"></dl>
+                        </details>
+                        <a href="#" class="buy-button" id="modalBuyButton">Comprar</a>
+                    </figcaption>
+                </figure>
+            </section>
+        </article>
+    </dialog>
+
+    <script src="js/calendario.js"></script>
+</body>
+</html>
