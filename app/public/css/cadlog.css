@@ -1,51 +1,211 @@
-body, html {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    box-sizing: border-box;
+}
+
+body, html {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #FFA500 0%, #4CAF50 100%);
+    min-height: 100vh;
     text-align: center;
+    color: #333;
 }
 
 header {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     position: relative;
+    padding: 15px 0;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 nav {
     position: absolute;
-    top: 10px;
-    left: 23px;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
 }
 
 .back {
     text-decoration: none;
-    font-size: 60px;
-    color: black;
+    font-size: 32px;
+    color: #555;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.back:hover {
+    color: #FFA500;
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .logo {
-    width: 130px;
+    width: 120px;
     height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 main {
-    padding: 205px 20px;
+    padding: 60px 20px 40px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.welcome-section {
+    margin-bottom: 50px;
 }
 
 h1 {
-    font-size: 22px;
-    color: #555555;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.3;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.buttons-section {
     margin-bottom: 40px;
 }
 
 .button {
-    display: block;
-    margin: 10px auto;
-    background-color: #FFA500;
-    color: white;
-    padding: 15px 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 10px;
+    padding: 18px 35px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 180px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.button:hover::before {
+    left: 100%;
+}
+
+.button-icon {
     font-size: 18px;
-    width: 200px;
+}
+
+.primary {
+    background: linear-gradient(45deg, #FFA500, #FF8C00);
+    color: white;
+    border: 2px solid transparent;
+}
+
+.primary:hover {
+    background: linear-gradient(45deg, #FF8C00, #FFA500);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(255, 165, 0, 0.4);
+}
+
+.secondary {
+    background: rgba(255, 255, 255, 0.95);
+    color: #FFA500;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.secondary:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 35px #FFA500(102, 126, 234, 0.3);
+    border-color: #FFA500;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    main {
+        padding: 40px 15px 30px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .button {
+        width: 160px;
+        padding: 16px 30px;
+        margin: 12px 8px;
+    }
+    
+    .back {
+        font-size: 28px;
+        left: 15px;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+}
+
+@media (max-width: 400px) {
+    .button {
+        width: 140px;
+        padding: 14px 25px;
+        font-size: 15px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    .subtitle {
+        font-size: 15px;
+    }
 }
