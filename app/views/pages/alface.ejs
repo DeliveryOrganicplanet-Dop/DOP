@@ -1,62 +1,215 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produto - DOP</title>
+    <title>Alface Crespa - DOP</title>
     <link rel="stylesheet" href="css/alface.css">
 </head>
 <body>
-    <header class="top-bar">
-        <a href="/" class="back">
-            <span class="back-icon">&#10094;</span>
-        </a>
-        <h1 class="logo">DOP</h1>
+    <header>
+        <nav>
+            <a href="/" class="back-button">&#8249;</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </nav>
+        <figure>
+            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
+        </figure>
     </header>
-    <section class="produto-container">
-        <img src="imagens/alface.png" alt="Alface crespa" class="produto-img">
-        <h2>Alface crespa</h2>
-        <p class="preco">R$ 2,99 <span class="unidade">Unidade 150g</span></p>
-        <!-- Botão para adicionar ao carrinho -->
-        <button class="btn-carrinho" onclick="adicionarProduto('Alface crespa', 2.99, 'imagens/alface.png')">Adicionar no carrinho</button>
-    </section>
-    <section class="peca-tambem">
-        <h3>Peça também</h3>
-        <ul class="produtos-sugeridos">
-            <li>
-                <a href="/ameixa" class="ameixa-button">
-                    <img src="imagens/ameixa.png" alt="Ameixa">
-                    <p class="offer-price">R$ 2,99</p>
-                    <p class="offer-name">Ameixa importada unidade 150g</p>
-                </a>
-            </li>
-            <li>
-                <a href="/Brocolis" class="brocolis-button">
-                    <img src="imagens/brocolis.png" alt="Brócolis">
-                    <p class="offer-price">R$ 9,70</p>
-                    <p class="offer-name">Brócolis ninja unidade 250g</p>
-                </a>
-            </li>
-            <li>
-                <a href="/abacaxi" class="abacaxi-button">
-                    <img src="imagens/abacaxi.png" alt="Abacaxi">
-                    <p class="offer-price">R$ 9,85</p>
-                    <p class="offer-name">Abacaxi Pérola 1,00kg cada</p>
-                </a>
-            </li>
-        </ul>
-    </section>
-    <section class="vendedor-info">
-        <h4>Vendedor</h4>
-        <p>Cleuson<br><a href="#">Ver perfil</a></p>
-        <div class="vendedor-detalhes">
-            <p><img src="location-icon.png" alt="Localização"> Barueri - São Paulo</p>
-            <p><img src="clock-icon.png" alt="Na DOP desde"> Na DOP desde 2024</p>
-        </div>
-        <a href="#" class="denunciar-link">Denunciar item</a>
-    </section>
 
-    <!-- Inclusão do arquivo JS -->
+    <main>
+        <article class="product-showcase">
+            <section class="product-gallery">
+                <figure class="main-image">
+                    <img src="imagens/alface.png" alt="Alface crespa" class="product-img">
+                </figure>
+                <div class="image-thumbnails">
+                    <img src="imagens/alface.png" alt="Alface vista 1" class="thumb active">
+                    <img src="imagens/organico.png" alt="Selo orgânico" class="thumb">
+                </div>
+            </section>
+
+            <section class="product-info">
+                <header>
+                    <h1>Alface Crespa</h1>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <small>(73 avaliações)</small>
+                    </div>
+                </header>
+                
+                <div class="price-section">
+                    <data class="current-price" value="2.99">R$ 2,99</data>
+                    <small class="unit-info">a unidade</small>
+                    <div class="savings">
+                        <span class="old-price">R$ 3,50</span>
+                        <span class="discount">15% OFF</span>
+                    </div>
+                </div>
+
+                <div class="product-details">
+                    <h3>Detalhes do Produto</h3>
+                    <dl>
+                        <dt>Origem</dt>
+                        <dd>Cultivo hidropônico</dd>
+                        <dt>Peso</dt>
+                        <dd>Aproximadamente 200g</dd>
+                        <dt>Validade</dt>
+                        <dd>3-5 dias refrigerado</dd>
+                        <dt>Benefícios</dt>
+                        <dd>Rica em folato, vitamina K e fibras</dd>
+                    </dl>
+                </div>
+
+                <div class="quantity-selector">
+                    <label for="quantity">Quantidade:</label>
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="add-to-cart" onclick="adicionarProduto('Alface crespa', 2.99, 'imagens/alface.png')">
+                        🛒 Adicionar ao Carrinho
+                    </button>
+                    <button class="buy-now">
+                        ⚡ Comprar Agora
+                    </button>
+                    <button class="favorite" onclick="toggleFavorite()">
+                        ♥️ Favoritar
+                    </button>
+                </div>
+            </section>
+        </article>
+
+        <section class="product-tabs">
+            <nav class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('description')">Descrição</button>
+                <button class="tab-btn" onclick="showTab('nutrition')">Nutrição</button>
+                <button class="tab-btn" onclick="showTab('reviews')">Avaliações</button>
+            </nav>
+            
+            <div id="description" class="tab-content active">
+                <h3>Sobre a Alface Crespa</h3>
+                <p>Alface crespa fresca e crocante, cultivada em sistema hidropônico. Ideal para saladas, sanduiches e pratos saudáveis. Rica em água e nutrientes essenciais.</p>
+                <ul>
+                    <li>✓ Cultivo hidropônico limpo</li>
+                    <li>✓ Folhas crocantes e frescas</li>
+                    <li>✓ Rica em folato e vitamina K</li>
+                    <li>✓ Baixo teor calórico</li>
+                </ul>
+            </div>
+            
+            <div id="nutrition" class="tab-content">
+                <h3>Informações Nutricionais (100g)</h3>
+                <table class="nutrition-table">
+                    <tr><td>Calorias</td><td>15 kcal</td></tr>
+                    <tr><td>Proteínas</td><td>1,4g</td></tr>
+                    <tr><td>Carboidratos</td><td>2,9g</td></tr>
+                    <tr><td>Fibras</td><td>1,3g</td></tr>
+                    <tr><td>Folato</td><td>38mcg</td></tr>
+                </table>
+            </div>
+            
+            <div id="reviews" class="tab-content">
+                <h3>Avaliações dos Clientes</h3>
+                <div class="review-summary">
+                    <div class="rating-breakdown">
+                        <span class="avg-rating">4.1</span>
+                        <div class="stars-large">★★★★☆</div>
+                        <small>73 avaliações</small>
+                    </div>
+                </div>
+                <div class="reviews-list">
+                    <article class="review">
+                        <header>
+                            <strong>Lucia R.</strong>
+                            <span class="stars">★★★★★</span>
+                        </header>
+                        <p>"Alface fresquinha e bem crocante! Perfeita para saladas."</p>
+                        <time>há 2 dias</time>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-products">
+            <header>
+                <h3>Produtos Relacionados</h3>
+            </header>
+            <div class="products-grid">
+                <article class="product-card">
+                    <a href="/ameixa">
+                        <figure>
+                            <img src="imagens/ameixa.png" alt="Ameixa Importada">
+                        </figure>
+                        <div class="card-info">
+                            <h4>Ameixa Importada</h4>
+                            <data class="price">R$ 2,99</data>
+                            <small>150g unidade</small>
+                        </div>
+                    </a>
+                </article>
+                
+                <article class="product-card">
+                    <a href="/Brocolis">
+                        <figure>
+                            <img src="imagens/brocolis.png" alt="Brócolis Ninja">
+                        </figure>
+                        <div class="card-info">
+                            <h4>Brócolis Ninja</h4>
+                            <data class="price">R$ 9,70</data>
+                            <small>250g unidade</small>
+                        </div>
+                    </a>
+                </article>
+                
+                <article class="product-card">
+                    <a href="/abacaxi">
+                        <figure>
+                            <img src="imagens/abacaxi.png" alt="Abacaxi Pérola">
+                        </figure>
+                        <div class="card-info">
+                            <h4>Abacaxi Pérola</h4>
+                            <data class="price">R$ 9,85</data>
+                            <small>1,00kg cada</small>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <aside class="seller-info">
+            <header>
+                <h3>Informações do Vendedor</h3>
+            </header>
+            <div class="seller-card">
+                <figure class="seller-avatar">
+                    <div class="avatar-circle">C</div>
+                </figure>
+                <div class="seller-details">
+                    <h4>Cleuson</h4>
+                    <div class="seller-rating">
+                        <span class="stars">★★★★☆</span>
+                        <small>4.2 (89 avaliações)</small>
+                    </div>
+                    <address>
+                        📍 Barueri - São Paulo
+                    </address>
+                    <time>
+                        🕰️ Na DOP desde 2024
+                    </time>
+                    <div class="seller-actions">
+                        <a href="/vendedores" class="view-profile">Ver Perfil</a>
+                        <button class="report-item">Denunciar</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
     <script src="js/alface.js"></script>
 </body>
 </html>

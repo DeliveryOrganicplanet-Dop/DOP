@@ -3,33 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Conta</title>
+    <title>Minha Conta - DOP</title>
     <link rel="stylesheet" href="css/conta.css">
 </head>
 <body>
-    <!-- Cabeçalho -->
     <header>
+        <nav>
+            <a href="/" class="back-button">&#8249;</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </nav>
+        <figure>
+            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
+        </figure>
         <h1>Minha Conta</h1>
     </header>
 
-    <!-- Informações Pessoais e Endereço -->
     <main>
-        <section id="userInfo">
-            <h2>Informações Pessoais</h2>
-            <p><strong>Nome:</strong> <%= usuario.nome %></p>
-            <p><strong>Email:</strong> <%= usuario.email %></p>
-            <p><strong>ID:</strong> <%= usuario.id %></p>
-            
-            <h2>Dados da Conta</h2>
-            <p><strong>Tipo:</strong> <%= usuario.tipo === 'C' ? 'Cliente' : usuario.tipo === 'V' ? 'Vendedor' : 'Administrador' %></p>
+        <section class="profile-section">
+            <article class="profile-card">
+                <header class="profile-header">
+                    <figure class="avatar">
+                        <div class="avatar-container">
+                            <img id="userPhoto" src="" alt="Foto do usuário" class="user-photo" style="display: none;">
+                            <div id="avatarCircle" class="avatar-circle">
+                                <%= usuario.nome.charAt(0).toUpperCase() %>
+                            </div>
+                            <button class="change-photo-btn" onclick="openPhotoModal()" title="Alterar foto">
+                                📷
+                            </button>
+                        </div>
+                    </figure>
+                    <div class="profile-info">
+                        <h2><%= usuario.nome %></h2>
+                        <p class="user-type"><%= usuario.tipo === 'C' ? 'Cliente' : usuario.tipo === 'V' ? 'Vendedor' : 'Administrador' %></p>
+                    </div>
+                </header>
+            </article>
         </section>
 
-        <!-- Botões de Voltar e Deslogar -->
-        <nav class="button-group">
-            <button onclick="voltarPaginaInicial()">Voltar</button>
-            <button onclick="deslogar()">Deslogar</button>
-        </nav>
+        <section class="account-details">
+            <article class="info-card">
+                <header>
+                    <h3>Informações Pessoais</h3>
+                    <button class="edit-btn" onclick="toggleEdit('personal')">✏️</button>
+                </header>
+                <dl class="info-list">
+                    <dt>Nome Completo</dt>
+                    <dd id="nome-display"><%= usuario.nome %></dd>
+                    <dt>Email</dt>
+                    <dd id="email-display"><%= usuario.email %></dd>
+                    <dt>ID da Conta</dt>
+                    <dd><%= usuario.id %></dd>
+                </dl>
+            </article>
+
+            <article class="info-card">
+                <header>
+                    <h3>Estatísticas da Conta</h3>
+                </header>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <data class="stat-number" value="12">12</data>
+                        <small>Pedidos Realizados</small>
+                    </div>
+                    <div class="stat-item">
+                        <data class="stat-number" value="85">R$ 850</data>
+                        <small>Total Gasto</small>
+                    </div>
+                    <div class="stat-item">
+                        <data class="stat-number" value="30">30</data>
+                        <small>Dias como Cliente</small>
+                    </div>
+                </div>
+            </article>
+
+            <article class="info-card">
+                <header>
+                    <h3>Preferências</h3>
+                </header>
+                <div class="preferences">
+                    <label class="preference-item">
+                        <input type="checkbox" checked>
+                        <span>Receber notificações por email</span>
+                    </label>
+                    <label class="preference-item">
+                        <input type="checkbox">
+                        <span>Ofertas especiais</span>
+                    </label>
+                    <label class="preference-item">
+                        <input type="checkbox" checked>
+                        <span>Lembretes de pedidos</span>
+                    </label>
+                </div>
+            </article>
+
+            <article class="info-card">
+                <header>
+                    <h3>Ações da Conta</h3>
+                </header>
+                <div class="action-buttons">
+                    <a href="/carrinho" class="action-btn primary">
+                        🛒 Ver Carrinho
+                    </a>
+                    <a href="/calendario" class="action-btn secondary">
+                        📅 Calendário Nutricional
+                    </a>
+                    <button onclick="openPasswordModal()" class="action-btn tertiary">
+                        🔒 Redefinir Senha
+                    </button>
+                </div>
+            </article>
+        </section>
+
+        <footer class="account-footer">
+            <button onclick="voltarPaginaInicial()" class="btn-secondary">Voltar ao Início</button>
+            <button onclick="deslogar()" class="btn-danger">Sair da Conta</button>
+        </footer>
     </main>
+
+    <dialog id="editModal" class="modal">
+        <article class="modal-content">
+            <header>
+                <h3>Editar Informações</h3>
+                <button class="close" onclick="closeEditModal()">&times;</button>
+            </header>
+            <form id="editForm">
+                <fieldset>
+                    <label for="editNome">Nome:</label>
+                    <input type="text" id="editNome" value="<%= usuario.nome %>">
+                    
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" value="<%= usuario.email %>">
+                </fieldset>
+                <footer>
+                    <button type="button" onclick="closeEditModal()">Cancelar</button>
+                    <button type="submit">Salvar</button>
+                </footer>
+            </form>
+        </article>
+    </dialog>
+
+    <dialog id="passwordModal" class="modal">
+        <article class="modal-content">
+            <header>
+                <h3>Redefinir Senha</h3>
+                <button class="close" onclick="closePasswordModal()">&times;</button>
+            </header>
+            <form id="passwordForm">
+                <fieldset>
+                    <label for="currentPassword">Senha Atual:</label>
+                    <input type="password" id="currentPassword" required>
+                    
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" required minlength="6">
+                    
+                    <label for="confirmPassword">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirmPassword" required minlength="6">
+                    
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div id="strengthIndicator" class="strength-fill"></div>
+                        </div>
+                        <small id="strengthText">Digite uma senha</small>
+                    </div>
+                </fieldset>
+                <footer>
+                    <button type="button" onclick="closePasswordModal()">Cancelar</button>
+                    <button type="submit">Alterar Senha</button>
+                </footer>
+            </form>
+        </article>
+    </dialog>
+
+    <dialog id="photoModal" class="modal">
+        <article class="modal-content">
+            <header>
+                <h3>Alterar Foto de Perfil</h3>
+                <button class="close" onclick="closePhotoModal()">&times;</button>
+            </header>
+            <div class="photo-options">
+                <div class="upload-area">
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    <button type="button" onclick="document.getElementById('photoInput').click()" class="upload-btn">
+                        📁 Escolher Arquivo
+                    </button>
+                    <p>ou</p>
+                    <button type="button" onclick="openCamera()" class="camera-btn">
+                        📷 Usar Câmera
+                    </button>
+                </div>
+                
+                <div class="photo-preview" id="photoPreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Preview">
+                    <div class="preview-actions">
+                        <button type="button" onclick="savePhoto()" class="save-photo-btn">Salvar Foto</button>
+                        <button type="button" onclick="removePhoto()" class="remove-photo-btn">Remover Foto</button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </dialog>
 
     <script src="js/conta.js"></script>
 </body>
