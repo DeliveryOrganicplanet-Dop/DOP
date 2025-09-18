@@ -8,7 +8,233 @@
 </head>
 <body>
     <header class="top-bar">
-        <a href="/">
+        <a href="/"><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - Delivery Organic Plant</title>
+    <link rel="stylesheet" href="carrinho-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="nav-container" aria-label="Navegação do carrinho">
+            <section class="back-navigation">
+                <a href="/" class="back-button" title="Voltar à página inicial" aria-label="Voltar">
+                    <span class="back-icon">←</span>
+                    <span class="back-text">Voltar</span>
+                </a>
+            </section>
+            
+            <section class="header-title">
+                <h1 class="page-title">
+                    <span class="title-icon">🛒</span>
+                    <span class="title-text">Meu Carrinho</span>
+                </h1>
+            </section>
+
+            <section class="header-actions">
+                <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                
+                <button class="clear-cart-btn" id="clear-cart" aria-label="Limpar carrinho" title="Limpar tudo">
+                    <span class="clear-icon">🗑️</span>
+                </button>
+            </section>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="cart-container">
+            <article class="cart-items-section">
+                <header class="section-header">
+                    <h2 class="section-title">Itens Selecionados</h2>
+                    <span class="items-count" id="items-count">0 itens</span>
+                </header>
+
+                <section class="empty-cart-message" id="empty-cart-message">
+                    <figure class="empty-cart-icon">
+                        <span class="icon">🛒</span>
+                    </figure>
+                    <h3 class="empty-title">Seu carrinho está vazio</h3>
+                    <p class="empty-subtitle">Adicione produtos deliciosos ao seu carrinho</p>
+                    <a href="/" class="continue-shopping-btn">
+                        <span class="btn-text">Continuar Comprando</span>
+                        <span class="btn-icon">→</span>
+                    </a>
+                </section>
+
+                <ul class="cart-items-list" id="cart-items-list" role="list">
+                    <!-- Items will be dynamically inserted here -->
+                </ul>
+            </article>
+
+            <aside class="order-summary-section">
+                <header class="summary-header">
+                    <h2 class="summary-title">Resumo do Pedido</h2>
+                </header>
+
+                <section class="summary-content">
+                    <section class="summary-details">
+                        <article class="summary-row">
+                            <span class="summary-label">Subtotal:</span>
+                            <span class="summary-value" id="subtotal">R$ 0,00</span>
+                        </article>
+                        
+                        <article class="summary-row">
+                            <span class="summary-label">Taxa de entrega:</span>
+                            <span class="summary-value" id="delivery-fee">R$ 5,00</span>
+                        </article>
+                        
+                        <article class="summary-row discount-row" id="discount-row">
+                            <span class="summary-label">Desconto:</span>
+                            <span class="summary-value discount" id="discount">- R$ 0,00</span>
+                        </article>
+                        
+                        <hr class="summary-divider">
+                        
+                        <article class="summary-row total-row">
+                            <span class="summary-label total-label">Total:</span>
+                            <span class="summary-value total-value" id="total">R$ 5,00</span>
+                        </article>
+                    </section>
+
+                    <section class="coupon-section">
+                        <details class="coupon-details">
+                            <summary class="coupon-toggle">
+                                <span class="coupon-icon">🎟️</span>
+                                <span class="coupon-text">Cupom de desconto</span>
+                                <span class="toggle-arrow">▼</span>
+                            </summary>
+                            
+                            <form class="coupon-form" id="coupon-form">
+                                <fieldset class="coupon-fieldset">
+                                    <label for="coupon-input" class="coupon-label">Código do cupom:</label>
+                                    <section class="coupon-input-group">
+                                        <input 
+                                            type="text" 
+                                            id="coupon-input" 
+                                            class="coupon-input" 
+                                            placeholder="Digite seu cupom"
+                                            maxlength="20"
+                                        >
+                                        <button type="submit" class="coupon-apply-btn">
+                                            <span class="apply-text">Aplicar</span>
+                                        </button>
+                                    </section>
+                                </fieldset>
+                            </form>
+                        </details>
+                    </section>
+
+                    <section class="checkout-actions">
+                        <button class="checkout-btn" id="checkout-btn" disabled>
+                            <span class="checkout-icon">💳</span>
+                            <span class="checkout-text">Finalizar Compra</span>
+                            <span class="checkout-arrow">→</span>
+                        </button>
+                        
+                        <button class="continue-shopping-link" onclick="window.location.href='/'">
+                            <span class="continue-icon">🛍️</span>
+                            <span class="continue-text">Continuar Comprando</span>
+                        </button>
+                    </section>
+                </section>
+            </aside>
+        </section>
+
+        <section class="recommendations-section" id="recommendations">
+            <header class="section-header">
+                <h2 class="section-title">Você pode gostar</h2>
+                <p class="section-subtitle">Produtos similares selecionados para você</p>
+            </header>
+
+            <article class="recommendations-grid">
+                <section class="recommendation-card">
+                    <figure class="recommendation-image">
+                        <span class="product-icon">🥦</span>
+                    </figure>
+                    <header class="recommendation-info">
+                        <h3 class="recommendation-name">Brócolis Premium</h3>
+                        <span class="recommendation-price">R$ 8,90</span>
+                    </header>
+                    <button class="add-recommendation-btn" data-product="brocolis">
+                        <span class="add-icon">+</span>
+                    </button>
+                </section>
+
+                <section class="recommendation-card">
+                    <figure class="recommendation-image">
+                        <span class="product-icon">🥬</span>
+                    </figure>
+                    <header class="recommendation-info">
+                        <h3 class="recommendation-name">Alface Orgânica</h3>
+                        <span class="recommendation-price">R$ 3,50</span>
+                    </header>
+                    <button class="add-recommendation-btn" data-product="alface">
+                        <span class="add-icon">+</span>
+                    </button>
+                </section>
+
+                <section class="recommendation-card">
+                    <figure class="recommendation-image">
+                        <span class="product-icon">🍅</span>
+                    </figure>
+                    <header class="recommendation-info">
+                        <h3 class="recommendation-name">Tomate Cereja</h3>
+                        <span class="recommendation-price">R$ 6,80</span>
+                    </header>
+                    <button class="add-recommendation-btn" data-product="tomate">
+                        <span class="add-icon">+</span>
+                    </button>
+                </section>
+            </article>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p class="footer-text">&copy; 2024 Delivery Organic Plant. Compra segura e entrega garantida.</p>
+    </footer>
+
+    <!-- Loading overlay -->
+    <section class="loading-overlay" id="loading-overlay">
+        <article class="loading-content">
+            <span class="loading-spinner"></span>
+            <p class="loading-text">Processando...</p>
+        </article>
+    </section>
+
+    <!-- Toast notifications -->
+    <section class="toast-container" id="toast-container" aria-live="polite">
+        <!-- Toasts will be dynamically inserted here -->
+    </section>
+
+    <script>
+        // Dados do carrinho vindos do servidor (simulação)
+        window.carrinhoData = [
+            {
+                nome: "Brócolis Ninja",
+                preco: 9.70,
+                quantidade: 2,
+                imagem: "🥦",
+                descricao: "Unidade 250g"
+            },
+            {
+                nome: "Alface Crespa",
+                preco: 2.99,
+                quantidade: 1,
+                imagem: "🥬",
+                descricao: "A unidade"
+            }
+        ];
+    </script>
+    <script src="carrinho-script.js"></script>
+</body>
+</html>
             <span class="back-icon">&#10094;</span>
         </a>
         <h1 class="logo">Meu Carrinho</h1>
