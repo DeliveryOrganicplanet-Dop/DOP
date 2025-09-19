@@ -443,7 +443,7 @@ main {
 }
 
 .related-products header h3 {
-    color: var(--primary-color);
+    color: var(#ffffff);
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
 }
@@ -510,8 +510,9 @@ main {
 }
 
 .seller-info header h3 {
-    color: var(--primary-color);
+    color: var(#ffffff);
     margin-bottom: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .seller-card {
