@@ -6,6 +6,21 @@ const cidadeInput = document.getElementById('cidade');
 const bairroInput = document.getElementById('bairro');
 const complementoInput = document.getElementById('complemento');
 
+// Máscara para CEP
+cepInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    
+    if (value.length > 8) {
+        value = value.substring(0, 8);
+    }
+    
+    if (value.length > 5) {
+        value = value.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+    }
+    
+    e.target.value = value;
+});
+
 cepInput.addEventListener('focusout', async () => {
     try {
         const cepValue = cepInput.value.trim().replace("-", "");

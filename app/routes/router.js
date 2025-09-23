@@ -121,6 +121,10 @@ router.get('/carrinho', verificarAuth, (req, res) => {
   res.render('pages/carrinho', { errors: null, carrinho });
 });
 
+router.get('/favoritos', verificarAuth, (req, res) => {
+  res.render('pages/favoritos', { errors: null });
+});
+
 // Rotas da API do carrinho
 router.post('/api/carrinho/adicionar', verificarAuth, carrinhoController.adicionarProduto);
 router.get('/api/carrinho', verificarAuth, carrinhoController.obterCarrinho);
