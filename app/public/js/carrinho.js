@@ -1,143 +1,4 @@
-// Função para formatar o preço em reais
-function formatarPreco(preco) {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
-}
-
-// Carrinho será carregado do servidor
-let carrinho = window.carrinhoData || [];
-
-// Função para atualizar o carrinho na tela
-function atualizarCarrinho() {
-    const listaCarrinho = document.getElementById('lista-carrinho');
-    const mensagemCarrinhoVazio = document.getElementById('mensagem-carrinho-vazio');
-    const btnFinalizar = document.getElementById('btn-finalizar');
-
-    // Limpa o conteúdo atual da lista do carrinho
-    listaCarrinho.innerHTML = '';
-
-    // Se o carrinho estiver vazio, exibe a mensagem de carrinho vazio e desabilita o botão
-    if (carrinho.length === 0) {
-        mensagemCarrinhoVazio.style.display = 'block';
-        btnFinalizar.disabled = true;
-        document.getElementById('total-itens').textContent = `Total de itens: 0`;
-        document.getElementById('total-preco').textContent = `Total: R$ 0,00`;
-        return;
-    }
-
-    // Oculta a mensagem de carrinho vazio e habilita o botão finalizar
-    mensagemCarrinhoVazio.style.display = 'none';
-    btnFinalizar.disabled = false;
-
-    let totalItens = 0;
-    let totalPreco = 0;
-
-    // Cria os elementos para cada item no carrinho
-    carrinho.forEach(item => {
-        totalItens += item.quantidade;
-        totalPreco += item.preco * item.quantidade;
-
-        // Cria o HTML para o item
-        const itemCarrinho = document.createElement('div');
-        itemCarrinho.classList.add('produto');
-        itemCarrinho.innerHTML = `
-            <figure>
-                <img src="${item.imagem}" alt="${item.nome}">
-                <figcaption>${item.nome}</figcaption>
-            </figure>
-            <header class="produto-header">
-                <h3>${item.nome}</h3>
-                <p>${formatarPreco(item.preco)} <span class="unidade">Unidade</span></p>
-            </header>
-            <footer class="produto-footer">
-                <button class="btn-quantidade" onclick="alterarQuantidade('${item.nome}', -1)">-</button>
-                <span class="quantidade">${item.quantidade}</span>
-                <button class="btn-quantidade" onclick="alterarQuantidade('${item.nome}', 1)">+</button>
-                <button class="btn-remover" onclick="removerItem('${item.nome}')">Remover</button>
-            </footer>
-        `;
-        listaCarrinho.appendChild(itemCarrinho);
-    });
-
-    // Atualiza o resumo do carrinho
-    document.getElementById('total-itens').textContent = `Total de itens: ${totalItens}`;
-    document.getElementById('total-preco').textContent = `Total: ${formatarPreco(totalPreco)}`;
-
-    // Carrinho é atualizado automaticamente no servidor
-}
-
-// Função para alterar a quantidade de um item (com os botões + e -)
-async function alterarQuantidade(nome, delta) {
-    const item = carrinho.find(item => item.nome === nome);
-    if (item) {
-        const novaQuantidade = Math.max(1, item.quantidade + delta);
-        
-        try {
-            const response = await fetch('/api/carrinho/quantidade', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ nome, quantidade: novaQuantidade })
-            });
-            
-            if (response.ok) {
-                item.quantidade = novaQuantidade;
-                atualizarCarrinho();
-            } else {
-                alert('Erro ao atualizar quantidade');
-            }
-        } catch (error) {
-            console.error('Erro ao alterar quantidade:', error);
-            alert('Erro ao atualizar quantidade');
-        }
-    }
-}
-
-// Função para remover um item do carrinho
-async function removerItem(nome) {
-    try {
-        const response = await fetch('/api/carrinho/remover', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nome })
-        });
-        
-        if (response.ok) {
-            carrinho = carrinho.filter(item => item.nome !== nome);
-            atualizarCarrinho();
-        } else {
-            alert('Erro ao remover item');
-        }
-    } catch (error) {
-        console.error('Erro ao remover item:', error);
-        alert('Erro ao remover item');
-    }
-}
-
-// Função para adicionar um produto ao carrinho (não usada nesta página)
-function adicionarProduto(nome, preco, imagem) {
-    // Esta função não é usada na página do carrinho
-    console.log('Função não utilizada nesta página');
-}
-
-// Função para finalizar a compra
-async function finalizarCompra() {
-    // Verifica se o carrinho está vazio
-    if (carrinho.length === 0) {
-        alert("Seu carrinho está vazio. Adicione produtos antes de finalizar a compra.");
-        return;
-    }
-
-    try {
-        // Simulação de pagamento com sucesso
-        alert("Compra finalizada com sucesso! Obrigado pela sua compra.");
-
-        // Limpa o carrinho no servidor
-        const response = await fetch('/api/carrinho/limpar', {
-            method: 'DELETE'
-        });// Carrinho Premium - JavaScript Enhanced
+// Carrinho Premium - JavaScript Enhanced
 
 class PremiumCart {
     constructor() {
@@ -613,20 +474,339 @@ class PremiumCart {
         }
     }
 
-    showLoading(show, text = '
+    showLoading(show, text = 'Processando...') {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.querySelector('.loading-text');
         
-        if (response.ok) {
-            // Redireciona para a página de finalização
-            window.location.href = '/finalizar';
-        } else {
-            alert('Erro ao finalizar compra');
+        if (loadingOverlay && loadingText) {
+            loadingText.textContent = text;
+            loadingOverlay.classList.toggle('show', show);
+            
+            // Prevent scrolling when loading
+            document.body.style.overflow = show ? 'hidden' : '';
         }
-    } catch (error) {
-        console.error('Erro ao finalizar compra:', error);
-        alert('Erro ao finalizar compra');
+    }
+
+    showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) return;
+
+        const toast = document.createElement('article');
+        toast.className = `toast ${type}`;
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'polite');
+
+        const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️'
+        };
+
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Fechar notificação">×</button>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        // Show animation
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Auto remove after 4 seconds
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 4000);
+    }
+
+    addScrollEffects() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        const elementsToAnimate = document.querySelectorAll(
+            '.recommendation-card, .order-summary-section'
+        );
+        
+        elementsToAnimate.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    }
+
+    preloadRecommendations() {
+        // Simulate loading recommendations from API
+        const recommendationCards = document.querySelectorAll('.recommendation-card');
+        recommendationCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    }
+
+    // Utility methods
+    formatPrice(price) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(price);
+    }
+
+    updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+    simulateApiCall(delay = 800) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, delay);
+        });
+    }
+
+    // Advanced features
+    setupKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+            // Navigate through cart items with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                const cartItems = document.querySelectorAll('.cart-item');
+                const activeElement = document.activeElement;
+                const currentIndex = Array.from(cartItems).findIndex(item => 
+                    item.contains(activeElement)
+                );
+                
+                if (currentIndex !== -1) {
+                    e.preventDefault();
+                    const nextIndex = e.key === 'ArrowDown' 
+                        ? (currentIndex + 1) % cartItems.length
+                        : (currentIndex - 1 + cartItems.length) % cartItems.length;
+                    
+                    const nextItem = cartItems[nextIndex];
+                    const firstButton = nextItem.querySelector('button');
+                    if (firstButton) firstButton.focus();
+                }
+            }
+        });
+    }
+
+    setupSwipeGestures() {
+        let startX = 0;
+        let currentX = 0;
+        let isSwipe = false;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isSwipe = true;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isSwipe) return;
+            currentX = e.touches[0].clientX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            if (!isSwipe) return;
+            
+            const diff = startX - currentX;
+            const threshold = 100;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    // Swipe left - could trigger some action
+                    console.log('Swipe left detected');
+                } else {
+                    // Swipe right - could go back
+                    if (window.history.length > 1) {
+                        window.history.back();
+                    }
+                }
+            }
+            
+            isSwipe = false;
+        });
+    }
+
+    // Performance monitoring
+    trackPerformance() {
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach((entry) => {
+                    if (entry.entryType === 'measure') {
+                        console.log(`${entry.name}: ${entry.duration}ms`);
+                    }
+                });
+            });
+            
+            observer.observe({ entryTypes: ['measure'] });
+        }
+    }
+
+    // Save cart state to localStorage
+    saveCartState() {
+        const cartState = {
+            items: this.carrinho,
+            appliedCoupon: this.appliedCoupon,
+            timestamp: Date.now()
+        };
+        
+        try {
+            localStorage.setItem('cart-state', JSON.stringify(cartState));
+        } catch (error) {
+            console.warn('Não foi possível salvar o estado do carrinho:', error);
+        }
+    }
+
+    // Load cart state from localStorage
+    loadCartState() {
+        try {
+            const saved = localStorage.getItem('cart-state');
+            if (saved) {
+                const cartState = JSON.parse(saved);
+                
+                // Check if state is not too old (24 hours)
+                const maxAge = 24 * 60 * 60 * 1000;
+                if (Date.now() - cartState.timestamp < maxAge) {
+                    this.carrinho = cartState.items || [];
+                    this.appliedCoupon = cartState.appliedCoupon || null;
+                    return true;
+                }
+            }
+        } catch (error) {
+            console.warn('Não foi possível carregar o estado do carrinho:', error);
+        }
+        return false;
+    }
+
+    // Analytics tracking (simulate)
+    trackEvent(event, data = {}) {
+        console.log('Analytics Event:', event, data);
+        
+        // Here you would integrate with your analytics service
+        // Example: gtag('event', event, data);
+    }
+
+    // Export cart data for debugging
+    exportCartData() {
+        const cartData = {
+            items: this.carrinho,
+            subtotal: this.calculateSubtotal(),
+            deliveryFee: this.calculateDeliveryFee(this.calculateSubtotal()),
+            discount: this.calculateDiscount(this.calculateSubtotal()),
+            appliedCoupon: this.appliedCoupon,
+            timestamp: new Date().toISOString()
+        };
+        
+        console.log('Cart Data Export:', cartData);
+        return cartData;
     }
 }
 
-// Inicializa o carrinho
-atualizarCarrinho();
+// Initialize cart when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.cart = new PremiumCart();
+    
+    // Add CSS animation utilities if not already present
+    if (!document.getElementById('cart-animations')) {
+        const animationStyles = document.createElement('style');
+        animationStyles.id = 'cart-animations';
+        animationStyles.textContent = `
+            .animate-in {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+            
+            .cart-item {
+                transition: all 0.3s ease;
+            }
+            
+            .cart-item:hover {
+                transform: translateY(-2px);
+            }
+            
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+            
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            
+            .shake {
+                animation: shake 0.5s ease-in-out;
+            }
+            
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(animationStyles);
+    }
+    
+    // Setup additional features
+    window.cart.setupKeyboardNavigation();
+    window.cart.setupSwipeGestures();
+    window.cart.trackPerformance();
+    
+    // Load saved cart state
+    if (window.cart.loadCartState()) {
+        window.cart.updateCartDisplay();
+    }
+    
+    // Save cart state on changes
+    const originalUpdateCartDisplay = window.cart.updateCartDisplay;
+    window.cart.updateCartDisplay = function() {
+        originalUpdateCartDisplay.call(this);
+        this.saveCartState();
+    };
+    
+    // Track page view
+    window.cart.trackEvent('cart_view', {
+        items_count: window.cart.carrinho.length,
+        cart_value: window.cart.calculateSubtotal()
+    });
+});
 
+// Handle page unload
+window.addEventListener('beforeunload', () => {
+    if (window.cart) {
+        window.cart.saveCartState();
+    }
+});
+
+// Expose cart for global access and debugging
+window.debugCart = () => {
+    if (window.cart) {
+        return window.cart.exportCartData();
+    }
+    return null;
+};
+
+// Service Worker registration for offline support
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
