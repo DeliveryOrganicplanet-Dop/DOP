@@ -236,25 +236,51 @@ function validateConfirmPassword(input, value, passwordValue) {
 }
 
 function errorValidation(input, message) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
-    small.innerText = message;
-    formControl.className = 'form-control error';
+    const formGroup = input.parentElement;
+    const small = formGroup.querySelector('.error-message');
+    if (small) small.innerText = message;
+    input.classList.remove('success');
+    input.classList.add('error');
+    formGroup.classList.remove('form-control', 'success');
+    formGroup.classList.add('form-control', 'error');
 }
 
 function successValidation(input) {
-    const formControl = input.parentElement;
-    formControl.className = 'form-control success';
+    const formGroup = input.parentElement;
+    const small = formGroup.querySelector('.error-message');
+    if (small) small.innerText = '';
+    input.classList.remove('error');
+    input.classList.add('success');
+    formGroup.classList.remove('form-control', 'error');
+    formGroup.classList.add('form-control', 'success');
 }
 
 // Funções para mostrar e esconder a caixa de requisitos
 function mostrarRequisitos() {
-    document.getElementById('password-requirements').style.display = 'block';
+    const requirements = document.getElementById('password-requirements');
+    requirements.classList.add('show');
 }
 
 function esconderRequisitos() {
-    document.getElementById('password-requirements').style.display = 'none';
+    const requirements = document.getElementById('password-requirements');
+    setTimeout(() => {
+        requirements.classList.remove('show');
+    }, 200);
 }
+
+// Toggle para mostrar/ocultar senha
+document.addEventListener('DOMContentLoaded', () => {
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+});
 
 // Função para validar a senha e atualizar os requisitos
 function validarSenha() {

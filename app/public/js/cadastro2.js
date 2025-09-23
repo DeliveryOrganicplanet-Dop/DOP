@@ -31,6 +31,11 @@ cepInput.addEventListener('focusout', async () => {
         enderecoInput.value = data.logradouro || '';
         cidadeInput.value = data.localidade || '';
         bairroInput.value = data.bairro || '';
+        
+        const ufSelect = document.getElementById('uf');
+        if (ufSelect && data.uf) {
+            ufSelect.value = data.uf;
+        }
     } catch (error) {
         console.log(error);
         alert('Erro ao buscar o CEP');
@@ -60,9 +65,9 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     console.log('Formulário de endereço submetido');
 
-    const ufInput = document.getElementById('uf');
+    const ufSelect = document.getElementById('uf');
     const enderecoData = {
-        uf_usuario: ufInput.value.trim(),
+        uf_usuario: ufSelect.value.trim(),
         cep_usuario: cepInput.value.trim(),
         logradouro_usuario: enderecoInput.value.trim(),
         numero_usuario: numeroInput.value.trim(),
