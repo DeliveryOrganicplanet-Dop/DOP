@@ -3,41 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Endereço</title>
-    <link rel="stylesheet" href="css/cadastro2.css">
+    <title>Cadastro - Endereço - Delivery Organic Plant</title>
+    <link rel="stylesheet" href="css/cadastro-new.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="/cadastro" aria-label="Voltar ao passo anterior">← Voltar</a>
+            <h1>🌱 DOP</h1>
+        </nav>
+    </header>
 
     <main>
-        <form id="form">
-            <input type="hidden" id="redirectTo" name="redirectTo" value="<%= typeof redirectTo !== 'undefined' ? redirectTo : '/' %>">
+        <section class="cadastro-container">
+            <header class="cadastro-header">
+                <h2>Quase lá!</h2>
+                <p>Passo 2 de 2 - Endereço de Entrega</p>
+                <progress value="100" max="100" aria-label="Progresso do cadastro">100%</progress>
+            </header>
 
-            <input type="hidden" id="username" placeholder="Nome"> 
-            <label for="cep">CEP</label>
-            <input type="text" id="cep" name="cep" placeholder="00000-000" required>
-            
+            <form id="form">
+                <input type="hidden" id="redirectTo" name="redirectTo" value="<%= typeof redirectTo !== 'undefined' ? redirectTo : '/' %>">
 
-            <label for="endereco">Endereço</label>
-            <input type="text" id="endereco" name="endereco" required>
-            
+                <fieldset>
+                    <legend>Endereço de Entrega</legend>
+                    
+                    <article class="form-group cep-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+                        <button type="button" class="btn-search-cep" aria-label="Buscar CEP">🔍</button>
+                        <small class="error-message" role="alert"></small>
+                    </article>
 
-            <label for="cidade">Cidade</label>
-            <input type="text" id="cidade" name="cidade" required>
-            
-            <label for="uf">UF</label>
-            <input type="text" id="uf" name="uf" maxlength="2" required>
+                    <section class="address-grid">
+                        <article class="form-group">
+                            <label for="endereco">Logradouro</label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Rua, Avenida..." required>
+                            <small class="error-message" role="alert"></small>
+                        </article>
 
-            <label for="bairro">Bairro</label>
-            <input type="text" id="bairro" name="bairro" required>
-            
-            <label for="numero">Número</label>
-            <input type="text" id="numero" name="numero" required>            
+                        <article class="form-group">
+                            <label for="numero">Número</label>
+                            <input type="text" id="numero" name="numero" placeholder="123" required>
+                            <small class="error-message" role="alert"></small>
+                        </article>
 
-            <label for="complemento">Complemento (opcional)</label>
-            <input type="text" id="complemento" name="complemento">
+                        <article class="form-group">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" id="complemento" name="complemento" placeholder="Apto, Bloco... (opcional)">
+                            <small class="error-message" role="alert"></small>
+                        </article>
 
-            <button type="submit">Finalizar Cadastro</button>
-        </form>
+                        <article class="form-group">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" id="bairro" name="bairro" placeholder="Nome do bairro" required>
+                            <small class="error-message" role="alert"></small>
+                        </article>
+
+                        <article class="form-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" id="cidade" name="cidade" placeholder="Nome da cidade" required>
+                            <small class="error-message" role="alert"></small>
+                        </article>
+
+                        <article class="form-group">
+                            <label for="uf">Estado</label>
+                            <select id="uf" name="uf" required>
+                                <option value="">Selecione</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                            <small class="error-message" role="alert"></small>
+                        </article>
+                    </section>
+                </fieldset>
+
+                <footer class="form-footer">
+                    <button type="submit" class="btn-primary btn-finish">
+                        <span>✓ Finalizar Cadastro</span>
+                    </button>
+                    
+                    <p>Ao finalizar, você concorda com nossos <a href="/termos">Termos de Uso</a></p>
+                </footer>
+            </form>
+        </section>
     </main>
 
     <script src="js/cadastro2.js"></script>

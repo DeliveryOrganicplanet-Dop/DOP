@@ -3,64 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro DOP</title>
-    <link rel="stylesheet" href="css/cadastro.css">
+    <title>Cadastro - Delivery Organic Plant</title>
+    <link rel="stylesheet" href="css/cadastro-new.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="/" aria-label="Voltar ao início">← Voltar</a>
+            <h1>🌱 DOP</h1>
+        </nav>
+    </header>
 
-<section class="container">
-    <section class="header">
-        <h2>Cadastro</h2>
-    </section>
+    <main>
+        <section class="cadastro-container">
+            <header class="cadastro-header">
+                <h2>Criar Conta</h2>
+                <p>Passo 1 de 2 - Dados Pessoais</p>
+                <progress value="50" max="100" aria-label="Progresso do cadastro">50%</progress>
+            </header>
 
-    <form class="form" id="form" method="POST" action="/cadastro2">
-        <section class="form-control">
-            <label for="username">Nome</label>
-            <input type="text" id="username" name="nome_usuario" placeholder="Nome">
-            <small>Error message</small>
+            <form id="form" method="POST" action="/cadastro2">
+                <fieldset>
+                    <legend>Informações Pessoais</legend>
+                    
+                    <article class="form-group">
+                        <label for="username">Nome Completo</label>
+                        <input type="text" id="username" name="nome_usuario" placeholder="Digite seu nome completo" required>
+                        <small class="error-message" role="alert"></small>
+                    </article>
+
+                    <article class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email_usuario" placeholder="seu@email.com" required>
+                        <small class="error-message" role="alert"></small>
+                    </article>
+
+                    <article class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="celular_usuario" placeholder="(00) 00000-0000" required>
+                        <small class="error-message" role="alert"></small>
+                    </article>
+
+                    <article class="form-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf_usuario" placeholder="000.000.000-00" maxlength="14" required>
+                        <small class="error-message" role="alert"></small>
+                    </article>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Segurança</legend>
+                    
+                    <article class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="senha_usuario" placeholder="Digite uma senha segura" required>
+                        <button type="button" class="toggle-password" aria-label="Mostrar/ocultar senha">👁️</button>
+                        <small class="error-message" role="alert"></small>
+                        
+                        <aside class="password-requirements" id="password-requirements">
+                            <h4>Sua senha deve ter:</h4>
+                            <ul>
+                                <li id="length">✓ Mínimo 8 caracteres</li>
+                                <li id="uppercase">✓ Uma letra maiúscula</li>
+                                <li id="special">✓ Um caractere especial</li>
+                            </ul>
+                        </aside>
+                    </article>
+
+                    <article class="form-group">
+                        <label for="passwordtwo">Confirmar Senha</label>
+                        <input type="password" id="passwordtwo" name="confirma_senha" placeholder="Digite a senha novamente" onpaste="return false" required>
+                        <small class="error-message" role="alert"></small>
+                    </article>
+                </fieldset>
+
+                <footer class="form-footer">
+                    <button type="submit" class="btn-primary">
+                        <span>Continuar</span>
+                        <span>→</span>
+                    </button>
+                    
+                    <p>Já tem uma conta? <a href="/login">Fazer login</a></p>
+                </footer>
+            </form>
         </section>
+    </main>
 
-        <section class="form-control">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email_usuario" placeholder="nome@gmail.com">
-            <small>Error message</small>
-        </section>
-
-        <section class="form-control">
-            <label for="telefone">Telefone</label>
-            <input type="text" id="telefone" name="celular_usuario" placeholder="(00) 00000-0000">
-            <small>Error message</small>
-        </section>        
-
-        <section class="form-control">
-            <label for="cpf">CPF</label>
-            <input type="text" id="cpf" name="cpf_usuario" placeholder="000.000.000-00" maxlength="14">
-            <small>Error message</small>
-        </section>
-
-        <section class="form-control">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="senha_usuario" placeholder="********" onfocus="mostrarRequisitos()" onblur="esconderRequisitos()" oninput="validarSenha()">
-            <small>Error message</small>
-            
-            <div id="password-requirements" class="password-requirements">
-                <p class="requirement" id="length">✔ 8 caracteres no mínimo</p>
-                <p class="requirement" id="uppercase">✔ Pelo menos uma letra maiúscula</p>
-                <p class="requirement" id="special">✔ Pelo menos um caractere especial</p>
-            </div>
-        </section>
-
-        <section class="form-control">
-            <label for="passwordtwo">Confirme sua senha</label>
-            <input type="password" id="passwordtwo" name="confirma_senha" placeholder="********" onpaste="return false">
-            <small>Error message</small>
-        </section>
-
-        <button type="submit">Criar Conta</button>
-    </form>
-</section>
-
-<script src="js/cadastro.js"></script>
-
+    <script src="js/cadastro.js"></script>
 </body>
 </html>
