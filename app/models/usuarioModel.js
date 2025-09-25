@@ -40,6 +40,23 @@ const usuarioModel = {
   async delete(id) {
     await pool.query('DELETE FROM USUARIOS WHERE ID_USUARIO = ?', [id]);
   },
+
+  async findByEmail(email) {
+    const [results] = await pool.query(
+      'SELECT * FROM USUARIOS WHERE EMAIL_USUARIO = ?',
+      [email]
+    );
+    return results[0];
+  },
+
+  async createGoogleUser(dados) {
+    const { nome_usuario, email_usuario, google_id } = dados;
+    const [result] = await pool.query(
+      'INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, GOOGLE_ID, TIPO_USUARIO) VALUES (?, ?, ?, ?)',
+      [nome_usuario, email_usuario, google_id, 'cliente']
+    );
+    return result.insertId;
+  }
 };
 
 module.exports = usuarioModel;

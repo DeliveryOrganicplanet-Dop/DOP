@@ -83,12 +83,26 @@
                         <span>→</span>
                     </button>
                     
+                    <div class="divider">
+                        <span>ou</span>
+                    </div>
+                    
+                    <button type="button" class="btn-google" onclick="signupWithGoogle()">
+                        <img src="imagens/google.png" alt="Google" class="google-icon">
+                        Cadastrar com Google
+                    </button>
+                    
                     <p>Já tem uma conta? <a href="/login">Fazer login</a></p>
                 </footer>
             </form>
         </section>
     </main>
 
+    <script>
+        function signupWithGoogle() {
+            window.location.href = '/auth/google';
+        }
+    </script>
     <script src="js/cadastro.js"></script>
 </body>
 </html>
