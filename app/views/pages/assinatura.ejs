@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assinatura de Boxes Orgânicos - DOP</title>
+    <link rel="stylesheet" href="css/dop.css">
+    <link rel="stylesheet" href="css/assinatura.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/imagens/logo  dop 2.png" type="image/x-icon">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="nav-container" aria-label="Menu principal">
+            <section class="logo-section">
+                <h1 class="brand-logo">
+                    <img src="imagens/dopimg.png" alt="DOP Logo" class="logo-image">
+                    <span class="logo-text"></span>
+                </h1>
+            </section>
+
+            <section class="search-section">
+                <form class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Buscar produtos...">
+                    <button type="button" class="search-btn" onclick="buscarProdutos()">
+                        <span class="search-icon">🔍</span>
+                    </button>
+                </form>
+            </section>
+ 
+            <section class="header-controls">
+                <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
+                    <span class="theme-icon">🌙</span>
+                </button>
+               
+                <button class="mobile-menu" aria-label="Abrir menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </section>
+        </nav>
+
+        <nav class="bottom-nav" aria-label="Menu de navegação">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/" class="nav-link" title="Página inicial">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <% if (usuario) { %>
+                        <a href="/conta" class="nav-link" title="Sua conta">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">Olá, <%= usuario.nome.split(' ')[0] %></span>
+                        </a>
+                    <% } else { %>
+                        <a href="#" id="btn-conta" class="nav-link" title="Sua conta">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">Conta</span>
+                        </a>
+                    <% } %>
+                </li>
+                <li class="nav-item">
+                    <a href="/assinatura" class="nav-link active" title="Assinatura de Boxes">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">Boxes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/calendario" class="nav-link" title="Calendário de entregas">
+                        <span class="nav-icon">📅</span>
+                        <span class="nav-text">Calendário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/favoritos" class="nav-link" title="Produtos favoritos">
+                        <span class="nav-icon">❤️</span>
+                        <span class="nav-text">Favoritos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
+                        <span class="nav-icon">🛒</span>
+                        <span class="nav-text">Carrinho</span>
+                    </a>
+                </li>
+                <% if (usuario) { %>
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link" title="Sair">
+                        <span class="nav-icon">🚪</span>
+                        <span class="nav-text">Sair</span>
+                    </a>
+                </li>
+                <% } %>
+            </ul>
+        </nav>
+    </header>
+ 
+    <main class="main-content">
+        <section class="hero-subscription">
+            <header class="hero-header">
+                <h1 class="hero-title">Boxes Orgânicos por Assinatura</h1>
+                <p class="hero-subtitle">Receba produtos orgânicos frescos e selecionados mensalmente na sua casa</p>
+            </header>
+        </section>
+
+        <section class="subscription-plans">
+            <header class="section-header">
+                <h2 class="section-title">Escolha seu Plano</h2>
+                <p class="section-subtitle">Boxes com produtos aleatórios selecionados especialmente para você</p>
+            </header>
+
+            <article class="plans-grid">
+                <section class="plan-card" data-plan="pequena">
+                    <figure class="plan-image">
+                        <img src="imagens/boxp.png" alt="Box Pequena" class="box-img">
+                    </figure>
+                    <header class="plan-header">
+                        <h3 class="plan-name">Box Pequena</h3>
+                        <div class="plan-price">
+                            <span class="price-value">R$ 35,00</span>
+                            <span class="price-period">/semana</span>
+                        </div>
+                    </header>
+                    <div class="plan-content">
+                        <ul class="plan-features">
+                            <li>3-4 produtos orgânicos aleatórios</li>
+                            <li>Ideal para 1-2 pessoas</li>
+                            <li>Frutas e verduras frescas</li>
+                            <li>Entrega semanal</li>
+                        </ul>
+                        <button class="plan-select-btn" data-plan="pequena">Escolher Plano</button>
+                    </div>
+                </section>
+
+                <section class="plan-card featured" data-plan="media">
+                    <div class="plan-badge">Mais Popular</div>
+                    <figure class="plan-image">
+                        <img src="imagens/boxm.png" alt="Box Média" class="box-img">
+                    </figure>
+                    <header class="plan-header">
+                        <h3 class="plan-name">Box Média</h3>
+                        <div class="plan-price">
+                            <span class="price-value">R$ 55,00</span>
+                            <span class="price-period">/semana</span>
+                        </div>
+                    </header>
+                    <div class="plan-content">
+                        <ul class="plan-features">
+                            <li>6-8 produtos orgânicos aleatórios</li>
+                            <li>Ideal para 2-3 pessoas</li>
+                            <li>Frutas, verduras e legumes</li>
+                            <li>Produtos premium inclusos</li>
+                            <li>Entrega semanal gratuita</li>
+                        </ul>
+                        <button class="plan-select-btn" data-plan="media">Escolher Plano</button>
+                    </div>
+                </section>
+
+                <section class="plan-card" data-plan="grande">
+                    <figure class="plan-image">
+                        <img src="imagens/boxg.png" alt="Box Grande" class="box-img">
+                    </figure>
+                    <header class="plan-header">
+                        <h3 class="plan-name">Box Grande</h3>
+                        <div class="plan-price">
+                            <span class="price-value">R$ 85,00</span>
+                            <span class="price-period">/semana</span>
+                        </div>
+                    </header>
+                    <div class="plan-content">
+                        <ul class="plan-features">
+                            <li>10-12 produtos orgânicos aleatórios</li>
+                            <li>Ideal para famílias (4+ pessoas)</li>
+                            <li>Variedade completa de produtos</li>
+                            <li>Produtos especiais e temperos</li>
+                            <li>Entrega semanal prioritária</li>
+                        </ul>
+                        <button class="plan-select-btn" data-plan="grande">Escolher Plano</button>
+                    </div>
+                </section>
+
+                <section class="plan-card" data-plan="vegana">
+                    <figure class="plan-image">
+                        <img src="imagens/boxv.png" alt="Box Vegana" class="box-img">
+                    </figure>
+                    <header class="plan-header">
+                        <h3 class="plan-name">Box Vegana</h3>
+                        <div class="plan-price">
+                            <span class="price-value">R$ 65,00</span>
+                            <span class="price-period">/semana</span>
+                        </div>
+                    </header>
+                    <div class="plan-content">
+                        <ul class="plan-features">
+                            <li>8-10 produtos veganos aleatórios</li>
+                            <li>100% plant-based</li>
+                            <li>Proteínas vegetais incluídas</li>
+                            <li>Superalimentos e grãos</li>
+                            <li>Entrega semanal especializada</li>
+                        </ul>
+                        <button class="plan-select-btn" data-plan="vegana">Escolher Plano</button>
+                    </div>
+                </section>
+            </article>
+        </section>
+
+        <section class="customization-section" id="customization" style="display: none;">
+            <header class="section-header">
+                <h2 class="section-title">Personalize sua Box</h2>
+                <p class="section-subtitle">Adicione produtos extras à sua assinatura</p>
+            </header>
+
+            <div class="selected-plan-info">
+                <h3 class="selected-plan-title">Plano Selecionado: <span id="selected-plan-name"></span></h3>
+                <p class="selected-plan-price">Valor base: <span id="selected-plan-price"></span></p>
+            </div>
+
+            <article class="extra-products">
+                <h3 class="extras-title">Produtos Extras Disponíveis</h3>
+                <div class="products-grid">
+                    <section class="extra-product" data-product="brocolis" data-price="9.70">
+                        <figure class="product-image">
+                            <img src="imagens/brocolis.png" alt="Brócolis Ninja" class="product-img">
+                        </figure>
+                        <div class="product-info">
+                            <h4 class="product-name">Brócolis Ninja</h4>
+                            <p class="product-description">Unidade 250g</p>
+                            <span class="product-price">+ R$ 9,70</span>
+                        </div>
+                        <button class="add-product-btn">Adicionar</button>
+                    </section>
+
+                    <section class="extra-product" data-product="ameixa" data-price="2.99">
+                        <figure class="product-image">
+                            <img src="imagens/ameixa.png" alt="Ameixa Importada" class="product-img">
+                        </figure>
+                        <div class="product-info">
+                            <h4 class="product-name">Ameixa Importada</h4>
+                            <p class="product-description">Unidade 150g</p>
+                            <span class="product-price">+ R$ 2,99</span>
+                        </div>
+                        <button class="add-product-btn">Adicionar</button>
+                    </section>
+
+                    <section class="extra-product" data-product="abacaxi" data-price="9.85">
+                        <figure class="product-image">
+                            <img src="imagens/abacaxi.png" alt="Abacaxi Pérola" class="product-img">
+                        </figure>
+                        <div class="product-info">
+                            <h4 class="product-name">Abacaxi Pérola</h4>
+                            <p class="product-description">1,00kg cada</p>
+                            <span class="product-price">+ R$ 9,85</span>
+                        </div>
+                        <button class="add-product-btn">Adicionar</button>
+                    </section>
+
+                    <section class="extra-product" data-product="alface" data-price="2.99">
+                        <figure class="product-image">
+                            <img src="imagens/alface.png" alt="Alface Crespa" class="product-img">
+                        </figure>
+                        <div class="product-info">
+                            <h4 class="product-name">Alface Crespa</h4>
+                            <p class="product-description">A unidade</p>
+                            <span class="product-price">+ R$ 2,99</span>
+                        </div>
+                        <button class="add-product-btn">Adicionar</button>
+                    </section>
+                </div>
+            </article>
+
+            <aside class="added-products" id="added-products" style="display: none;">
+                <h3 class="added-title">Produtos Adicionados</h3>
+                <ul class="added-list" id="added-list"></ul>
+            </aside>
+
+            <footer class="customization-footer">
+                <div class="total-price">
+                    <span class="total-label">Total da Assinatura:</span>
+                    <span class="total-value" id="total-price">R$ 0,00</span>
+                </div>
+                <button class="subscribe-btn" id="subscribe-btn">Assinar Agora</button>
+            </footer>
+        </section>
+    </main>
+ 
+    <footer class="main-footer">
+        <p class="footer-text">&copy; 2024 Delivery Organic Plant. Todos os direitos reservados.</p>
+    </footer>
+ 
+    <script src="js/assinatura.js"></script>
+</body>
+</html>

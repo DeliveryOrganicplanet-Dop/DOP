@@ -40,6 +40,15 @@
                 </div>
             
                 <button type="submit" class="btn-login">Entrar</button>
+                
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+                
+                <button type="button" class="btn-google" onclick="loginWithGoogle()">
+                    <img src="imagens/google.png" alt="Google" class="google-icon">
+                    Entrar com Google
+                </button>
             
                 <div class="login-footer">
                     <p>Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a></p>
@@ -49,6 +58,11 @@
         </div>
     </div>
 
+    <script>
+        function loginWithGoogle() {
+            window.location.href = '/auth/google';
+        }
+    </script>
     <script src="js/login.js"></script> 
 </body>
 </html>

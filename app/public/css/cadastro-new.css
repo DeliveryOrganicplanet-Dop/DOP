@@ -398,6 +398,60 @@ legend {
     100% { transform: rotate(360deg); }
 }
 
+.divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-subtle);
+}
+
+.divider span {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.btn-google {
+    width: 100%;
+    background: white;
+    color: var(--text-primary);
+    border: 2px solid var(--border-subtle);
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    border-color: #dadce0;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     main {

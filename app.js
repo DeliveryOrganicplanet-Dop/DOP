@@ -4,6 +4,8 @@ const session = require('express-session');
 require('dotenv').config();
 
 const router = require('./app/routes/router');
+const authRoutes = require('./app/routes/auth');
+const passport = require('./config/passport');
 
 // Tratamento global de erros não capturados
 process.on('uncaughtException', (err) => {
@@ -36,6 +38,10 @@ app.use(session({
   }
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/auth', authRoutes);
 app.use('/', router);
 
 const PORT = process.env.PORT || 3000;

@@ -183,6 +183,10 @@ router.get('/produtos', async (req, res) => {
   }
 });
 
+router.get('/assinatura', (req, res) => {
+  res.render('pages/assinatura', { errors: null });
+});
+
 router.get('/vendedores', async (req, res) => {
   try {
     const vendedorController = require('../controllers/vendedorController');
