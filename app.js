@@ -4,8 +4,7 @@ const session = require('express-session');
 require('dotenv').config();
 
 const router = require('./app/routes/router');
-const authRoutes = require('./app/routes/auth');
-const passport = require('./config/passport');
+const authRoutes = require('./app/routes/simple-auth');
 
 // Tratamento global de erros não capturados
 process.on('uncaughtException', (err) => {
@@ -38,8 +37,7 @@ app.use(session({
   }
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+// Passport removido - usando auth simples
 
 app.use('/auth', authRoutes);
 app.use('/', router);

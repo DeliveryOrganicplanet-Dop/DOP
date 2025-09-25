@@ -60,7 +60,11 @@
 
     <script>
         function loginWithGoogle() {
-            window.location.href = '/auth/google';
+            try {
+                window.location.href = '/auth/google';
+            } catch (error) {
+                alert('Erro ao tentar fazer login com Google: ' + error.message);
+            }
         }
     </script>
     <script src="js/login.js"></script> 

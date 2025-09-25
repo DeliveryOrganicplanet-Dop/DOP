@@ -50,12 +50,17 @@ const usuarioModel = {
   },
 
   async createGoogleUser(dados) {
-    const { nome_usuario, email_usuario, google_id } = dados;
-    const [result] = await pool.query(
-      'INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, GOOGLE_ID, TIPO_USUARIO) VALUES (?, ?, ?, ?)',
-      [nome_usuario, email_usuario, google_id, 'cliente']
-    );
-    return result.insertId;
+    try {
+      const { nome_usuario, email_usuario, google_id } = dados;
+      const [result] = await pool.query(
+        'INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, GOOGLE_ID, TIPO_USUARIO) VALUES (?, ?, ?, ?)',
+        [nome_usuario, email_usuario, google_id, 'C']
+      );
+      return result.insertId;
+    } catch (error) {
+      console.error('Erro ao criar usuário Google:', error);
+      throw error;
+    }
   }
 };
 

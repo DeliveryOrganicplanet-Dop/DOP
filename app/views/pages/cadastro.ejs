@@ -100,7 +100,10 @@
 
     <script>
         function signupWithGoogle() {
-            window.location.href = '/auth/google';
+            // Verificar se as credenciais estão configuradas
+            if (confirm('Atenção: Certifique-se de que as credenciais Google OAuth estão configuradas no arquivo .env\n\nContinuar mesmo assim?')) {
+                window.location.href = '/auth/google';
+            }
         }
     </script>
     <script src="js/cadastro.js"></script>

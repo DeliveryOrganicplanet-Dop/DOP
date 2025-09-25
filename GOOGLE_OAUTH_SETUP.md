@@ -16,12 +16,17 @@
    - https://seudominio.com/auth/google/callback (produção)
 
 ### 3. Configurar variáveis de ambiente
-Substitua no arquivo `.env`:
+Substitua no arquivo `.env` com suas credenciais reais:
 ```
-GOOGLE_CLIENT_ID=seu_client_id_aqui
-GOOGLE_CLIENT_SECRET=seu_client_secret_aqui
-SESSION_SECRET=uma_chave_secreta_aleatoria
+GOOGLE_CLIENT_ID=123456789-abc123def456.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-abc123def456ghi789jkl012
+SESSION_SECRET=minha_chave_secreta_super_segura_123
 ```
+
+**IMPORTANTE:** 
+- O CLIENT_ID deve terminar com `.apps.googleusercontent.com`
+- O CLIENT_SECRET deve começar com `GOCSPX-`
+- Use suas credenciais reais do Google Cloud Console
 
 ### 4. Executar script SQL
 Execute o script SQL atualizado para adicionar a coluna GOOGLE_ID:

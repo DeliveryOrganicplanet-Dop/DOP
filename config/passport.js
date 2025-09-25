@@ -8,34 +8,35 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        // Verificar se usuário já existe
+        console.log('Google OAuth - Perfil:', profile.displayName, profile.emails[0].value);
+        
         const existingUser = await usuarioModel.findByEmail(profile.emails[0].value);
         
         if (existingUser) {
+            console.log('Usuário existente:', existingUser.EMAIL_USUARIO);
             return done(null, existingUser);
         }
         
-        // Criar novo usuário
+        console.log('Criando novo usuário...');
         const newUser = {
             nome_usuario: profile.displayName,
             email_usuario: profile.emails[0].value,
-            senha_usuario: null, // Usuário OAuth não precisa de senha
-            google_id: profile.id,
-            celular_usuario: '',
-            cpf_usuario: ''
+            google_id: profile.id
         };
         
         const userId = await usuarioModel.createGoogleUser(newUser);
         const user = await usuarioModel.findById(userId);
         
+        console.log('Usuário criado:', user.EMAIL_USUARIO);
         return done(null, user);
     } catch (error) {
+        console.error('Erro OAuth:', error);
         return done(error, null);
     }
 }));
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.ID_USUARIO);
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -43,6 +44,7 @@ passport.deserializeUser(async (id, done) => {
         const user = await usuarioModel.findById(id);
         done(null, user);
     } catch (error) {
+        console.error('Erro deserialize:', error);
         done(error, null);
     }
 });
