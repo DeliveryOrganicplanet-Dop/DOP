@@ -831,3 +831,161 @@ body.dark .main-header {
         height: 80px;
     }
 }
+
+/* Estilos específicos para a página de produtos */
+.page-header {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl) var(--spacing-2xl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.5px;
+    position: relative;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--accent-silver));
+    border-radius: 1px;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--font-size-lg);
+    font-weight: 300;
+}
+
+/* Filtros */
+.filters-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl) var(--spacing-2xl);
+}
+
+.filters-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: var(--shadow-soft);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.3px;
+}
+
+.filter-btn:hover {
+    background: var(--shadow-medium);
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, var(--accent-gold), #e6940a);
+    color: white;
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+}
+
+/* Seção de produtos */
+.products-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl) var(--spacing-3xl);
+}
+
+/* Botão adicionar ao carrinho */
+.add-to-cart-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent-gold), #e6940a);
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    margin-top: var(--spacing-md);
+    letter-spacing: 0.3px;
+}
+
+.add-to-cart-btn:hover {
+    background: linear-gradient(135deg, #e6940a, var(--accent-gold));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsivo para filtros */
+@media (max-width: 768px) {
+    .filters-section {
+        padding: 0 var(--spacing-lg) var(--spacing-xl);
+    }
+    
+    .filter-btn {
+        padding: var(--spacing-xs) var(--spacing-md);
+        font-size: var(--font-size-xs);
+    }
+    
+    .page-header {
+        padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+    }
+    
+    .page-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .products-section {
+        padding: 0 var(--spacing-lg) var(--spacing-2xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .filters-container {
+        gap: var(--spacing-sm);
+    }
+    
+    .filter-btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.7rem;
+    }
+    
+    .page-header {
+        padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .page-title {
+        font-size: var(--font-size-xl);
+    }
+    
+    .page-subtitle {
+        font-size: var(--font-size-base);
+    }
+    
+    .products-section {
+        padding: 0 var(--spacing-md) var(--spacing-xl);
+    }
+}

@@ -195,20 +195,17 @@ router.get('/finalizar', (req, res) => {
   res.render('pages/finalizar', { errors: null, carrinho, totalItens, totalPreco });
 });
 
-router.get('/produtos', async (req, res) => {
-  try {
-    const produtos = await produtoController.findAll(req, res);
-    // Como o controller já envia a resposta, vamos criar uma versão que retorna os dados
-    const produtoModel = require('../models/produtoModel');
-    const produtosList = await produtoModel.findAll();
-    res.render('pages/produtos', { errors: null, produtos: produtosList });
-  } catch (error) {
-    res.render('pages/error', { errors: [{ msg: 'Erro ao carregar produtos' }] });
-  }
-});
-
 router.get('/assinatura', (req, res) => {
   res.render('pages/assinatura', { errors: null });
+});
+
+router.get('/produtos', (req, res) => {
+  console.log('Rota /produtos chamada');
+  res.render('pages/produtos', { errors: null });
+});
+
+router.get('/ver-produtos', (req, res) => {
+  res.render('pages/produtos', { errors: null });
 });
 
 router.get('/vendedores', async (req, res) => {

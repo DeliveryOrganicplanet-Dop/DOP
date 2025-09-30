@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Organic Plant - Premium Organic Delivery</title>
-    <link rel="stylesheet" href="css/dop.css">
+    <title>Produtos - Delivery Organic Plant</title>
+    <link rel="stylesheet" href="/css/dop.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="icon" href="/imagens/logo  dop 2.png" type="image/x-icon">
-
 </head>
 <body>
     <header class="main-header">
         <nav class="nav-container" aria-label="Menu principal">
             <section class="logo-section">
                 <h1 class="brand-logo">
-                    <img src="imagens/dopimg.png" alt="DOP Logo" class="logo-image">
+                    <img src="/imagens/dopimg.png" alt="DOP Logo" class="logo-image">
                     <span class="logo-text"></span>
                 </h1>
             </section>
@@ -108,52 +106,26 @@
     </header>
  
     <main class="main-content">
-        <section class="hero-section" aria-label="Carrossel promocional">
-            <article class="carousel-wrapper">
-                <button class="carousel-arrow carousel-prev" id="prev-slide" aria-label="Slide anterior">
-                    <span class="arrow-icon">‹</span>
-                </button>
-               
-                <section class="carousel-container">
-                    <ul class="carousel-track">
-                        <li class="carousel-slide active">
-                            <picture class="slide-content">
-                                <h2 class="slide-title">Produtos Orgânicos Premium</h2>
-                                <p class="slide-subtitle">Seleção exclusiva de produtos orgânicos certificados</p>
-                            </picture>
-                        </li>
-                        <li class="carousel-slide">
-                            <picture class="slide-content">
-                                <h2 class="slide-title">Entrega Rápida e Segura</h2>
-                                <p class="slide-subtitle">Receba seus produtos frescos em casa</p>
-                            </picture>
-                        </li>
-                        <li class="carousel-slide">
-                            <picture class="slide-content">
-                                <h2 class="slide-title">Qualidade Garantida</h2>
-                                <p class="slide-subtitle">100% orgânico, 100% fresco, 100% saudável</p>
-                            </picture>
-                        </li>
-                    </ul>
-                </section>
-               
-                <button class="carousel-arrow carousel-next" id="next-slide" aria-label="Próximo slide">
-                    <span class="arrow-icon">›</span>
-                </button>
-            </article>
+        <section class="page-header">
+            <h1 class="page-title">Nossos Produtos</h1>
+            <p class="page-subtitle">Descubra nossa seleção completa de produtos orgânicos premium</p>
+        </section>
+
+        <section class="filters-section">
+            <div class="filters-container">
+                <button class="filter-btn active" data-category="todos">Todos</button>
+                <button class="filter-btn" data-category="frutas">Frutas</button>
+                <button class="filter-btn" data-category="verduras">Verduras</button>
+                <button class="filter-btn" data-category="legumes">Legumes</button>
+            </div>
         </section>
  
-        <section class="offers-section">
-            <header class="section-header">
-                <h2 class="section-title">Ofertas Selecionadas</h2>
-                <p class="section-subtitle">Produtos premium com preços especiais</p>
-            </header>
- 
+        <section class="products-section">
             <article class="products-grid">
-                <section class="product-card">
-                    <a href="/brocolis" class="product-link" title="Brócolis Ninja Premium">
+                <section class="product-card" data-category="legumes">
+                    <a href="/Brocolis" class="product-link" title="Brócolis Ninja Premium">
                         <figure class="product-image">
-                            <img src="imagens/brocolis.png" alt="Brócolis Ninja" class="product-img">
+                            <img src="/imagens/brocolis.png" alt="Brócolis Ninja" class="product-img">
                             <figcaption class="product-badge">Premium</figcaption>
                         </figure>
                         <header class="product-info">
@@ -161,13 +133,16 @@
                             <p class="product-description">Unidade 250g</p>
                             <span class="product-price">R$ 9,70</span>
                         </header>
+                        <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, 'brocolis', 'Brócolis Ninja', 9.70, '/imagens/brocolis.png')">
+                            Adicionar ao Carrinho
+                        </button>
                     </a>
                 </section>
  
-                <section class="product-card">
+                <section class="product-card" data-category="frutas">
                     <a href="/ameixa" class="product-link" title="Ameixa Importada Premium">
                         <figure class="product-image">
-                            <img src="imagens/ameixa.png" alt="Ameixa Importada" class="product-img">
+                            <img src="/imagens/ameixa.png" alt="Ameixa Importada" class="product-img">
                             <figcaption class="product-badge">Importado</figcaption>
                         </figure>
                         <header class="product-info">
@@ -175,13 +150,16 @@
                             <p class="product-description">Unidade 150g</p>
                             <span class="product-price">R$ 2,99</span>
                         </header>
+                        <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, 'ameixa', 'Ameixa Importada', 2.99, '/imagens/ameixa.png')">
+                            Adicionar ao Carrinho
+                        </button>
                     </a>
                 </section>
  
-                <section class="product-card">
+                <section class="product-card" data-category="frutas">
                     <a href="/abacaxi" class="product-link" title="Abacaxi Pérola Premium">
                         <figure class="product-image">
-                            <img src="imagens/abacaxi.png" alt="Abacaxi Pérola" class="product-img">
+                            <img src="/imagens/abacaxi.png" alt="Abacaxi Pérola" class="product-img">
                             <figcaption class="product-badge">Especial</figcaption>
                         </figure>
                         <header class="product-info">
@@ -189,13 +167,16 @@
                             <p class="product-description">1,00kg cada</p>
                             <span class="product-price">R$ 9,85</span>
                         </header>
+                        <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, 'abacaxi', 'Abacaxi Pérola', 9.85, '/imagens/abacaxi.png')">
+                            Adicionar ao Carrinho
+                        </button>
                     </a>
                 </section>
  
-                <section class="product-card">
+                <section class="product-card" data-category="verduras">
                     <a href="/alface" class="product-link" title="Alface Crespa Premium">
                         <figure class="product-image">
-                            <img src="imagens/alface.png" alt="Alface Crespa" class="product-img">
+                            <img src="/imagens/alface.png" alt="Alface Crespa" class="product-img">
                             <figcaption class="product-badge">Orgânico</figcaption>
                         </figure>
                         <header class="product-info">
@@ -203,20 +184,12 @@
                             <p class="product-description">A unidade</p>
                             <span class="product-price">R$ 2,99</span>
                         </header>
+                        <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, 'alface', 'Alface Crespa', 2.99, '/imagens/alface.png')">
+                            Adicionar ao Carrinho
+                        </button>
                     </a>
                 </section>
             </article>
- 
-            <footer class="section-footer">
-                <a href="/assinatura" class="view-more-btn" title="Assinar Boxes Orgânicos" style="background: linear-gradient(135deg, var(--accent-gold), #e6940a); margin-right: var(--spacing-md);">
-                    <span class="btn-text">📦 Assinar Boxes</span>
-                    <span class="btn-icon">→</span>
-                </a>
-                <a href="/ver-produtos" class="view-more-btn" title="Ver todos os produtos">
-                    <span class="btn-text">Ver Mais Produtos</span>
-                    <span class="btn-icon">→</span>
-                </a>
-            </footer>
         </section>
     </main>
  
@@ -227,7 +200,89 @@
     <script>
         // Dados do usuário vindos do servidor
         window.usuario = <%- JSON.stringify(usuario) %>;
+        
+        // Filtros de categoria
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active de todos os botões
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Adiciona active ao botão clicado
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (category === 'todos' || product.dataset.category === category) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Função para adicionar ao carrinho
+        function adicionarAoCarrinho(event, id, nome, preco, imagem) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            fetch('/api/carrinho/adicionar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                    nome: nome,
+                    preco: preco,
+                    imagem: imagem,
+                    quantidade: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Feedback visual
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Adicionado!';
+                    btn.style.background = '#28a745';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao adicionar ao carrinho:', error);
+            });
+        }
+        
+        // Função de busca
+        function buscarProdutos() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            
+            products.forEach(product => {
+                const productName = product.querySelector('.product-name').textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        // Busca ao pressionar Enter
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarProdutos();
+            }
+        });
     </script>
-    <script src="js/inicio.js"></script>
+    <script src="/js/inicio.js"></script>
 </body>
 </html>
