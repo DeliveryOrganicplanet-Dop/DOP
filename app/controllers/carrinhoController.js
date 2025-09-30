@@ -1,31 +1,44 @@
 const carrinhoController = {
   // Adicionar produto ao carrinho (sessão)
   adicionarProduto(req, res) {
-    const { nome, preco, imagem } = req.body;
+    console.log('Adicionando produto ao carrinho:', req.body);
+    console.log('Session ID:', req.sessionID);
+    
+    const { nome, preco, imagem, quantidade = 1 } = req.body;
     
     if (!req.session.carrinho) {
       req.session.carrinho = [];
+      console.log('Carrinho inicializado');
     }
     
     const itemExistente = req.session.carrinho.find(item => item.nome === nome);
     
     if (itemExistente) {
-      itemExistente.quantidade += 1;
+      itemExistente.quantidade += parseInt(quantidade);
+      console.log('Item existente atualizado:', itemExistente);
     } else {
-      req.session.carrinho.push({ nome, preco, imagem, quantidade: 1 });
+      const novoItem = { nome, preco, imagem, quantidade: parseInt(quantidade) };
+      req.session.carrinho.push(novoItem);
+      console.log('Novo item adicionado:', novoItem);
     }
+    
+    console.log('Carrinho atual:', req.session.carrinho);
     
     req.session.save((err) => {
       if (err) {
+        console.error('Erro ao salvar sessão:', err);
         return res.status(500).json({ error: 'Erro ao salvar carrinho' });
       }
+      console.log('Sessão salva com sucesso');
       res.json({ success: true, carrinho: req.session.carrinho });
     });
   },
 
   // Obter carrinho
   obterCarrinho(req, res) {
+    console.log('Obtendo carrinho - Session ID:', req.sessionID);
     const carrinho = req.session.carrinho || [];
+    console.log('Carrinho encontrado:', carrinho);
     res.json({ carrinho });
   },
 

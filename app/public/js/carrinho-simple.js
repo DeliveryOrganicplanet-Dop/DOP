@@ -5,9 +5,22 @@ class CarrinhoSimple {
         this.init();
     }
 
-    init() {
+    async init() {
+        await this.carregarCarrinho();
         this.renderizarCarrinho();
         this.bindEvents();
+    }
+
+    async carregarCarrinho() {
+        try {
+            const response = await fetch('/api/carrinho');
+            if (response.ok) {
+                const data = await response.json();
+                this.carrinho = data.carrinho || [];
+            }
+        } catch (error) {
+            console.error('Erro ao carregar carrinho:', error);
+        }
     }
 
     bindEvents() {
@@ -61,7 +74,8 @@ class CarrinhoSimple {
             cartList.innerHTML = this.carrinho.map(item => `
                 <li class="cart-item">
                     <div class="item-info">
-                        <span class="item-icon">${item.imagem || '📦'}</span>
+                        <img src="${item.imagem}" alt="${item.nome}" class="item-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+                        <span class="item-icon" style="display:none">📦</span>
                         <div class="item-details">
                             <h3>${item.nome}</h3>
                             <p>R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
@@ -98,9 +112,9 @@ class CarrinhoSimple {
 
     async adicionarProduto(produtoId) {
         const produtos = {
-            'brocolis': { nome: 'Brócolis Premium', preco: 9.70, imagem: '🥦' },
-            'alface': { nome: 'Alface Orgânica', preco: 2.99, imagem: '🥬' },
-            'tomate': { nome: 'Tomate Cereja', preco: 6.80, imagem: '🍅' }
+            'brocolis': { nome: 'Brócolis ninja', preco: 9.70, imagem: 'imagens/brocolis.png', quantidade: 1 },
+            'alface': { nome: 'Alface Crespa', preco: 2.99, imagem: 'imagens/alface.png', quantidade: 1 },
+            'abacaxi': { nome: 'Abacaxi Pérola', preco: 9.85, imagem: 'imagens/abacaxi.png', quantidade: 1 }
         };
 
         const produto = produtos[produtoId];
@@ -120,6 +134,8 @@ class CarrinhoSimple {
                 this.carrinho = data.carrinho;
                 this.renderizarCarrinho();
                 this.mostrarToast(`${produto.nome} adicionado ao carrinho!`);
+            } else {
+                this.mostrarToast('Erro ao adicionar produto', 'error');
             }
         } catch (error) {
             console.error('Erro ao adicionar produto:', error);
@@ -265,6 +281,27 @@ style.textContent = `
     
     .item-icon {
         font-size: 2rem;
+    }
+    
+    .item-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    
+    .product-card img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    
+    .product-card small {
+        color: #666;
+        font-size: 0.8rem;
+        display: block;
+        margin-top: 0.25rem;
     }
     
     .item-controls {

@@ -17,6 +17,7 @@ function adicionarProduto(nome, preco, imagem) {
     .then(data => {
         if (data.success) {
             showNotification(`${quantidade}x ${nome} adicionado ao carrinho!`, 'success');
+            mostrarBotaoCarrinho();
             updateCartIcon();
         } else {
             showNotification('Erro ao adicionar produto', 'error');
@@ -130,6 +131,22 @@ function updateCartIcon() {
                 const totalItems = data.carrinho?.reduce((acc, item) => acc + item.quantidade, 0) || 0;
                 cartCounter.textContent = totalItems;
             });
+    }
+}
+
+function mostrarBotaoCarrinho() {
+    const addButton = document.querySelector('.add-to-cart');
+    const goToCartButton = document.querySelector('.go-to-cart');
+    
+    if (addButton && goToCartButton) {
+        addButton.style.display = 'none';
+        goToCartButton.style.display = 'inline-block';
+        goToCartButton.style.background = '#4CAF50';
+        goToCartButton.style.color = 'white';
+        goToCartButton.style.border = '1px solid #4CAF50';
+        goToCartButton.style.padding = '0.75rem 1.5rem';
+        goToCartButton.style.borderRadius = '5px';
+        goToCartButton.style.cursor = 'pointer';
     }
 }
 

@@ -20,6 +20,14 @@ function verificarAuth(req, res, next) {
   return res.redirect('/login');
 }
 
+// Middleware para inicializar sessão
+function inicializarSessao(req, res, next) {
+  if (!req.session.carrinho) {
+    req.session.carrinho = [];
+  }
+  next();
+}
+
 // Middleware para passar dados do usuário para todas as views
 function passarUsuario(req, res, next) {
   res.locals.usuario = req.session.usuario || null;
@@ -27,6 +35,7 @@ function passarUsuario(req, res, next) {
 }
 
 // Aplicar middleware em todas as rotas
+router.use(inicializarSessao);
 router.use(passarUsuario);
 
 
@@ -44,6 +53,10 @@ router.get('/teste-simples', (req, res) => {
 
 router.get('/teste-basico', (req, res) => {
   res.sendFile(path.join(__dirname, '../../teste_basico.html'));
+});
+
+router.get('/teste-carrinho', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../teste_carrinho.html'));
 });
 
 // Endpoint para verificar sessão
@@ -116,7 +129,7 @@ router.delete('/api/limpar-dados-temp', (req, res) => {
   res.json({ success: true });
 });
 
-router.get('/carrinho', verificarAuth, (req, res) => {
+router.get('/carrinho', (req, res) => {
   const carrinho = req.session.carrinho || [];
   res.render('pages/carrinho', { errors: null, carrinho });
 });
@@ -125,12 +138,12 @@ router.get('/favoritos', verificarAuth, (req, res) => {
   res.render('pages/favoritos', { errors: null });
 });
 
-// Rotas da API do carrinho
-router.post('/api/carrinho/adicionar', verificarAuth, carrinhoController.adicionarProduto);
-router.get('/api/carrinho', verificarAuth, carrinhoController.obterCarrinho);
-router.put('/api/carrinho/quantidade', verificarAuth, carrinhoController.alterarQuantidade);
-router.delete('/api/carrinho/remover', verificarAuth, carrinhoController.removerItem);
-router.delete('/api/carrinho/limpar', verificarAuth, carrinhoController.limparCarrinho);
+// Rotas da API do carrinho (sem autenticação para permitir uso como visitante)
+router.post('/api/carrinho/adicionar', carrinhoController.adicionarProduto);
+router.get('/api/carrinho', carrinhoController.obterCarrinho);
+router.put('/api/carrinho/quantidade', carrinhoController.alterarQuantidade);
+router.delete('/api/carrinho/remover', carrinhoController.removerItem);
+router.delete('/api/carrinho/limpar', carrinhoController.limparCarrinho);
 
 router.get('/calendario', verificarAuth, (req, res) => {
   res.render('pages/calendario', { errors: null });
@@ -164,8 +177,19 @@ router.get('/conta', verificarAuth, (req, res) => {
   res.render('pages/conta', { errors: null, usuario: req.session.usuario });
 });
 
-router.get('/finalizar', verificarAuth, (req, res) => {
+router.get('/finalizar', (req, res) => {
   const carrinho = req.session.carrinho || [];
+  
+  // Se o carrinho estiver vazio, redirecionar para home
+  if (carrinho.length === 0) {
+    return res.redirect('/');
+  }
+  
+  // Se não estiver logado, redirecionar para login
+  if (!req.session.usuario) {
+    return res.redirect('/login');
+  }
+  
   const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
   const totalPreco = carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0);
   res.render('pages/finalizar', { errors: null, carrinho, totalItens, totalPreco });

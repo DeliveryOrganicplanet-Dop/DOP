@@ -17,6 +17,7 @@ function adicionarProduto(nome, preco, imagem) {
     .then(data => {
         if (data.success) {
             showNotification(`${quantidade}x ${nome} adicionado ao carrinho!`, 'success');
+            mostrarBotaoCarrinho();
             updateCartIcon();
         } else {
             showNotification('Erro ao adicionar produto', 'error');
@@ -126,6 +127,76 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+function showNotificationWithCartButton(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type} with-button`;
+    
+    notification.innerHTML = `
+        <span class="notification-message">${message}</span>
+        <button onclick="window.location.href='/carrinho'" class="cart-button">
+            🛒 Ir para o Carrinho
+        </button>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 300px;
+    `;
+    
+    switch (type) {
+        case 'success':
+            notification.style.background = '#4CAF50';
+            break;
+        case 'error':
+            notification.style.background = '#f44336';
+            break;
+        case 'info':
+            notification.style.background = '#2196F3';
+            break;
+    }
+    
+    // Estilo do botão
+    const cartButton = notification.querySelector('.cart-button');
+    if (cartButton) {
+        cartButton.style.cssText = `
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        `;
+        
+        cartButton.addEventListener('mouseenter', () => {
+            cartButton.style.background = 'rgba(255, 255, 255, 0.3)';
+        });
+        
+        cartButton.addEventListener('mouseleave', () => {
+            cartButton.style.background = 'rgba(255, 255, 255, 0.2)';
+        });
+    }
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 5000); // Mais tempo para permitir clicar no botão
+}
+
 function updateCartIcon() {
     // Atualizar contador do carrinho se existir
     const cartCounter = document.querySelector('.cart-counter');
@@ -136,6 +207,22 @@ function updateCartIcon() {
                 const totalItems = data.carrinho?.reduce((acc, item) => acc + item.quantidade, 0) || 0;
                 cartCounter.textContent = totalItems;
             });
+    }
+}
+
+function mostrarBotaoCarrinho() {
+    const addButton = document.querySelector('.add-to-cart');
+    const goToCartButton = document.querySelector('.go-to-cart');
+    
+    if (addButton && goToCartButton) {
+        addButton.style.display = 'none';
+        goToCartButton.style.display = 'inline-block';
+        goToCartButton.style.background = '#4CAF50';
+        goToCartButton.style.color = 'white';
+        goToCartButton.style.border = '1px solid #4CAF50';
+        goToCartButton.style.padding = '0.75rem 1.5rem';
+        goToCartButton.style.borderRadius = '5px';
+        goToCartButton.style.cursor = 'pointer';
     }
 }
 
