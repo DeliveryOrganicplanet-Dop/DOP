@@ -1,32 +1,89 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compra Finalizada</title>
-    <link rel="stylesheet" href="css/finalizar.css">
+    <title>Finalizar Compra - DOP</title>
+    <link rel="stylesheet" href="/css/dop.css">
 </head>
 <body>
-    <header class="top-bar">
-        <a href="/" class="back">
-            <span class="back-icon">&#10094;</span>
-        </a>
-        <h1 class="logo">Compra Finalizada</h1>
+    <header class="main-header">
+        <nav class="nav-container">
+            <a href="/" class="brand-logo">
+                <img src="/imagens/dopimg.png" alt="DOP Logo" class="logo-image">
+            </a>
+            <h1 class="page-title">Finalizar Compra</h1>
+        </nav>
     </header>
 
-    <main class="finalizacao-compra">
-        <h2>Obrigado pela sua compra!</h2>
-        <p>Seu pedido foi finalizado com sucesso.</p>
-        <p id="detalhes-compra"></p>
-        <a href="/" class="btn-voltar">Voltar para a loja</a>
+    <main class="main-content">
+        <div class="checkout-container">
+            <div class="resumo-pedido">
+                <h2 class="section-title">Resumo do Pedido</h2>
+                <div class="itens-lista">
+                    <% carrinho.forEach(item => { %>
+                    <div class="item-checkout">
+                        <div class="item-info">
+                            <h4><%= item.nome %></h4>
+                            <p>Quantidade: <%= item.quantidade %></p>
+                        </div>
+                        <div class="item-preco">
+                            <span>R$ <%= (item.preco * item.quantidade).toFixed(2) %></span>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+                <div class="total-pedido">
+                    <h3>Total: R$ <%= totalPreco.toFixed(2) %></h3>
+                </div>
+            </div>
+            
+            <div class="pagamento-section">
+                <h2 class="section-title">Forma de Pagamento</h2>
+                <button id="btn-mercado-pago" class="btn-mercado-pago">
+                    <img src="https://http2.mlstatic.com/storage/logos-api-admin/a5f047d0-9be0-11ec-aad4-c3381f368aaf-m.svg" alt="Mercado Pago">
+                    <span>Pagar com Mercado Pago</span>
+                </button>
+            </div>
+        </div>
     </main>
 
     <script>
         // Dados da compra vindos do servidor
         window.detalhesCompra = {
             totalItens: <%= totalItens || 0 %>,
-            totalPreco: <%= totalPreco || 0 %>
+            totalPreco: <%= totalPreco || 0 %>,
+            carrinho: <%- JSON.stringify(carrinho) %>,
+            usuario: <%- JSON.stringify(usuario) %>
         };
+        
+        // Função para processar pagamento com Mercado Pago
+        document.getElementById('btn-mercado-pago').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/pagamento/criar-preferencia', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        itens: window.detalhesCompra.carrinho,
+                        usuario: window.detalhesCompra.usuario
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.init_point) {
+                    // Redirecionar para o Mercado Pago
+                    window.location.href = data.init_point;
+                } else {
+                    alert('Erro ao processar pagamento');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao processar pagamento');
+            }
+        });
     </script>
     <script src="js/finalizar.js"></script>
 </body>

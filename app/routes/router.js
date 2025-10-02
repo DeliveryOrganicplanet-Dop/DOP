@@ -4,6 +4,7 @@ const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 const produtoController = require('../controllers/produtoController');
 const carrinhoController = require('../controllers/carrinhoController');
+const pagamentoController = require('../controllers/pagamentoController');
 
 // Middleware para verificar autenticação
 function verificarAuth(req, res, next) {
@@ -180,19 +181,17 @@ router.get('/conta', verificarAuth, (req, res) => {
 router.get('/finalizar', (req, res) => {
   const carrinho = req.session.carrinho || [];
   
-  // Se o carrinho estiver vazio, redirecionar para home
   if (carrinho.length === 0) {
     return res.redirect('/');
   }
   
-  // Se não estiver logado, redirecionar para login
   if (!req.session.usuario) {
     return res.redirect('/login');
   }
   
   const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
   const totalPreco = carrinho.reduce((acc, item) => acc + (item.quantidade * item.preco), 0);
-  res.render('pages/finalizar', { errors: null, carrinho, totalItens, totalPreco });
+  res.render('pages/finalizar', { errors: null, carrinho, totalItens, totalPreco, usuario: req.session.usuario });
 });
 
 router.get('/assinatura', (req, res) => {
@@ -233,5 +232,22 @@ router.post('/api/produtos', produtoController.create);
 router.get('/api/produtos/:id', produtoController.findById);
 router.put('/api/produtos/:id', produtoController.update);
 router.delete('/api/produtos/:id', produtoController.delete);
+
+// Rotas de pagamento
+router.post('/api/pagamento/criar-preferencia', pagamentoController.criarPreferencia);
+router.post('/webhook/mercadopago', pagamentoController.webhook);
+
+// Páginas de retorno do pagamento
+router.get('/pagamento/sucesso', (req, res) => {
+  res.render('pages/pagamento-sucesso', { errors: null });
+});
+
+router.get('/pagamento/falha', (req, res) => {
+  res.render('pages/pagamento-falha', { errors: null });
+});
+
+router.get('/pagamento/pendente', (req, res) => {
+  res.render('pages/pagamento-pendente', { errors: null });
+});
 
 module.exports = router;

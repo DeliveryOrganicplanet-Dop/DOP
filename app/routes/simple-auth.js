@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/google', (req, res) => {
     const googleAuthURL = `https://accounts.google.com/oauth/authorize?` +
         `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
-        `redirect_uri=${encodeURIComponent('http://localhost:3000/auth/google/callback')}&` +
+        `redirect_uri=${encodeURIComponent('http://localhost:3002/auth/google/callback')}&` +
         `scope=profile email&` +
         `response_type=code&` +
         `access_type=offline`;
@@ -31,7 +31,7 @@ router.get('/google/callback', async (req, res) => {
                 client_secret: process.env.GOOGLE_CLIENT_SECRET,
                 code: code,
                 grant_type: 'authorization_code',
-                redirect_uri: 'http://localhost:3000/auth/google/callback'
+                redirect_uri: 'http://localhost:3002/auth/google/callback'
             })
         });
 

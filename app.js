@@ -42,7 +42,7 @@ app.use(session({
 app.use('/auth', authRoutes);
 app.use('/', router);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.APP_PORT || 3003;
 app.listen(PORT, () => {
   console.log(`Servidor ouvindo na porta ${PORT}\nhttp://localhost:${PORT}`);
 });

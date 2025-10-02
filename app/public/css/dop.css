@@ -989,3 +989,206 @@ body.dark .main-header {
         padding: 0 var(--spacing-md) var(--spacing-xl);
     }
 }
+
+/* Estilos para checkout e pagamento */
+.checkout-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl);
+    display: grid;
+    gap: var(--spacing-2xl);
+}
+
+.resumo-pedido {
+    background: var(--primary-light);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    box-shadow: 0 4px 20px var(--shadow-soft);
+}
+
+.itens-lista {
+    margin: var(--spacing-lg) 0;
+}
+
+.item-checkout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.item-checkout:last-child {
+    border-bottom: none;
+}
+
+.item-info h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.item-info p {
+    margin: 4px 0 0 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.item-preco {
+    font-weight: 700;
+    color: var(--accent-gold);
+    font-size: var(--font-size-lg);
+}
+
+.total-pedido {
+    text-align: right;
+    padding-top: var(--spacing-md);
+    border-top: 2px solid var(--accent-gold);
+    margin-top: var(--spacing-md);
+}
+
+.total-pedido h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-xl);
+}
+
+.pagamento-section {
+    background: var(--primary-light);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    box-shadow: 0 4px 20px var(--shadow-soft);
+    text-align: center;
+}
+
+.btn-mercado-pago {
+    background: linear-gradient(135deg, #00b1ea, #0099cc);
+    color: white;
+    border: none;
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    width: 100%;
+    max-width: 400px;
+    margin: var(--spacing-lg) auto 0;
+    transition: all var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(0, 177, 234, 0.3);
+}
+
+.btn-mercado-pago:hover {
+    background: linear-gradient(135deg, #0099cc, #00b1ea);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 177, 234, 0.4);
+}
+
+.btn-mercado-pago img {
+    height: 24px;
+    width: auto;
+}
+
+/* Páginas de resultado de pagamento */
+.payment-result-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    background: linear-gradient(135deg, var(--primary-light), var(--shadow-soft));
+}
+
+.result-card {
+    background: white;
+    border-radius: 20px;
+    padding: var(--spacing-3xl);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px var(--shadow-strong);
+    border: 1px solid var(--border-subtle);
+}
+
+.result-card.success {
+    border-top: 4px solid #28a745;
+}
+
+.result-card.error {
+    border-top: 4px solid #dc3545;
+}
+
+.result-card.pending {
+    border-top: 4px solid #ffc107;
+}
+
+.result-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+.result-title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+.result-message {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.result-submessage {
+    font-size: var(--font-size-base);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-gold), #e6940a);
+    color: white;
+    text-decoration: none;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    display: inline-block;
+    transition: all var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #e6940a, var(--accent-gold));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 165, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: var(--spacing-lg);
+        gap: var(--spacing-lg);
+    }
+    
+    .resumo-pedido, .pagamento-section {
+        padding: var(--spacing-lg);
+    }
+    
+    .result-card {
+        padding: var(--spacing-2xl);
+    }
+    
+    .result-icon {
+        font-size: 3rem;
+    }
+    
+    .result-title {
+        font-size: var(--font-size-xl);
+    }
+}
