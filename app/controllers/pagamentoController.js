@@ -15,11 +15,18 @@ const pagamentoController = {
       const { itens, usuario } = req.body;
       const preference = new Preference(client);
       
+      // Verificar se itens é um array e tem conteúdo
+      const itensArray = Array.isArray(itens) ? itens : [];
+      
+      if (itensArray.length === 0) {
+        return res.status(400).json({ error: 'Carrinho vazio' });
+      }
+      
       const body = {
-        items: itens.map(item => ({
-          title: item.nome,
-          unit_price: parseFloat(item.preco),
-          quantity: item.quantidade,
+        items: itensArray.map(item => ({
+          title: item.nome || 'Produto',
+          unit_price: parseFloat(item.preco) || 1.0,
+          quantity: parseInt(item.quantidade) || 1,
           currency_id: 'BRL'
         })),
         back_urls: {

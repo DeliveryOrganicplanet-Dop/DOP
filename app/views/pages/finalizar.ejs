@@ -48,43 +48,7 @@
         </div>
     </main>
 
-    <script>
-        // Dados da compra vindos do servidor
-        window.detalhesCompra = {
-            totalItens: <%= totalItens || 0 %>,
-            totalPreco: <%= totalPreco || 0 %>,
-            carrinho: <%- JSON.stringify(carrinho) %>,
-            usuario: <%- JSON.stringify(usuario) %>
-        };
-        
-        // Função para processar pagamento com Mercado Pago
-        document.getElementById('btn-mercado-pago').addEventListener('click', async function() {
-            try {
-                const response = await fetch('/api/pagamento/criar-preferencia', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        itens: window.detalhesCompra.carrinho,
-                        usuario: window.detalhesCompra.usuario
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.init_point) {
-                    // Redirecionar para o Mercado Pago
-                    window.location.href = data.init_point;
-                } else {
-                    alert('Erro ao processar pagamento');
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao processar pagamento');
-            }
-        });
-    </script>
+
     <script src="js/finalizar.js"></script>
 </body>
 </html>
