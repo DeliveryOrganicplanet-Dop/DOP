@@ -219,16 +219,31 @@ class SubscriptionManager {
 
     async submitSubscription(subscriptionData) {
         try {
-            // Here you would normally send to your backend
-            console.log('Subscription data:', subscriptionData);
+            // Criar preferência no Mercado Pago para assinatura
+            const response = await fetch('/api/pagamento/criar-preferencia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itens: [{
+                        id: subscriptionData.plan,
+                        nome: `Assinatura ${subscriptionData.planName}`,
+                        preco: subscriptionData.totalPrice,
+                        quantidade: 1
+                    }],
+                    usuario: { nome: 'Cliente', email: 'cliente@teste.com' }
+                })
+            });
             
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const data = await response.json();
             
-            alert('Assinatura realizada com sucesso! Você receberá um email de confirmação em breve.');
-            
-            // Redirect to account page or subscription management
-            window.location.href = '/conta';
+            if (data.init_point) {
+                // Redirecionar para o Mercado Pago
+                window.location.href = data.init_point;
+            } else {
+                alert('Erro ao processar pagamento da assinatura');
+            }
             
         } catch (error) {
             console.error('Erro ao processar assinatura:', error);
