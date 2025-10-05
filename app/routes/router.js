@@ -237,6 +237,72 @@ router.delete('/api/produtos/:id', produtoController.delete);
 router.post('/api/pagamento/criar-preferencia', pagamentoController.criarPreferencia);
 router.post('/webhook/mercadopago', pagamentoController.webhook);
 
+// Rotas para dados do usuário
+router.get('/api/user-data', verificarAuth, async (req, res) => {
+  try {
+    // Buscar dados atualizados do banco
+    const usuarioModel = require('../models/usuarioModel');
+    const usuarioAtualizado = await usuarioModel.findById(req.session.usuario.ID_USUARIO);
+    
+    // Atualizar sessão com dados do banco
+    req.session.usuario = usuarioAtualizado;
+    
+    console.log('Dados do usuário enviados:', usuarioAtualizado);
+    res.json(usuarioAtualizado);
+  } catch (error) {
+    console.error('Erro ao buscar dados do usuário:', error);
+    res.status(500).json({ error: 'Erro ao carregar dados' });
+  }
+});
+
+const multer = require('multer');
+const upload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('O arquivo enviado não é uma imagem válida.'));
+    }
+  }
+});
+
+router.post('/api/upload-photo', verificarAuth, upload.single('photo'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nenhum arquivo enviado ou arquivo inválido' });
+    }
+    const fs = require('fs');
+    const filename = 'profile-' + req.session.usuario.ID_USUARIO + '-' + Date.now() + '.jpg';
+    const filepath = path.join(__dirname, '../public/uploads/profiles/', filename);
+    fs.writeFileSync(filepath, req.file.buffer);
+    const usuarioModel = require('../models/usuarioModel');
+    const fotoPath = '/uploads/profiles/' + filename;
+    await usuarioModel.updatePhoto(req.session.usuario.ID_USUARIO, fotoPath);
+    req.session.usuario.FOTO_USUARIO = fotoPath;
+    res.json({ success: true, fotoPath });
+  } catch (error) {
+    console.error('Erro ao salvar foto:', error);
+    res.status(500).json({ error: error.message || 'Erro ao salvar foto' });
+  }
+});
+
+router.delete('/api/remove-photo', verificarAuth, async (req, res) => {
+  try {
+    const usuarioModel = require('../models/usuarioModel');
+    
+    await usuarioModel.removePhoto(req.session.usuario.ID_USUARIO);
+    req.session.usuario.FOTO_USUARIO = null;
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Erro ao remover foto:', error);
+    res.status(500).json({ error: 'Erro ao remover foto' });
+  }
+});
+
+
+
 // Páginas de retorno do pagamento
 router.get('/pagamento/sucesso', (req, res) => {
   res.render('pages/pagamento-sucesso', { errors: null });

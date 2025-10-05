@@ -194,56 +194,95 @@ function capturePhoto(video, stream) {
     document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
 }
 
-function savePhoto() {
-    const previewImage = document.getElementById('previewImage');
-    const userPhoto = document.getElementById('userPhoto');
-    const avatarCircle = document.getElementById('avatarCircle');
+async function savePhoto() {
+    const photoInput = document.getElementById('photoInput');
+    const file = photoInput.files[0];
     
-    // Salvar foto no localStorage
-    localStorage.setItem('userPhoto', previewImage.src);
+    if (!file) {
+        alert('Selecione uma foto primeiro!');
+        return;
+    }
     
-    // Atualizar interface
-    userPhoto.src = previewImage.src;
-    userPhoto.style.display = 'block';
-    avatarCircle.style.display = 'none';
-    
-    closePhotoModal();
-    
-    // Feedback visual
-    const profileCard = document.querySelector('.profile-card');
-    const originalBg = profileCard.style.background;
-    profileCard.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-    profileCard.style.color = 'white';
-    
-    setTimeout(() => {
-        profileCard.style.background = originalBg;
-        profileCard.style.color = '';
-    }, 1500);
-}
-
-function removePhoto() {
-    const userPhoto = document.getElementById('userPhoto');
-    const avatarCircle = document.getElementById('avatarCircle');
-    
-    // Remover do localStorage
-    localStorage.removeItem('userPhoto');
-    
-    // Atualizar interface
-    userPhoto.style.display = 'none';
-    avatarCircle.style.display = 'flex';
-    
-    closePhotoModal();
-}
-
-function loadUserPhoto() {
-    const savedPhoto = localStorage.getItem('userPhoto');
-    if (savedPhoto) {
-        const userPhoto = document.getElementById('userPhoto');
-        const avatarCircle = document.getElementById('avatarCircle');
+    try {
+        const formData = new FormData();
+        formData.append('photo', file);
         
-        userPhoto.src = savedPhoto;
-        userPhoto.style.display = 'block';
-        avatarCircle.style.display = 'none';
+        const response = await fetch('/api/upload-photo', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            const userPhoto = document.getElementById('userPhoto');
+            const avatarCircle = document.getElementById('avatarCircle');
+            
+            userPhoto.src = result.fotoPath;
+            userPhoto.style.display = 'block';
+            avatarCircle.style.display = 'none';
+            
+            closePhotoModal();
+            alert('Foto salva com sucesso!');
+        } else {
+            alert('Erro: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro: ' + error.message);
+    }
+}
+
+async function removePhoto() {
+    try {
+        const response = await fetch('/api/remove-photo', {
+            method: 'DELETE'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            const userPhoto = document.getElementById('userPhoto');
+            const avatarCircle = document.getElementById('avatarCircle');
+            
+            userPhoto.style.display = 'none';
+            avatarCircle.style.display = 'flex';
+            
+            closePhotoModal();
+        } else {
+            alert('Erro ao remover foto');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao remover foto');
+    }
+}
+
+async function loadUserData() {
+    try {
+        const response = await fetch('/api/user-data');
+        const userData = await response.json();
+        
+        // Atualizar informações do usuário
+        document.getElementById('userName').textContent = userData.NOME_USUARIO;
+        document.getElementById('nome-display').textContent = userData.NOME_USUARIO;
+        document.getElementById('email-display').textContent = userData.EMAIL_USUARIO;
+        document.getElementById('user-id').textContent = userData.ID_USUARIO;
+        
+        // Atualizar avatar
+        const avatarCircle = document.getElementById('avatarCircle');
+        avatarCircle.textContent = userData.NOME_USUARIO.charAt(0).toUpperCase();
+        
+        // Carregar foto se existir
+        if (userData.FOTO_USUARIO) {
+            const userPhoto = document.getElementById('userPhoto');
+            userPhoto.src = userData.FOTO_USUARIO;
+            userPhoto.style.display = 'block';
+            avatarCircle.style.display = 'none';
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
     }
 }
 
@@ -393,9 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     }
     
-    // Carregar preferências e foto
+    // Carregar dados do usuário
+    loadUserData();
     loadPreferences();
-    loadUserPhoto();
     
     // Animar estatísticas
     setTimeout(animateStats, 500);

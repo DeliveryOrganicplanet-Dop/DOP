@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Conta - DOP</title>
-    <link rel="stylesheet" href="css/conta.css">
+    <link rel="stylesheet" href="/css/conta.css">
 </head>
 <body>
     <header>
@@ -13,7 +13,7 @@
             <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
         </nav>
         <figure>
-            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
+            <img src="/imagens/dopimg.png" alt="DOP Logo" class="logo">
         </figure>
         <h1>Minha Conta</h1>
     </header>
@@ -183,7 +183,7 @@
             </header>
             <div class="photo-options">
                 <div class="upload-area">
-                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    <input type="file" id="photoInput" name="photo" accept="image/*" style="display: none;">
                     <button type="button" onclick="document.getElementById('photoInput').click()" class="upload-btn">
                         📁 Escolher Arquivo
                     </button>
@@ -204,6 +204,6 @@
         </article>
     </dialog>
 
-    <script src="js/conta.js"></script>
+    <script src="/js/conta.js"></script>
 </body>
 </html>

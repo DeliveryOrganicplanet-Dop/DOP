@@ -10,59 +10,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="login-background">
-        <div class="login-container">
-            <div class="login-header">
+    <main class="login-background">
+        <section class="login-container">
+            <header class="login-header">
                 <img src="imagens/logo  dop 2.png" alt="DOP Logo" class="logo">
                 <h1>DOP</h1>
                 <p>Delivery Organic Plant</p>
-            </div>
+            </header>
 
             <form id="login-form" class="login-form" method="post" action="/login">
-                <input type="hidden" id="redirectTo" name="redirectTo" value="<%= typeof redirectTo !== 'undefined' ? redirectTo : '/' %>">
+                <input type="hidden" id="redirectTo" name="redirectTo" value="/">
                 
-                <% if (typeof errors !== 'undefined' && errors && errors.length > 0) { %>
-                    <div class="error-messages">
-                        <% errors.forEach(error => { %>
-                            <p class="error-message"><%= error.msg || error.message %></p>
-                        <% }); %>
-                    </div>
-                <% } %>
+                <section class="error-messages" id="error-messages" style="display: none;">
+                </section>
             
-                <div class="form-group">
+                <section class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-                </div>
+                </section>
             
-                <div class="form-group">
+                <section class="form-group">
                     <label for="password">Senha</label>
                     <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
-                </div>
+                </section>
             
                 <button type="submit" class="btn-login">Entrar</button>
                 
-                <div class="divider">
-                    <span>ou</span>
-                </div>
+                <hr class="divider">
+                <span class="divider-text">ou</span>
                 
-                <button type="button" class="btn-google" onclick="loginWithGoogle()">
+                <button type="button" class="btn-google" id="btn-google">
                     <img src="imagens/google.png" alt="Google" class="google-icon">
                     Entrar com Google
                 </button>
             
-                <div class="login-footer">
+                <footer class="login-footer">
                     <p>Não tem uma conta? <a href="/cadastro">Cadastre-se aqui</a></p>
                     <p><a href="/">Voltar para a loja</a></p>
-                </div>
+                </footer>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <script>
-        function loginWithGoogle() {
-            window.location.href = '/auth/google';       
-        }
-    </script>
     <script src="js/login.js"></script> 
 </body>
 </html>

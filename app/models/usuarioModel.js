@@ -61,6 +61,22 @@ const usuarioModel = {
       console.error('Erro ao criar usuário Google:', error);
       throw error;
     }
+  },
+
+  async updatePhoto(id, fotoPath) {
+    console.log('Salvando foto:', { id, fotoPath });
+    const result = await pool.query(
+      'UPDATE USUARIOS SET FOTO_USUARIO = ? WHERE ID_USUARIO = ?',
+      [fotoPath, id]
+    );
+    return result;
+  },
+
+  async removePhoto(id) {
+    await pool.query(
+      'UPDATE USUARIOS SET FOTO_USUARIO = NULL WHERE ID_USUARIO = ?',
+      [id]
+    );
   }
 };
 

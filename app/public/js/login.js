@@ -1,63 +1,32 @@
-const form = document.getElementById('login-form');
-const email = document.getElementById('email');
-const password = document.getElementById('password');
-const redirectInput = document.getElementById('redirectTo');
+// Login JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+    const btnGoogle = document.getElementById('btn-google');
+    const errorMessages = document.getElementById('error-messages');
 
-// 🔹 Preenche o campo hidden com o redirectTo
-(function () {
-    // Se vier de cadlog, redireciona para home, senão mantém referrer
-    let redirectValue = document.referrer || '/';
-    if (redirectValue.includes('/cadlog') || redirectValue.includes('/login')) {
-        redirectValue = '/';
-    }
-    if (redirectInput) {
-        redirectInput.value = redirectValue;
-    }
-})();
+    // Google login
+    btnGoogle.addEventListener('click', function() {
+        window.location.href = '/auth/google';
+    });
 
-// Validação e envio
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    // Form submission - usar submit padrão do formulário
+    // O controller já trata o redirecionamento
 
-    const emailValue = email.value.trim();
-    const passwordValue = password.value.trim();
-    const redirectTo = redirectInput.value || '/';
-
-    if (!emailValue || !passwordValue) {
-        alert("Preencha todos os campos.");
-        return;
-    }
-
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: emailValue,
-                password: passwordValue,
-                redirectTo
-            })
+    function showErrors(errors) {
+        errorMessages.innerHTML = '';
+        errors.forEach(error => {
+            const p = document.createElement('p');
+            p.className = 'error-message';
+            p.textContent = error.msg || error.message || error;
+            errorMessages.appendChild(p);
         });
+        errorMessages.style.display = 'block';
+    }
 
-        const contentType = response.headers.get('content-type') || '';
-
-        if (response.ok) {
-            if (contentType.includes('application/json')) {
-                const data = await response.json();
-                const destino = data.redirectTo || redirectTo || '/';
-                window.location.href = destino;
-            } else {
-                // Caso o servidor responda com HTML (formulário tradicional)
-                window.location.href = redirectTo;
-            }
-        } else {
-            const errMsg = contentType.includes('application/json')
-                ? (await response.json()).message
-                : await response.text();
-            alert("Erro no login: " + errMsg);
-        }
-    } catch (err) {
-        console.error(err);
-        alert("Erro interno ao tentar fazer login.");
+    // Check for URL parameters (errors from server redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    if (error) {
+        showErrors([decodeURIComponent(error)]);
     }
 });
