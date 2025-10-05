@@ -26,12 +26,13 @@ app.use(express.static(path.join(__dirname, 'app/public')));
 
 // Configuração global da sessão
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'chave_super_secreta',
-  resave: false,
+  secret: process.env.SESSION_SECRET || 'chave_super_secreta_dop_2024',
+  resave: true,
   saveUninitialized: false,
+  name: 'dop.session',
   cookie: { 
     secure: false, 
-    httpOnly: true,
+    httpOnly: false,
     maxAge: 24 * 60 * 60 * 1000, // 24 horas
     sameSite: 'lax'
   }

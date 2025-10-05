@@ -77,6 +77,22 @@ const usuarioModel = {
       'UPDATE USUARIOS SET FOTO_USUARIO = NULL WHERE ID_USUARIO = ?',
       [id]
     );
+  },
+
+  async updateProfile(id, dados) {
+    const { NOME_USUARIO, EMAIL_USUARIO } = dados;
+    await pool.query(
+      'UPDATE USUARIOS SET NOME_USUARIO = ?, EMAIL_USUARIO = ? WHERE ID_USUARIO = ?',
+      [NOME_USUARIO, EMAIL_USUARIO, id]
+    );
+    return await this.findById(id);
+  },
+
+  async updatePassword(id, hashedPassword) {
+    await pool.query(
+      'UPDATE USUARIOS SET SENHA_USUARIO = ? WHERE ID_USUARIO = ?',
+      [hashedPassword, id]
+    );
   }
 };
 

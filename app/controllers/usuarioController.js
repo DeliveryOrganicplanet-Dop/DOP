@@ -60,7 +60,7 @@ const usuarioController = {
     } catch (error) {
       console.error('Erro no login:', error);
       if (isJson) return res.status(500).json({ message: error.message });
-      return res.render('pages/error', { errors: [{ msg: error.message }] });
+        return res.render('pages/error', { message: error.message });
     }
   },
   
@@ -176,6 +176,78 @@ const usuarioController = {
       res.status(204).json({});
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  },
+
+  async updateProfile(req, res) {
+    try {
+      const userId = req.session.usuario.id;
+      const { nome, email } = req.body;
+      
+      if (!nome || !email) {
+        return res.status(400).json({ error: 'Nome e email são obrigatórios' });
+      }
+      
+      // Verificar se o email já existe para outro usuário
+      const existingUser = await usuarioModel.findByEmail(email);
+      if (existingUser && existingUser.ID_USUARIO !== userId) {
+        return res.status(400).json({ error: 'Este email já está sendo usado por outro usuário' });
+      }
+      
+      const dadosAtualizacao = {
+        NOME_USUARIO: nome,
+        EMAIL_USUARIO: email
+      };
+      
+      await usuarioModel.updateProfile(userId, dadosAtualizacao);
+      
+      // Atualizar sessão
+      req.session.usuario.nome = nome;
+      req.session.usuario.email = email;
+      
+      // Salvar sessão explicitamente
+      req.session.save((err) => {
+        if (err) {
+          console.error('Erro ao salvar sessão:', err);
+          return res.status(500).json({ error: 'Erro ao salvar sessão' });
+        }
+        res.json({ success: true, message: 'Perfil atualizado com sucesso' });
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  },
+
+  async updatePassword(req, res) {
+    try {
+      const userId = req.session.usuario.id;
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'Senha atual e nova senha são obrigatórias' });
+      }
+      
+      // Buscar usuário atual
+      const usuario = await usuarioModel.findById(userId);
+      if (!usuario) {
+        return res.status(404).json({ error: 'Usuário não encontrado' });
+      }
+      
+      // Verificar senha atual
+      if (!bcrypt.compareSync(currentPassword, usuario.SENHA_USUARIO)) {
+        return res.status(400).json({ error: 'Senha atual incorreta' });
+      }
+      
+      // Criptografar nova senha
+      const hashedPassword = bcrypt.hashSync(newPassword, 10);
+      
+      await usuarioModel.updatePassword(userId, hashedPassword);
+      
+      res.json({ success: true, message: 'Senha alterada com sucesso' });
+    } catch (error) {
+      console.error('Erro ao alterar senha:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
     }
   },
 };

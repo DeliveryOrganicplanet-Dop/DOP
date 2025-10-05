@@ -8,16 +8,26 @@ const pagamentoController = require('../controllers/pagamentoController');
 
 // Middleware para verificar autenticação
 function verificarAuth(req, res, next) {
-  console.log('Verificando autenticação para:', req.url);
+  console.log('=== DEBUG AUTH ===');
+  console.log('URL:', req.url);
+  console.log('Method:', req.method);
   console.log('Session ID:', req.sessionID);
-  console.log('Usuário na sessão:', req.session?.usuario);
+  console.log('Session data:', req.session);
+  console.log('Usuario na sessão:', req.session?.usuario);
+  console.log('Headers:', req.headers.cookie);
   
-  if (req.session && req.session.usuario) {
+  if (req.session && req.session.usuario && req.session.usuario.id) {
     console.log('Usuário autenticado:', req.session.usuario.nome);
     return next();
   }
   
-  console.log('Usuário não autenticado, redirecionando para login');
+  console.log('Usuário não autenticado');
+  
+  // Para requisições AJAX, retornar JSON
+  if (req.xhr || req.headers.accept?.indexOf('json') > -1) {
+    return res.status(401).json({ error: 'Não autenticado' });
+  }
+  
   return res.redirect('/login');
 }
 
@@ -68,6 +78,21 @@ router.get('/verificar-sessao', (req, res) => {
     sessionId: req.sessionID,
     cookies: req.headers.cookie,
     sessionData: req.session
+  });
+});
+
+// Endpoint de teste para sessão
+router.get('/api/test-session', (req, res) => {
+  console.log('=== TEST SESSION ===');
+  console.log('Session ID:', req.sessionID);
+  console.log('Session:', req.session);
+  console.log('Usuario:', req.session?.usuario);
+  console.log('Cookies:', req.headers.cookie);
+  
+  res.json({
+    authenticated: !!(req.session && req.session.usuario),
+    user: req.session?.usuario || null,
+    sessionId: req.sessionID
   });
 });
 
@@ -174,8 +199,24 @@ router.get('/cadlog', (req, res) => {
   res.render('pages/cadlog', { errors: null });
 });
 
-router.get('/conta', verificarAuth, (req, res) => {
-  res.render('pages/conta', { errors: null, usuario: req.session.usuario });
+router.get('/conta', verificarAuth, async (req, res) => {
+  try {
+    const usuarioModel = require('../models/usuarioModel');
+    const usuarioCompleto = await usuarioModel.findById(req.session.usuario.id);
+    
+    const usuario = {
+      id: usuarioCompleto.ID_USUARIO,
+      nome: usuarioCompleto.NOME_USUARIO,
+      email: usuarioCompleto.EMAIL_USUARIO,
+      tipo: usuarioCompleto.TIPO_USUARIO,
+      foto: usuarioCompleto.FOTO_USUARIO
+    };
+    
+    res.render('pages/conta', { errors: null, usuario });
+  } catch (error) {
+    console.error('Erro ao carregar conta:', error);
+    res.render('pages/conta', { errors: null, usuario: req.session.usuario });
+  }
 });
 
 router.get('/finalizar', (req, res) => {
@@ -242,10 +283,17 @@ router.get('/api/user-data', verificarAuth, async (req, res) => {
   try {
     // Buscar dados atualizados do banco
     const usuarioModel = require('../models/usuarioModel');
-    const usuarioAtualizado = await usuarioModel.findById(req.session.usuario.ID_USUARIO);
+    const usuarioAtualizado = await usuarioModel.findById(req.session.usuario.id);
     
-    // Atualizar sessão com dados do banco
-    req.session.usuario = usuarioAtualizado;
+    if (usuarioAtualizado) {
+      // Atualizar sessão com dados do banco
+      req.session.usuario = {
+        id: usuarioAtualizado.ID_USUARIO,
+        nome: usuarioAtualizado.NOME_USUARIO,
+        email: usuarioAtualizado.EMAIL_USUARIO,
+        tipo: usuarioAtualizado.TIPO_USUARIO
+      };
+    }
     
     console.log('Dados do usuário enviados:', usuarioAtualizado);
     res.json(usuarioAtualizado);
@@ -269,21 +317,33 @@ const upload = multer({
 
 router.post('/api/upload-photo', verificarAuth, upload.single('photo'), async (req, res) => {
   try {
+    console.log('Upload iniciado para usuário:', req.session.usuario.id);
+    console.log('Arquivo recebido:', req.file ? 'Sim' : 'Não');
+    
     if (!req.file) {
-      return res.status(400).json({ error: 'Nenhum arquivo enviado ou arquivo inválido' });
+      return res.status(400).json({ error: 'Nenhum arquivo enviado' });
     }
+    
     const fs = require('fs');
-    const filename = 'profile-' + req.session.usuario.ID_USUARIO + '-' + Date.now() + '.jpg';
+    const filename = `profile-${req.session.usuario.id}-${Date.now()}.jpg`;
     const filepath = path.join(__dirname, '../public/uploads/profiles/', filename);
+    const fotoPath = `/uploads/profiles/${filename}`;
+    
+    console.log('Salvando arquivo em:', filepath);
+    
+    // Salvar arquivo
     fs.writeFileSync(filepath, req.file.buffer);
+    
+    // Atualizar banco
     const usuarioModel = require('../models/usuarioModel');
-    const fotoPath = '/uploads/profiles/' + filename;
-    await usuarioModel.updatePhoto(req.session.usuario.ID_USUARIO, fotoPath);
-    req.session.usuario.FOTO_USUARIO = fotoPath;
+    await usuarioModel.updatePhoto(req.session.usuario.id, fotoPath);
+    
+    console.log('Foto salva com sucesso:', fotoPath);
+    
     res.json({ success: true, fotoPath });
   } catch (error) {
     console.error('Erro ao salvar foto:', error);
-    res.status(500).json({ error: error.message || 'Erro ao salvar foto' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -291,14 +351,30 @@ router.delete('/api/remove-photo', verificarAuth, async (req, res) => {
   try {
     const usuarioModel = require('../models/usuarioModel');
     
-    await usuarioModel.removePhoto(req.session.usuario.ID_USUARIO);
-    req.session.usuario.FOTO_USUARIO = null;
+    await usuarioModel.removePhoto(req.session.usuario.id);
+    req.session.usuario.foto = null;
     
     res.json({ success: true });
   } catch (error) {
     console.error('Erro ao remover foto:', error);
     res.status(500).json({ error: 'Erro ao remover foto' });
   }
+});
+
+// Rota para atualizar perfil
+router.put('/api/update-profile', verificarAuth, usuarioController.updateProfile);
+
+// Rota para alterar senha
+router.put('/api/update-password', verificarAuth, usuarioController.updatePassword);
+
+// Middleware para salvar sessão após atualizações
+router.use('/api/update-*', (req, res, next) => {
+  if (req.session) {
+    req.session.save((err) => {
+      if (err) console.error('Erro ao salvar sessão:', err);
+    });
+  }
+  next();
 });
 
 

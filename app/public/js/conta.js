@@ -97,12 +97,17 @@ function resetPasswordStrength() {
     strengthText.textContent = 'Digite uma senha';
 }
 
-function handlePasswordForm(event) {
+async function handlePasswordForm(event) {
     event.preventDefault();
     
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('Todos os campos são obrigatórios!');
+        return;
+    }
     
     if (newPassword !== confirmPassword) {
         alert('As senhas não coincidem!');
@@ -114,11 +119,28 @@ function handlePasswordForm(event) {
         return;
     }
     
-    // Simular alteração de senha
-    setTimeout(() => {
-        alert('Senha alterada com sucesso!');
-        closePasswordModal();
-    }, 1000);
+    try {
+        const response = await fetch('/api/update-password', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Senha alterada com sucesso!');
+            closePasswordModal();
+        } else {
+            alert('Erro: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erro ao alterar senha:', error);
+        alert('Erro ao alterar senha. Tente novamente.');
+    }
 }
 
 function handlePhotoUpload(event) {
@@ -196,19 +218,56 @@ function capturePhoto(video, stream) {
 
 async function savePhoto() {
     const photoInput = document.getElementById('photoInput');
-    const file = photoInput.files[0];
+    const previewImage = document.getElementById('previewImage');
     
-    if (!file) {
+    // Verificar se há arquivo ou preview
+    const file = photoInput.files[0];
+    const hasPreview = previewImage.src && previewImage.src !== window.location.href;
+    
+    if (!file && !hasPreview) {
         alert('Selecione uma foto primeiro!');
         return;
     }
     
     try {
-        const formData = new FormData();
-        formData.append('photo', file);
+        let formData = new FormData();
         
+        if (file) {
+            formData.append('photo', file);
+        } else if (hasPreview) {
+            // Converter preview para blob
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = async function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(async function(blob) {
+                    formData.append('photo', blob, 'photo.jpg');
+                    await uploadPhoto(formData);
+                }, 'image/jpeg', 0.8);
+            };
+            
+            img.src = previewImage.src;
+            return;
+        }
+        
+        await uploadPhoto(formData);
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao salvar foto');
+    }
+}
+
+async function uploadPhoto(formData) {
+    try {
         const response = await fetch('/api/upload-photo', {
             method: 'POST',
+            credentials: 'same-origin',
             body: formData
         });
         
@@ -228,15 +287,16 @@ async function savePhoto() {
             alert('Erro: ' + result.error);
         }
     } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro: ' + error.message);
+        console.error('Erro no upload:', error);
+        alert('Erro ao fazer upload da foto');
     }
 }
 
 async function removePhoto() {
     try {
         const response = await fetch('/api/remove-photo', {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
         
         const result = await response.json();
@@ -260,7 +320,9 @@ async function removePhoto() {
 
 async function loadUserData() {
     try {
-        const response = await fetch('/api/user-data');
+        const response = await fetch('/api/user-data', {
+            credentials: 'same-origin'
+        });
         const userData = await response.json();
         
         // Atualizar informações do usuário
@@ -276,6 +338,7 @@ async function loadUserData() {
         // Carregar foto se existir
         if (userData.FOTO_USUARIO) {
             const userPhoto = document.getElementById('userPhoto');
+            const avatarCircle = document.getElementById('avatarCircle');
             userPhoto.src = userData.FOTO_USUARIO;
             userPhoto.style.display = 'block';
             avatarCircle.style.display = 'none';
@@ -342,32 +405,59 @@ function loadPreferences() {
     }
 }
 
-function handleEditForm(event) {
+async function handleEditForm(event) {
     event.preventDefault();
     
     const nome = document.getElementById('editNome').value;
     const email = document.getElementById('editEmail').value;
     
-    // Atualizar displays
-    document.getElementById('nome-display').textContent = nome;
-    document.getElementById('email-display').textContent = email;
+    if (!nome || !email) {
+        alert('Nome e email são obrigatórios!');
+        return;
+    }
     
-    // Atualizar avatar
-    document.querySelector('.avatar-circle').textContent = nome.charAt(0).toUpperCase();
-    document.querySelector('.profile-info h2').textContent = nome;
-    
-    closeEditModal();
-    
-    // Mostrar feedback
-    const infoCard = document.querySelector('.info-list').closest('.info-card');
-    const originalBg = infoCard.style.background;
-    infoCard.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-    infoCard.style.color = 'white';
-    
-    setTimeout(() => {
-        infoCard.style.background = originalBg;
-        infoCard.style.color = '';
-    }, 1500);
+    try {
+        const response = await fetch('/api/update-profile', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ nome, email })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Atualizar displays
+            document.getElementById('nome-display').textContent = nome;
+            document.getElementById('email-display').textContent = email;
+            
+            // Atualizar avatar
+            document.querySelector('.avatar-circle').textContent = nome.charAt(0).toUpperCase();
+            document.querySelector('.profile-info h2').textContent = nome;
+            
+            closeEditModal();
+            
+            // Mostrar feedback de sucesso
+            const infoCard = document.querySelector('.info-list').closest('.info-card');
+            const originalBg = infoCard.style.background;
+            infoCard.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            infoCard.style.color = 'white';
+            
+            setTimeout(() => {
+                infoCard.style.background = originalBg;
+                infoCard.style.color = '';
+            }, 1500);
+            
+            alert('Perfil atualizado com sucesso!');
+        } else {
+            alert('Erro: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar perfil:', error);
+        alert('Erro ao atualizar perfil. Tente novamente.');
+    }
 }
 
 function addCardHoverEffects() {

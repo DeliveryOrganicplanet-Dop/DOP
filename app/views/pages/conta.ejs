@@ -24,10 +24,17 @@
                 <header class="profile-header">
                     <figure class="avatar">
                         <div class="avatar-container">
-                            <img id="userPhoto" src="" alt="Foto do usuário" class="user-photo" style="display: none;">
-                            <div id="avatarCircle" class="avatar-circle">
-                                <%= usuario.nome.charAt(0).toUpperCase() %>
-                            </div>
+                            <% if (usuario.foto) { %>
+                                <img id="userPhoto" src="<%= usuario.foto %>" alt="Foto do usuário" class="user-photo">
+                                <div id="avatarCircle" class="avatar-circle" style="display: none;">
+                                    <%= usuario.nome.charAt(0).toUpperCase() %>
+                                </div>
+                            <% } else { %>
+                                <img id="userPhoto" src="" alt="Foto do usuário" class="user-photo" style="display: none;">
+                                <div id="avatarCircle" class="avatar-circle">
+                                    <%= usuario.nome.charAt(0).toUpperCase() %>
+                                </div>
+                            <% } %>
                             <button class="change-photo-btn" onclick="openPhotoModal()" title="Alterar foto">
                                 📷
                             </button>
