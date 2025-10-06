@@ -51,9 +51,42 @@ exports.deleteVendedor = async (req, res) => {
 
 exports.getVendedoresWithUsers = async () => {
   try {
+    const vendedorModel = require('../models/vendedorModel');
+    const avaliacaoModel = require('../models/avaliacaoModel');
+    
+    // Criar tabela de avaliações se não existir
+    await avaliacaoModel.criarTabela();
+    
     const vendedores = await vendedorModel.findAllWithUsers();
+    
+    // Adicionar média de avaliações para cada vendedor
+    for (let vendedor of vendedores) {
+      const avaliacao = await avaliacaoModel.obterMediaVendedor(vendedor.id_vendedores);
+      vendedor.media_avaliacao = avaliacao.media;
+      vendedor.total_avaliacoes = avaliacao.total;
+    }
+    
     return vendedores;
   } catch (error) {
     throw error;
+  }
+};
+
+exports.avaliarVendedor = async (req, res) => {
+  try {
+    const avaliacaoModel = require('../models/avaliacaoModel');
+    const { id_vendedor, nota, comentario } = req.body;
+    
+    await avaliacaoModel.criar({
+      id_vendedor,
+      id_usuario: req.session.usuario.id,
+      nota,
+      comentario
+    });
+    
+    res.json({ success: true, message: 'Avaliação salva com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao avaliar vendedor:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 };

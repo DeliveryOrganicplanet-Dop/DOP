@@ -150,61 +150,34 @@
             </header>
  
             <article class="products-grid">
-                <section class="product-card">
-                    <a href="/brocolis" class="product-link" title="Brócolis Ninja Premium">
-                        <figure class="product-image">
-                            <img src="imagens/brocolis.png" alt="Brócolis Ninja" class="product-img">
-                            <figcaption class="product-badge">Premium</figcaption>
-                        </figure>
-                        <header class="product-info">
-                            <h3 class="product-name">Brócolis Ninja</h3>
-                            <p class="product-description">Unidade 250g</p>
-                            <span class="product-price">R$ 9,70</span>
-                        </header>
-                    </a>
-                </section>
- 
-                <section class="product-card">
-                    <a href="/ameixa" class="product-link" title="Ameixa Importada Premium">
-                        <figure class="product-image">
-                            <img src="imagens/ameixa.png" alt="Ameixa Importada" class="product-img">
-                            <figcaption class="product-badge">Importado</figcaption>
-                        </figure>
-                        <header class="product-info">
-                            <h3 class="product-name">Ameixa Importada</h3>
-                            <p class="product-description">Unidade 150g</p>
-                            <span class="product-price">R$ 2,99</span>
-                        </header>
-                    </a>
-                </section>
- 
-                <section class="product-card">
-                    <a href="/abacaxi" class="product-link" title="Abacaxi Pérola Premium">
-                        <figure class="product-image">
-                            <img src="imagens/abacaxi.png" alt="Abacaxi Pérola" class="product-img">
-                            <figcaption class="product-badge">Especial</figcaption>
-                        </figure>
-                        <header class="product-info">
-                            <h3 class="product-name">Abacaxi Pérola</h3>
-                            <p class="product-description">1,00kg cada</p>
-                            <span class="product-price">R$ 9,85</span>
-                        </header>
-                    </a>
-                </section>
- 
-                <section class="product-card">
-                    <a href="/alface" class="product-link" title="Alface Crespa Premium">
-                        <figure class="product-image">
-                            <img src="imagens/alface.png" alt="Alface Crespa" class="product-img">
-                            <figcaption class="product-badge">Orgânico</figcaption>
-                        </figure>
-                        <header class="product-info">
-                            <h3 class="product-name">Alface Crespa</h3>
-                            <p class="product-description">A unidade</p>
-                            <span class="product-price">R$ 2,99</span>
-                        </header>
-                    </a>
-                </section>
+                <% if (produtos && produtos.length > 0) { %>
+                    <% produtos.forEach(produto => { %>
+                        <section class="product-card">
+                            <a href="/produto/<%= produto.id_prod %>" class="product-link" title="<%= produto.nome_prod %>">
+                                <figure class="product-image">
+                                    <% if (produto.nome_imagem) { %>
+                                        <img src="imagens/<%= produto.nome_imagem %>" alt="<%= produto.nome_prod %>" class="product-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                    <% } else { %>
+                                        <img src="imagens/<%= produto.nome_prod.toLowerCase() %>.png" alt="<%= produto.nome_prod %>" class="product-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                    <% } %>
+                                    <div class="product-placeholder" style="display:none; width:100%; height:200px; background:#f0f0f0; align-items:center; justify-content:center; font-size:48px; color:#ccc;">📦</div>
+                                    <figcaption class="product-badge">Orgânico</figcaption>
+                                </figure>
+                                <header class="product-info">
+                                    <h3 class="product-name"><%= produto.nome_prod %></h3>
+                                    <p class="product-description">Estoque: <%= produto.qtde_estoque %></p>
+                                    <span class="product-price">R$ <%= parseFloat(produto.valor_unitario || 0).toFixed(2).replace('.', ',') %></span>
+                                </header>
+                            </a>
+                            <button class="quick-add-btn" onclick="adicionarAoCarrinho(<%= produto.id_prod %>, '<%= produto.nome_prod %>', <%= produto.valor_unitario %>)" style="position:absolute; bottom:10px; right:10px; background:#4CAF50; color:white; border:none; padding:8px; border-radius:50%; cursor:pointer;">+</button>
+                        </section>
+                    <% }); %>
+                <% } else { %>
+                    <section class="no-products">
+                        <p>Nenhum produto disponível no momento.</p>
+                        <p>Vendedores podem adicionar produtos no painel.</p>
+                    </section>
+                <% } %>
             </article>
  
             <footer class="section-footer">

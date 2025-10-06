@@ -326,10 +326,11 @@ async function loadUserData() {
         const userData = await response.json();
         
         // Atualizar informações do usuário
-        document.getElementById('userName').textContent = userData.NOME_USUARIO;
+        if (document.getElementById('userName')) {
+            document.getElementById('userName').textContent = userData.NOME_USUARIO;
+        }
         document.getElementById('nome-display').textContent = userData.NOME_USUARIO;
         document.getElementById('email-display').textContent = userData.EMAIL_USUARIO;
-        document.getElementById('user-id').textContent = userData.ID_USUARIO;
         
         // Atualizar avatar
         const avatarCircle = document.getElementById('avatarCircle');
@@ -344,15 +345,43 @@ async function loadUserData() {
             avatarCircle.style.display = 'none';
         }
         
+        // Carregar estatísticas
+        await loadUserStats();
+        
     } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
+    }
+}
+
+async function loadUserStats() {
+    try {
+        const response = await fetch('/api/user-stats', {
+            credentials: 'same-origin'
+        });
+        const stats = await response.json();
+        
+        // Atualizar estatísticas na página
+        const statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length >= 3) {
+            statNumbers[0].textContent = stats.pedidosRealizados;
+            statNumbers[0].setAttribute('data-value', stats.pedidosRealizados);
+            
+            statNumbers[1].textContent = `R$ ${stats.totalGasto.toFixed(2).replace('.', ',')}`;
+            statNumbers[1].setAttribute('data-value', stats.totalGasto);
+            
+            statNumbers[2].textContent = stats.diasComoCliente;
+            statNumbers[2].setAttribute('data-value', stats.diasComoCliente);
+        }
+        
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
     }
 }
 
 function animateStats() {
     const statNumbers = document.querySelectorAll('.stat-number');
     statNumbers.forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-value') || stat.textContent.replace(/[^\d]/g, ''));
+        const target = parseFloat(stat.getAttribute('data-value') || stat.textContent.replace(/[^\d.,]/g, '').replace(',', '.'));
         let current = 0;
         const increment = target / 50;
         const isPrice = stat.textContent.includes('R$');
@@ -365,7 +394,7 @@ function animateStats() {
             }
             
             if (isPrice) {
-                stat.textContent = `R$ ${Math.floor(current)}`;
+                stat.textContent = `R$ ${current.toFixed(2).replace('.', ',')}`;
             } else {
                 stat.textContent = Math.floor(current);
             }
@@ -510,6 +539,43 @@ function initializeTooltips() {
             }
         });
     });
+}
+
+// Funções de debug
+async function debugPedidos() {
+    try {
+        const response = await fetch('/api/debug-pedidos', {
+            credentials: 'same-origin'
+        });
+        const data = await response.json();
+        
+        console.log('Debug pedidos:', data);
+        alert(`Pedidos encontrados: ${data.total_pedidos}\n\nDetalhes no console (F12)`);
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao buscar pedidos');
+    }
+}
+
+async function aprovarUltimoPedido() {
+    try {
+        const response = await fetch('/api/aprovar-ultimo-pedido', {
+            method: 'POST',
+            credentials: 'same-origin'
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(data.message);
+            // Recarregar estatísticas
+            loadUserStats();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao aprovar pedido');
+    }
 }
 
 // Inicialização

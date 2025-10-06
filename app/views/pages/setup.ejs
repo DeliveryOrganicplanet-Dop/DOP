@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Produtos - DOP</title>
+</head>
+<body>
+    <h1>Setup dos Produtos</h1>
+    <button onclick="setupProdutos()">Inserir Produtos no Banco</button>
+    <div id="resultado"></div>
+
+    <script>
+        async function setupProdutos() {
+            try {
+                const response = await fetch('/api/setup-produtos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('resultado').innerHTML = '<p style="color: green;">✅ ' + result.message + '</p>';
+                } else {
+                    document.getElementById('resultado').innerHTML = '<p style="color: red;">❌ Erro: ' + result.error + '</p>';
+                }
+            } catch (error) {
+                document.getElementById('resultado').innerHTML = '<p style="color: red;">❌ Erro: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

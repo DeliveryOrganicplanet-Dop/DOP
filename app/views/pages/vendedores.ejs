@@ -48,8 +48,8 @@
                         </address>
                         <aside class="vendedor-stats">
                             <figure class="stat">
-                                <span class="stat-number">4.8</span>
-                                <figcaption class="stat-label">⭐ Avaliação</figcaption>
+                                <span class="stat-number"><%= vendedor.media_avaliacao || '0.0' %></span>
+                                <figcaption class="stat-label">⭐ Avaliação (<%= vendedor.total_avaliacoes || 0 %>)</figcaption>
                             </figure>
                             <figure class="stat">
                                 <span class="stat-number">2024</span>
@@ -59,6 +59,11 @@
                         <button class="btn-contatar" onclick="contatarVendedor('<%= vendedor.EMAIL_USUARIO %>', '<%= vendedor.NOME_USUARIO %>')">
                             Entrar em Contato
                         </button>
+                        <% if (usuario) { %>
+                        <button class="btn-avaliar" onclick="avaliarVendedor(<%= vendedor.id_vendedores %>, '<%= vendedor.NOME_USUARIO %>')" style="background:#ff9800; margin-top:8px;">
+                            Avaliar Vendedor
+                        </button>
+                        <% } %>
                     </section>
                 </article>
             <% }); %>
@@ -75,6 +80,101 @@
         </section>
     </main>
 
+    <script>
+        function contatarVendedor(email, nome) {
+            window.location.href = `mailto:${email}?subject=Contato - ${nome}`;
+        }
+        
+        function cadastrarVendedor() {
+            window.location.href = '/conta';
+        }
+        
+        function avaliarVendedor(idVendedor, nomeVendedor) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                justify-content: center; z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%;">
+                    <h3>Avaliar ${nomeVendedor}</h3>
+                    <div style="margin: 15px 0;">
+                        <label>Nota (1-5):</label>
+                        <div id="rating" style="font-size: 24px; margin: 10px 0;">
+                            <span onclick="setRating(1)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(2)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(3)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(4)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(5)" style="cursor: pointer;">⭐</span>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <label>Comentário (opcional):</label>
+                        <textarea id="comentario" style="width: 100%; height: 60px; margin-top: 5px;"></textarea>
+                    </div>
+                    <div style="text-align: right;">
+                        <button onclick="fecharModal()" style="margin-right: 10px; padding: 8px 16px;">Cancelar</button>
+                        <button onclick="enviarAvaliacao(${idVendedor})" style="background: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Enviar</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            window.currentModal = modal;
+            window.selectedRating = 0;
+        }
+        
+        function setRating(rating) {
+            window.selectedRating = rating;
+            const stars = document.querySelectorAll('#rating span');
+            stars.forEach((star, index) => {
+                star.style.opacity = index < rating ? '1' : '0.3';
+            });
+        }
+        
+        function fecharModal() {
+            if (window.currentModal) {
+                document.body.removeChild(window.currentModal);
+                window.currentModal = null;
+            }
+        }
+        
+        async function enviarAvaliacao(idVendedor) {
+            if (window.selectedRating === 0) {
+                alert('Por favor, selecione uma nota.');
+                return;
+            }
+            
+            const comentario = document.getElementById('comentario').value;
+            
+            try {
+                const response = await fetch('/api/avaliar-vendedor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_vendedor: idVendedor,
+                        nota: window.selectedRating,
+                        comentario: comentario
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Avaliação enviada com sucesso!');
+                    location.reload();
+                } else {
+                    alert('Erro: ' + result.error);
+                }
+            } catch (error) {
+                alert('Erro ao enviar avaliação');
+            }
+            
+            fecharModal();
+        }
+    </script>
     <script src="js/vendedores.js"></script>
 </body>
 </html>

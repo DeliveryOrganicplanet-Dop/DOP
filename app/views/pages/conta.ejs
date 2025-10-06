@@ -70,15 +70,15 @@
                 </header>
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <data class="stat-number" value="12">12</data>
+                        <data class="stat-number" data-value="0">0</data>
                         <small>Pedidos Realizados</small>
                     </div>
                     <div class="stat-item">
-                        <data class="stat-number" value="85">R$ 850</data>
+                        <data class="stat-number" data-value="0">R$ 0,00</data>
                         <small>Total Gasto</small>
                     </div>
                     <div class="stat-item">
-                        <data class="stat-number" value="30">30</data>
+                        <data class="stat-number" data-value="0">0</data>
                         <small>Dias como Cliente</small>
                     </div>
                 </div>
@@ -109,14 +109,26 @@
                     <h3>Ações da Conta</h3>
                 </header>
                 <div class="action-buttons">
-                    <a href="/carrinho" class="action-btn primary">
-                        🛒 Ver Carrinho
-                    </a>
+                    <% if (usuario.tipo === 'V') { %>
+                        <a href="/painel-vendedor" class="action-btn primary">
+                            📦 Gerenciar Produtos
+                        </a>
+                    <% } else { %>
+                        <a href="/carrinho" class="action-btn primary">
+                            🛒 Ver Carrinho
+                        </a>
+                    <% } %>
                     <a href="/calendario" class="action-btn secondary">
                         📅 Calendário Nutricional
                     </a>
                     <button onclick="openPasswordModal()" class="action-btn tertiary">
                         🔒 Redefinir Senha
+                    </button>
+                    <button onclick="debugPedidos()" class="action-btn" style="background: #ff9800; margin-top: 10px;">
+                        🔍 Debug Pedidos
+                    </button>
+                    <button onclick="aprovarUltimoPedido()" class="action-btn" style="background: #4caf50; margin-top: 5px;">
+                        ✅ Aprovar Último Pedido
                     </button>
                 </div>
             </article>

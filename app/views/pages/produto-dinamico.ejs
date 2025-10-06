@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= produto.nome_prod %> - DOP</title>
+    <link rel="stylesheet" href="/css/abacaxi.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="back-button">&#8249;</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </nav>
+        <figure>
+            <img src="/imagens/dopimg.png" alt="DOP Logo" class="logo">
+        </figure>
+    </header>
+
+    <main>
+        <article class="product-showcase">
+            <section class="product-gallery">
+                <figure class="main-image">
+                    <% if (produto.nome_imagem) { %>
+                        <img src="/imagens/<%= produto.nome_imagem %>" alt="<%= produto.nome_prod %>" class="product-img">
+                    <% } else { %>
+                        <img src="/imagens/<%= produto.nome_prod.toLowerCase() %>.png" alt="<%= produto.nome_prod %>" class="product-img" onerror="this.src='/imagens/default.png'">
+                    <% } %>
+                </figure>
+                <div class="image-thumbnails">
+                    <% if (produto.nome_imagem) { %>
+                        <img src="/imagens/<%= produto.nome_imagem %>" alt="<%= produto.nome_prod %> vista 1" class="thumb active">
+                    <% } else { %>
+                        <img src="/imagens/<%= produto.nome_prod.toLowerCase() %>.png" alt="<%= produto.nome_prod %> vista 1" class="thumb active" onerror="this.src='/imagens/default.png'">
+                    <% } %>
+                    <img src="/imagens/organico.png" alt="Selo orgânico" class="thumb">
+                </div>
+            </section>
+
+            <section class="product-info">
+                <header>
+                    <h1><%= produto.nome_prod %></h1>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <small>(<%= produto.total_avaliacoes || 0 %> avaliações - Média: <%= produto.media_avaliacao || '0.0' %>)</small>
+                    </div>
+                </header>
+                
+                <div class="price-section">
+                    <data class="current-price" value="<%= produto.valor_unitario %>">R$ <%= parseFloat(produto.valor_unitario).toFixed(2).replace('.', ',') %></data>
+                    <small class="unit-info">Estoque: <%= produto.qtde_estoque %> unidades</small>
+                </div>
+
+                <div class="product-details">
+                    <h3>Detalhes do Produto</h3>
+                    <dl>
+                        <dt>Categoria</dt>
+                        <dd><%= produto.nome_categoria || 'Geral' %></dd>
+                        <dt>Estoque</dt>
+                        <dd><%= produto.qtde_estoque %> unidades disponíveis</dd>
+                        <dt>Preço</dt>
+                        <dd>R$ <%= parseFloat(produto.valor_unitario).toFixed(2).replace('.', ',') %> por unidade</dd>
+                        <dt>Status</dt>
+                        <dd>Produto orgânico certificado</dd>
+                    </dl>
+                </div>
+
+                <div class="quantity-selector">
+                    <label for="quantity">Quantidade:</label>
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="<%= produto.qtde_estoque %>">
+                        <button onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="add-to-cart" onclick="adicionarProduto('<%= produto.nome_prod %>', <%= produto.valor_unitario %>, '<%= produto.nome_imagem ? `/imagens/${produto.nome_imagem}` : `/imagens/${produto.nome_prod.toLowerCase()}.png` %>', <%= produto.id_prod %>)">
+                        🛒 Adicionar ao Carrinho
+                    </button>
+                    <button class="go-to-cart" onclick="window.location.href='/carrinho'" style="display:none;">
+                        🛒 Ir para o Carrinho
+                    </button>
+                    <button class="buy-now">
+                        ⚡ Comprar Agora
+                    </button>
+                    <button class="favorite" onclick="toggleFavorite()">
+                        ♥️ Favoritar
+                    </button>
+                </div>
+            </section>
+        </article>
+
+        <section class="product-tabs">
+            <nav class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('description')">Descrição</button>
+                <button class="tab-btn" onclick="showTab('nutrition')">Informações</button>
+                <button class="tab-btn" onclick="showTab('reviews')">Avaliações</button>
+            </nav>
+            
+            <div id="description" class="tab-content active">
+                <h3>Sobre <%= produto.nome_prod %></h3>
+                <p>Produto orgânico de alta qualidade, cultivado com cuidado e carinho por nossos produtores parceiros.</p>
+                <ul>
+                    <li>✓ Produto orgânico certificado</li>
+                    <li>✓ Cultivado sem agrotóxicos</li>
+                    <li>✓ Colhido no ponto ideal</li>
+                    <li>✓ Entrega rápida e segura</li>
+                </ul>
+            </div>
+            
+            <div id="nutrition" class="tab-content">
+                <h3>Informações do Produto</h3>
+                <table class="nutrition-table">
+                    <tr><td>Nome</td><td><%= produto.nome_prod %></td></tr>
+                    <tr><td>Preço</td><td>R$ <%= parseFloat(produto.valor_unitario).toFixed(2).replace('.', ',') %></td></tr>
+                    <tr><td>Estoque</td><td><%= produto.qtde_estoque %> unidades</td></tr>
+                    <tr><td>Categoria</td><td><%= produto.nome_categoria || 'Geral' %></td></tr>
+                </table>
+            </div>
+            
+            <div id="reviews" class="tab-content">
+                <h3>Avaliações dos Clientes</h3>
+                <div class="review-summary">
+                    <div class="rating-breakdown">
+                        <span class="avg-rating"><%= produto.media_avaliacao || '0.0' %></span>
+                        <div class="stars-large">★★★★★</div>
+                        <small><%= produto.total_avaliacoes || 0 %> avaliações</small>
+                    </div>
+                    <% if (usuario) { %>
+                    <button onclick="avaliarProduto(<%= produto.id_prod %>, '<%= produto.nome_prod %>')" style="background:#ff9800; color:white; padding:8px 16px; border:none; border-radius:4px; margin-top:10px;">
+                        Avaliar Produto
+                    </button>
+                    <% } %>
+                </div>
+                <div class="reviews-list" id="reviews-container">
+                    <p>Carregando avaliações...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/abacaxi.js"></script>
+    <script>
+        // Função específica para adicionar produto dinâmico
+        async function adicionarProduto(nome, preco, imagem, id) {
+            const quantidade = document.getElementById('quantity').value;
+            
+            try {
+                const response = await fetch('/api/carrinho/adicionar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        id: id,
+                        nome: nome,
+                        preco: preco,
+                        quantidade: parseInt(quantidade),
+                        imagem: imagem
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Mostrar botão "Ir para o Carrinho"
+                    document.querySelector('.add-to-cart').style.display = 'none';
+                    document.querySelector('.go-to-cart').style.display = 'block';
+                    
+                    // Feedback visual
+                    alert(`${nome} adicionado ao carrinho!`);
+                } else {
+                    alert('Erro ao adicionar produto');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao adicionar produto');
+            }
+        }
+        
+        // Função para avaliar produto
+        function avaliarProduto(idProduto, nomeProduto) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                justify-content: center; z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%;">
+                    <h3>Avaliar ${nomeProduto}</h3>
+                    <div style="margin: 15px 0;">
+                        <label>Nota (1-5):</label>
+                        <div id="rating" style="font-size: 24px; margin: 10px 0;">
+                            <span onclick="setRating(1)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(2)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(3)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(4)" style="cursor: pointer;">⭐</span>
+                            <span onclick="setRating(5)" style="cursor: pointer;">⭐</span>
+                        </div>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <label>Comentário (opcional):</label>
+                        <textarea id="comentario" style="width: 100%; height: 60px; margin-top: 5px;"></textarea>
+                    </div>
+                    <div style="text-align: right;">
+                        <button onclick="fecharModal()" style="margin-right: 10px; padding: 8px 16px;">Cancelar</button>
+                        <button onclick="enviarAvaliacaoProduto(${idProduto})" style="background: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Enviar</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            window.currentModal = modal;
+            window.selectedRating = 0;
+        }
+        
+        function setRating(rating) {
+            window.selectedRating = rating;
+            const stars = document.querySelectorAll('#rating span');
+            stars.forEach((star, index) => {
+                star.style.opacity = index < rating ? '1' : '0.3';
+            });
+        }
+        
+        function fecharModal() {
+            if (window.currentModal) {
+                document.body.removeChild(window.currentModal);
+                window.currentModal = null;
+            }
+        }
+        
+        async function enviarAvaliacaoProduto(idProduto) {
+            if (window.selectedRating === 0) {
+                alert('Por favor, selecione uma nota.');
+                return;
+            }
+            
+            const comentario = document.getElementById('comentario').value;
+            
+            try {
+                const response = await fetch('/api/avaliar-produto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_produto: idProduto,
+                        nota: window.selectedRating,
+                        comentario: comentario
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Avaliação enviada com sucesso!');
+                    location.reload();
+                } else {
+                    alert('Erro: ' + result.error);
+                }
+            } catch (error) {
+                alert('Erro ao enviar avaliação');
+            }
+            
+            fecharModal();
+        }
+        
+        // Carregar avaliações ao abrir a aba
+        function showTab(tabName) {
+            // Código existente da função showTab...
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'reviews') {
+                carregarAvaliacoes();
+            }
+        }
+        
+        async function carregarAvaliacoes() {
+            try {
+                const response = await fetch(`/api/produto/<%= produto.id_prod %>/avaliacoes`);
+                const avaliacoes = await response.json();
+                
+                const container = document.getElementById('reviews-container');
+                
+                if (avaliacoes.length === 0) {
+                    container.innerHTML = '<p>Seja o primeiro a avaliar este produto!</p>';
+                } else {
+                    container.innerHTML = avaliacoes.map(av => `
+                        <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                            <strong>${av.nome_usuario}</strong>
+                            <div style="color: #ff9800;">${'★'.repeat(av.nota)}${'☆'.repeat(5-av.nota)}</div>
+                            ${av.comentario ? `<p>${av.comentario}</p>` : ''}
+                            <small style="color: #666;">${new Date(av.data_avaliacao).toLocaleDateString()}</small>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                document.getElementById('reviews-container').innerHTML = '<p>Erro ao carregar avaliações</p>';
+            }
+        }
+    </script>
+</body>
+</html>

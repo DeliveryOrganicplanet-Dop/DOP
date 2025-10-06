@@ -50,8 +50,15 @@ router.use(inicializarSessao);
 router.use(passarUsuario);
 
 
-router.get('/', (req, res) => {
-  res.render('pages/index', { errors: null });
+router.get('/', async (req, res) => {
+  try {
+    const produtoModel = require('../models/produtoModel');
+    const produtos = await produtoModel.findAll();
+    res.render('pages/index', { errors: null, produtos });
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+    res.render('pages/index', { errors: null, produtos: [] });
+  }
 });
 
 router.get('/teste', (req, res) => {
@@ -219,6 +226,13 @@ router.get('/conta', verificarAuth, async (req, res) => {
   }
 });
 
+router.get('/painel-vendedor', verificarAuth, (req, res) => {
+  if (req.session.usuario.tipo !== 'V') {
+    return res.redirect('/conta');
+  }
+  res.render('pages/painel-vendedor', { errors: null });
+});
+
 router.get('/finalizar', (req, res) => {
   const carrinho = req.session.carrinho || [];
   
@@ -239,13 +253,46 @@ router.get('/assinatura', (req, res) => {
   res.render('pages/assinatura', { errors: null });
 });
 
-router.get('/produtos', (req, res) => {
-  console.log('Rota /produtos chamada');
-  res.render('pages/produtos', { errors: null });
+router.get('/produtos', async (req, res) => {
+  try {
+    const produtoModel = require('../models/produtoModel');
+    const termoBusca = req.query.busca;
+    
+    let produtos;
+    if (termoBusca) {
+      produtos = await produtoModel.search(termoBusca);
+    } else {
+      produtos = await produtoModel.findAll();
+    }
+    
+    res.render('pages/produtos', { 
+      errors: null, 
+      produtos, 
+      termoBusca: termoBusca || '' 
+    });
+  } catch (error) {
+    console.error('Erro ao buscar produtos:', error);
+    res.render('pages/produtos', { 
+      errors: null, 
+      produtos: [], 
+      termoBusca: req.query.busca || '' 
+    });
+  }
 });
 
-router.get('/ver-produtos', (req, res) => {
-  res.render('pages/produtos', { errors: null });
+router.get('/setup', (req, res) => {
+  res.render('pages/setup', { errors: null });
+});
+
+router.get('/ver-produtos', async (req, res) => {
+  try {
+    const produtoModel = require('../models/produtoModel');
+    const produtos = await produtoModel.findAll();
+    res.render('pages/produtos', { errors: null, produtos, termoBusca: '' });
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+    res.render('pages/produtos', { errors: null, produtos: [], termoBusca: '' });
+  }
 });
 
 router.get('/vendedores', async (req, res) => {
@@ -258,6 +305,24 @@ router.get('/vendedores', async (req, res) => {
   }
 });
 
+// Rota dinâmica para produtos do banco
+router.get('/produto/:id', async (req, res) => {
+  try {
+    const produtoModel = require('../models/produtoModel');
+    const produto = await produtoModel.findByIdWithCategory(req.params.id);
+    
+    if (!produto) {
+      return res.status(404).render('pages/error', { message: 'Produto não encontrado' });
+    }
+    
+    res.render('pages/produto-dinamico', { errors: null, produto });
+  } catch (error) {
+    console.error('Erro ao carregar produto:', error);
+    res.status(500).render('pages/error', { message: 'Erro ao carregar produto' });
+  }
+});
+
+// Rotas estáticas dos produtos antigos (manter compatibilidade)
 router.get('/produtos/:nome', (req, res) => {
   const produto = req.params.nome;
   res.render(`pages/${produto}`, { errors: null });
@@ -367,6 +432,156 @@ router.put('/api/update-profile', verificarAuth, usuarioController.updateProfile
 // Rota para alterar senha
 router.put('/api/update-password', verificarAuth, usuarioController.updatePassword);
 
+// Rota para buscar estatísticas do usuário
+router.get('/api/user-stats', verificarAuth, async (req, res) => {
+  try {
+    const usuarioModel = require('../models/usuarioModel');
+    const stats = await usuarioModel.getUserStats(req.session.usuario.id);
+    res.json(stats);
+  } catch (error) {
+    console.error('Erro ao buscar estatísticas:', error);
+    res.status(500).json({ error: 'Erro ao carregar estatísticas' });
+  }
+});
+
+// Rota para inserir produtos do site
+router.post('/api/setup-produtos', async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    
+    // Inserir categoria padrão
+    await pool.query('INSERT IGNORE INTO CATEGORIAS (id_categoria, nome_categoria) VALUES (1, "Frutas e Verduras")');
+    
+    // Inserir imagem padrão
+    await pool.query('INSERT IGNORE INTO IMAGENS (id_imagem, nome_imagem) VALUES (1, "default.jpg")');
+    
+    // Produtos do site
+    const produtos = [
+      { id: 1, nome: 'Abacaxi', preco: 9.70 },
+      { id: 2, nome: 'Alface', preco: 3.50 },
+      { id: 3, nome: 'Ameixa', preco: 8.90 },
+      { id: 4, nome: 'Brócolis', preco: 5.20 }
+    ];
+
+    for (const produto of produtos) {
+      await pool.query(`
+        INSERT INTO PRODUTOS (id_prod, nome_prod, valor_unitario, qtde_estoque, id_categoria, id_imagem, ativo) 
+        VALUES (?, ?, ?, 999, 1, 1, TRUE)
+        ON DUPLICATE KEY UPDATE 
+        nome_prod = VALUES(nome_prod), 
+        valor_unitario = VALUES(valor_unitario)
+      `, [produto.id, produto.nome, produto.preco]);
+    }
+
+    res.json({ success: true, message: 'Produtos inseridos com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao inserir produtos:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para converter usuário em vendedor
+router.post('/api/converter-vendedor', verificarAuth, async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    const userId = req.session.usuario.id;
+    
+    // Verificar se já é vendedor
+    if (req.session.usuario.tipo === 'V') {
+      return res.json({ success: false, error: 'Usuário já é vendedor' });
+    }
+    
+    // Atualizar tipo do usuário para vendedor
+    await pool.query(
+      'UPDATE USUARIOS SET TIPO_USUARIO = ? WHERE ID_USUARIO = ?',
+      ['V', userId]
+    );
+    
+    // Criar registro na tabela VENDEDORES
+    await pool.query(
+      'INSERT INTO VENDEDORES (tipo_pessoa, digito_pessoa, id_usuario) VALUES (?, ?, ?)',
+      ['PF', '00000000000', userId]
+    );
+    
+    // Atualizar sessão
+    req.session.usuario.tipo = 'V';
+    
+    res.json({ success: true, message: 'Conta convertida para vendedor com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao converter para vendedor:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rotas para categorias
+router.get('/api/categorias', async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    const [categorias] = await pool.query('SELECT * FROM CATEGORIAS ORDER BY nome_categoria');
+    res.json(categorias);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/api/categorias', verificarAuth, async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    const { nome_categoria } = req.body;
+    
+    const [result] = await pool.query(
+      'INSERT INTO CATEGORIAS (nome_categoria) VALUES (?)',
+      [nome_categoria]
+    );
+    
+    res.json({ id_categoria: result.insertId, nome_categoria });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para upload de imagem
+router.post('/api/upload-imagem', verificarAuth, upload.single('imagem'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nenhuma imagem enviada' });
+    }
+    
+    const fs = require('fs');
+    const filename = `produto-${Date.now()}.jpg`;
+    const filepath = path.join(__dirname, '../public/imagens/', filename);
+    
+    fs.writeFileSync(filepath, req.file.buffer);
+    
+    const pool = require('../../config/pool_conexoes');
+    const [result] = await pool.query(
+      'INSERT INTO IMAGENS (nome_imagem) VALUES (?)',
+      [filename]
+    );
+    
+    res.json({ id_imagem: result.insertId, nome_imagem: filename });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para mapear produtos do banco
+router.get('/api/mapear-produtos', async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    const [produtos] = await pool.query('SELECT id_prod, nome_prod FROM PRODUTOS WHERE ativo = TRUE');
+    
+    const mapeamento = {};
+    produtos.forEach(produto => {
+      mapeamento[produto.nome_prod] = produto.id_prod;
+    });
+    
+    res.json(mapeamento);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Middleware para salvar sessão após atualizações
 router.use('/api/update-*', (req, res, next) => {
   if (req.session) {
@@ -380,8 +595,43 @@ router.use('/api/update-*', (req, res, next) => {
 
 
 // Páginas de retorno do pagamento
-router.get('/pagamento/sucesso', (req, res) => {
-  res.render('pages/pagamento-sucesso', { errors: null });
+router.get('/pagamento/sucesso', async (req, res) => {
+  try {
+    const { external_reference, user_id } = req.query;
+    
+    console.log('Página de sucesso:', { external_reference, user_id });
+    
+    if (external_reference) {
+      const pool = require('../../config/pool_conexoes');
+      
+      // Buscar pedido pela referência externa
+      const [pedidos] = await pool.query(
+        'SELECT id_pedido FROM PEDIDOS WHERE observacoes LIKE ?',
+        [`%${external_reference}%`]
+      );
+      
+      if (pedidos.length > 0) {
+        const pedidoId = pedidos[0].id_pedido;
+        
+        // Atualizar status para confirmado
+        await pool.query(
+          'UPDATE PEDIDOS SET status_pedido = ? WHERE id_pedido = ?',
+          ['confirmado', pedidoId]
+        );
+        
+        console.log(`Pedido ${pedidoId} aprovado automaticamente - Usuário: ${user_id}`);
+      }
+    }
+    
+    res.render('pages/pagamento-sucesso', { 
+      errors: null, 
+      external_reference: external_reference || null,
+      user_id: user_id || null
+    });
+  } catch (error) {
+    console.error('Erro ao processar sucesso:', error);
+    res.render('pages/pagamento-sucesso', { errors: null, external_reference: null, user_id: null });
+  }
 });
 
 router.get('/pagamento/falha', (req, res) => {
@@ -390,6 +640,138 @@ router.get('/pagamento/falha', (req, res) => {
 
 router.get('/pagamento/pendente', (req, res) => {
   res.render('pages/pagamento-pendente', { errors: null });
+});
+
+// Rota para simular aprovação de pagamento (teste)
+router.post('/api/simular-aprovacao', async (req, res) => {
+  try {
+    const { external_reference } = req.body;
+    
+    const pool = require('../../config/pool_conexoes');
+    const [pedidos] = await pool.query(
+      'SELECT id_pedido FROM PEDIDOS WHERE observacoes LIKE ?',
+      [`%${external_reference}%`]
+    );
+    
+    if (pedidos.length > 0) {
+      const pedidoId = pedidos[0].id_pedido;
+      
+      await pool.query(
+        'UPDATE PEDIDOS SET status_pedido = ? WHERE id_pedido = ?',
+        ['confirmado', pedidoId]
+      );
+      
+      res.json({ success: true, message: `Pedido ${pedidoId} aprovado manualmente` });
+    } else {
+      res.json({ success: false, message: 'Pedido não encontrado' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota de debug para verificar pedidos
+router.get('/api/debug-pedidos', verificarAuth, async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    
+    // Buscar cliente do usuário
+    const [cliente] = await pool.query(
+      'SELECT id_cliente FROM CLIENTES WHERE id_usuario = ?',
+      [req.session.usuario.id]
+    );
+    
+    if (cliente.length === 0) {
+      return res.json({ pedidos: [], message: 'Cliente não encontrado' });
+    }
+    
+    // Buscar todos os pedidos do cliente
+    const [pedidos] = await pool.query(
+      'SELECT * FROM PEDIDOS WHERE id_cliente = ? ORDER BY dt_pedido DESC',
+      [cliente[0].id_cliente]
+    );
+    
+    res.json({ 
+      usuario_id: req.session.usuario.id,
+      cliente_id: cliente[0].id_cliente,
+      pedidos: pedidos,
+      total_pedidos: pedidos.length
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para aprovar último pedido pendente
+router.post('/api/aprovar-ultimo-pedido', verificarAuth, async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    
+    // Buscar cliente do usuário
+    const [cliente] = await pool.query(
+      'SELECT id_cliente FROM CLIENTES WHERE id_usuario = ?',
+      [req.session.usuario.id]
+    );
+    
+    if (cliente.length === 0) {
+      return res.json({ success: false, message: 'Cliente não encontrado' });
+    }
+    
+    // Buscar último pedido pendente
+    const [pedidos] = await pool.query(
+      'SELECT id_pedido FROM PEDIDOS WHERE id_cliente = ? AND status_pedido = "pendente" ORDER BY dt_pedido DESC LIMIT 1',
+      [cliente[0].id_cliente]
+    );
+    
+    if (pedidos.length > 0) {
+      const pedidoId = pedidos[0].id_pedido;
+      
+      await pool.query(
+        'UPDATE PEDIDOS SET status_pedido = ? WHERE id_pedido = ?',
+        ['confirmado', pedidoId]
+      );
+      
+      res.json({ success: true, message: `Pedido ${pedidoId} aprovado!` });
+    } else {
+      res.json({ success: false, message: 'Nenhum pedido pendente encontrado' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para avaliar vendedor
+router.post('/api/avaliar-vendedor', verificarAuth, require('../controllers/vendedorController').avaliarVendedor);
+
+// Rota para avaliar produto
+router.post('/api/avaliar-produto', verificarAuth, async (req, res) => {
+  try {
+    const avaliacaoProdutoModel = require('../models/avaliacaoProdutoModel');
+    const { id_produto, nota, comentario } = req.body;
+    
+    await avaliacaoProdutoModel.criar({
+      id_usuario: req.session.usuario.id,
+      id_produto,
+      nota,
+      comentario
+    });
+    
+    res.json({ success: true, message: 'Avaliação do produto salva com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao avaliar produto:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para obter avaliações de um produto
+router.get('/api/produto/:id/avaliacoes', async (req, res) => {
+  try {
+    const avaliacaoProdutoModel = require('../models/avaliacaoProdutoModel');
+    const avaliacoes = await avaliacaoProdutoModel.obterAvaliacoesProduto(req.params.id);
+    res.json(avaliacoes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;

@@ -14,7 +14,41 @@
             <p class="result-message">Seu pedido foi processado com sucesso.</p>
             <p class="result-submessage">Você receberá um e-mail com os detalhes da compra em breve.</p>
             <a href="/" class="btn-primary">Continuar Comprando</a>
+            <a href="/conta" class="btn-secondary" style="margin-top: 10px; display: inline-block;">Ver Minhas Compras</a>
         </div>
     </div>
+    
+    <script>
+        // Dados passados do servidor
+        const externalReference = '<%= external_reference %>';
+        const userId = '<%= user_id %>';
+        
+        console.log('Página de sucesso carregada:', { externalReference, userId });
+        
+        // Processar aprovação automaticamente
+        if (externalReference && externalReference !== 'null') {
+            fetch('/api/simular-aprovacao', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ external_reference: externalReference })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Aprovação processada:', data);
+                if (data.success) {
+                    // Mostrar mensagem de sucesso adicional
+                    const successMsg = document.createElement('p');
+                    successMsg.textContent = 'Pedido confirmado em sua conta!';
+                    successMsg.style.color = 'green';
+                    successMsg.style.fontWeight = 'bold';
+                    document.querySelector('.result-message').after(successMsg);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao processar aprovação:', error);
+            });
+        }
+    </script>
 </body>
 </html>

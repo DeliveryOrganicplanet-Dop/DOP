@@ -22,15 +22,51 @@ function contatarVendedor(email, nome) {
 }
 
 // Função para cadastrar como vendedor
-function cadastrarVendedor() {
-    // Verificar se usuário está logado
-    if (window.usuario) {
-        // Se logado, redirecionar para formulário de vendedor
-        window.location.href = '/cadastro-vendedor';
-    } else {
-        // Se não logado, redirecionar para cadastro
+async function cadastrarVendedor() {
+    try {
+        // Verificar se usuário está logado via API
+        const response = await fetch('/api/test-session', {
+            credentials: 'same-origin'
+        });
+        const sessionData = await response.json();
+        
+        if (sessionData.authenticated) {
+            // Se logado, mostrar opção para virar vendedor
+            if (confirm('Deseja converter sua conta para vendedor? Isso permitirá que você venda produtos na plataforma.')) {
+                await converterParaVendedor();
+            }
+        } else {
+            // Se não logado, redirecionar para cadastro
+            alert('Para se tornar um vendedor, você precisa primeiro criar uma conta.');
+            window.location.href = '/cadastro';
+        }
+    } catch (error) {
+        console.error('Erro ao verificar sessão:', error);
         alert('Para se tornar um vendedor, você precisa primeiro criar uma conta.');
         window.location.href = '/cadastro';
+    }
+}
+
+// Função para converter usuário em vendedor
+async function converterParaVendedor() {
+    try {
+        const response = await fetch('/api/converter-vendedor', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Conta convertida para vendedor com sucesso! Agora você pode gerenciar produtos.');
+            window.location.href = '/painel-vendedor';
+        } else {
+            alert('Erro: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erro ao converter para vendedor:', error);
+        alert('Erro ao converter conta para vendedor.');
     }
 }
 
