@@ -143,16 +143,159 @@ async function handlePasswordForm(event) {
     }
 }
 
+let cropData = {
+    image: null,
+    scale: 1,
+    rotation: 0,
+    offsetX: 0,
+    offsetY: 0,
+    isDragging: false,
+    lastX: 0,
+    lastY: 0
+};
+
 function handlePhotoUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('previewImage').src = e.target.result;
-            document.getElementById('photoPreview').style.display = 'block';
+            cropData.image = new Image();
+            cropData.image.onload = function() {
+                initializeCrop();
+                document.getElementById('photoPreview').style.display = 'block';
+            };
+            cropData.image.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
+}
+
+function initializeCrop() {
+    const canvas = document.getElementById('cropCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Reset crop data
+    cropData.scale = 1;
+    cropData.rotation = 0;
+    cropData.offsetX = 0;
+    cropData.offsetY = 0;
+    
+    // Reset sliders
+    document.getElementById('zoomSlider').value = 1;
+    document.getElementById('rotateSlider').value = 0;
+    
+    // Add event listeners
+    setupCropControls();
+    
+    // Initial draw
+    drawCroppedImage();
+}
+
+function setupCropControls() {
+    const canvas = document.getElementById('cropCanvas');
+    const zoomSlider = document.getElementById('zoomSlider');
+    const rotateSlider = document.getElementById('rotateSlider');
+    
+    // Zoom control
+    zoomSlider.oninput = function() {
+        cropData.scale = parseFloat(this.value);
+        drawCroppedImage();
+    };
+    
+    // Rotation control
+    rotateSlider.oninput = function() {
+        cropData.rotation = parseFloat(this.value);
+        drawCroppedImage();
+    };
+    
+    // Mouse drag controls
+    canvas.onmousedown = function(e) {
+        cropData.isDragging = true;
+        const rect = canvas.getBoundingClientRect();
+        cropData.lastX = e.clientX - rect.left;
+        cropData.lastY = e.clientY - rect.top;
+    };
+    
+    canvas.onmousemove = function(e) {
+        if (cropData.isDragging) {
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+            
+            cropData.offsetX += currentX - cropData.lastX;
+            cropData.offsetY += currentY - cropData.lastY;
+            
+            cropData.lastX = currentX;
+            cropData.lastY = currentY;
+            
+            drawCroppedImage();
+        }
+    };
+    
+    canvas.onmouseup = function() {
+        cropData.isDragging = false;
+    };
+    
+    canvas.onmouseleave = function() {
+        cropData.isDragging = false;
+    };
+}
+
+function drawCroppedImage() {
+    const canvas = document.getElementById('cropCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    if (!cropData.image) return;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Save context
+    ctx.save();
+    
+    // Move to center
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    
+    // Apply rotation
+    ctx.rotate(cropData.rotation * Math.PI / 180);
+    
+    // Apply scale
+    ctx.scale(cropData.scale, cropData.scale);
+    
+    // Calculate image dimensions to fit in circle
+    const size = Math.min(cropData.image.width, cropData.image.height);
+    const drawSize = 180; // Slightly smaller than canvas for border
+    
+    // Draw image with offset
+    ctx.drawImage(
+        cropData.image,
+        -drawSize / 2 + cropData.offsetX / cropData.scale,
+        -drawSize / 2 + cropData.offsetY / cropData.scale,
+        drawSize,
+        drawSize
+    );
+    
+    // Restore context
+    ctx.restore();
+    
+    // Create circular mask
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 98, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+}
+
+function resetCrop() {
+    cropData.scale = 1;
+    cropData.rotation = 0;
+    cropData.offsetX = 0;
+    cropData.offsetY = 0;
+    
+    document.getElementById('zoomSlider').value = 1;
+    document.getElementById('rotateSlider').value = 0;
+    
+    drawCroppedImage();
 }
 
 function openCamera() {
@@ -193,8 +336,14 @@ function capturePhoto(video, stream) {
     ctx.drawImage(video, 0, 0);
     
     const dataURL = canvas.toDataURL('image/jpeg');
-    document.getElementById('previewImage').src = dataURL;
-    document.getElementById('photoPreview').style.display = 'block';
+    
+    // Create image for crop
+    cropData.image = new Image();
+    cropData.image.onload = function() {
+        initializeCrop();
+        document.getElementById('photoPreview').style.display = 'block';
+    };
+    cropData.image.src = dataURL;
     
     // Parar stream da câmera
     stream.getTracks().forEach(track => track.stop());
@@ -217,45 +366,20 @@ function capturePhoto(video, stream) {
 }
 
 async function savePhoto() {
-    const photoInput = document.getElementById('photoInput');
-    const previewImage = document.getElementById('previewImage');
+    const canvas = document.getElementById('cropCanvas');
     
-    // Verificar se há arquivo ou preview
-    const file = photoInput.files[0];
-    const hasPreview = previewImage.src && previewImage.src !== window.location.href;
-    
-    if (!file && !hasPreview) {
+    if (!cropData.image) {
         alert('Selecione uma foto primeiro!');
         return;
     }
     
     try {
-        let formData = new FormData();
-        
-        if (file) {
-            formData.append('photo', file);
-        } else if (hasPreview) {
-            // Converter preview para blob
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-            
-            img.onload = async function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                
-                canvas.toBlob(async function(blob) {
-                    formData.append('photo', blob, 'photo.jpg');
-                    await uploadPhoto(formData);
-                }, 'image/jpeg', 0.8);
-            };
-            
-            img.src = previewImage.src;
-            return;
-        }
-        
-        await uploadPhoto(formData);
+        // Convert canvas to blob
+        canvas.toBlob(async function(blob) {
+            const formData = new FormData();
+            formData.append('photo', blob, 'profile.jpg');
+            await uploadPhoto(formData);
+        }, 'image/jpeg', 0.9);
         
     } catch (error) {
         console.error('Erro:', error);
