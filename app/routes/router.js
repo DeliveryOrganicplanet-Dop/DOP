@@ -57,7 +57,14 @@ router.get('/', async (req, res) => {
     res.render('pages/index', { errors: null, produtos });
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
-    res.render('pages/index', { errors: null, produtos: [] });
+    // Produtos de fallback quando banco não está disponível
+    const produtosFallback = [
+      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png' },
+      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png' },
+      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png' },
+      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png' }
+    ];
+    res.render('pages/index', { errors: null, produtos: produtosFallback });
   }
 });
 
@@ -272,10 +279,28 @@ router.get('/produtos', async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao buscar produtos:', error);
+    // Produtos de fallback
+    const produtosFallback = [
+      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png', nome_categoria: 'Frutas' },
+      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png', nome_categoria: 'Verduras' },
+      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png', nome_categoria: 'Frutas' },
+      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png', nome_categoria: 'Verduras' }
+    ];
+    
+    let produtos = produtosFallback;
+    const termoBusca = req.query.busca;
+    
+    if (termoBusca) {
+      produtos = produtosFallback.filter(p => 
+        p.nome_prod.toLowerCase().includes(termoBusca.toLowerCase()) ||
+        p.nome_categoria.toLowerCase().includes(termoBusca.toLowerCase())
+      );
+    }
+    
     res.render('pages/produtos', { 
       errors: null, 
-      produtos: [], 
-      termoBusca: req.query.busca || '' 
+      produtos, 
+      termoBusca: termoBusca || '' 
     });
   }
 });
@@ -291,7 +316,13 @@ router.get('/ver-produtos', async (req, res) => {
     res.render('pages/produtos', { errors: null, produtos, termoBusca: '' });
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
-    res.render('pages/produtos', { errors: null, produtos: [], termoBusca: '' });
+    const produtosFallback = [
+      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png', nome_categoria: 'Frutas' },
+      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png', nome_categoria: 'Verduras' },
+      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png', nome_categoria: 'Frutas' },
+      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png', nome_categoria: 'Verduras' }
+    ];
+    res.render('pages/produtos', { errors: null, produtos: produtosFallback, termoBusca: '' });
   }
 });
 
