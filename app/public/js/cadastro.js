@@ -44,6 +44,28 @@ cpf.addEventListener('input', (e) => {
     e.target.value = formatted;
 });
 
+cpf.addEventListener('blur', async (e) => {
+    const cpfValue = e.target.value.replace(/\D/g, '');
+    if (cpfValue.length === 11 && isValidCPF(e.target.value)) {
+        try {
+            const response = await fetch('/api/verificar-cpf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cpf: cpfValue })
+            });
+            const result = await response.json();
+            
+            if (result.exists) {
+                errorValidation(cpf, 'Este CPF já está cadastrado');
+            } else {
+                successValidation(cpf);
+            }
+        } catch (error) {
+            console.error('Erro ao verificar CPF:', error);
+        }
+    }
+});
+
 telefone.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, '');
     
@@ -83,7 +105,7 @@ async function checkInputs() {
     // Email validation
     isValid &= validateEmail(email, emailValue);
 
-    isValid &= validateCPF(cpf, cpfValue);
+    isValid &= await validateCPF(cpf, cpfValue);
 
     // Password validation
     isValid &= validatePassword(password, passwordValue);
@@ -158,7 +180,7 @@ function validateEmail(input, value) {
     }
 }
 
-function validateCPF(input, value) {
+async function validateCPF(input, value) {
     if (value === '') {
         errorValidation(input, 'Preencha esse campo');
         return false;
@@ -166,8 +188,28 @@ function validateCPF(input, value) {
         errorValidation(input, 'CPF inválido');
         return false;
     } else {
-        successValidation(input);
-        return true;
+        // Verificar se CPF já existe
+        try {
+            const cpfNumeros = value.replace(/\D/g, '');
+            const response = await fetch('/api/verificar-cpf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cpf: cpfNumeros })
+            });
+            const result = await response.json();
+            
+            if (result.exists) {
+                errorValidation(input, 'Este CPF já está cadastrado');
+                return false;
+            } else {
+                successValidation(input);
+                return true;
+            }
+        } catch (error) {
+            console.error('Erro ao verificar CPF:', error);
+            successValidation(input);
+            return true;
+        }
     }
 }
 

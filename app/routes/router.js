@@ -794,6 +794,23 @@ router.post('/api/avaliar-produto', verificarAuth, async (req, res) => {
   }
 });
 
+// Rota para verificar CPF
+router.post('/api/verificar-cpf', async (req, res) => {
+  try {
+    const { cpf } = req.body;
+    const pool = require('../../config/pool_conexoes');
+    
+    const [usuarios] = await pool.query(
+      'SELECT ID_USUARIO FROM USUARIOS WHERE CPF_USUARIO = ?',
+      [cpf]
+    );
+    
+    res.json({ exists: usuarios.length > 0 });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao verificar CPF' });
+  }
+});
+
 // Rota para obter avaliações de um produto
 router.get('/api/produto/:id/avaliacoes', async (req, res) => {
   try {

@@ -59,8 +59,8 @@ const usuarioModel = {
       
       // Criar registro na tabela CLIENTES
       await pool.query(
-        'INSERT INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
-        [result.insertId, '00000000000']
+        'INSERT IGNORE INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
+        [result.insertId, `google_${result.insertId}_${Date.now()}`]
       );
       
       return result.insertId;
@@ -112,9 +112,12 @@ const usuarioModel = {
       
       // Se não existe registro de cliente, criar um
       if (!clienteResult.length) {
+        const userData = await this.findById(userId);
+        const cpfCliente = userData?.CPF_USUARIO || `temp_${userId}_${Date.now()}`;
+        
         await pool.query(
-          'INSERT INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
-          [userId, '00000000000']
+          'INSERT IGNORE INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
+          [userId, cpfCliente]
         );
         
         [clienteResult] = await pool.query(

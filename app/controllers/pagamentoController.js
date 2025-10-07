@@ -68,9 +68,10 @@ const pagamentoController = {
       );
       
       if (!cliente.length) {
+        const cpfCliente = clienteData.CPF_USUARIO || `temp_${req.session.usuario.id}_${Date.now()}`;
         await pool.query(
-          'INSERT INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
-          [req.session.usuario.id, '00000000000']
+          'INSERT IGNORE INTO CLIENTES (id_usuario, cpf_cliente) VALUES (?, ?)',
+          [req.session.usuario.id, cpfCliente]
         );
         [cliente] = await pool.query(
           'SELECT id_cliente FROM CLIENTES WHERE id_usuario = ?',
