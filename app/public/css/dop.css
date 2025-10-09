@@ -282,6 +282,51 @@ body.dark .main-header {
     align-items: center;
     gap: var(--spacing-md);
 }
+
+.cart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--shadow-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all var(--transition-smooth);
+}
+
+.cart-icon:hover {
+    background: var(--shadow-medium);
+    transform: scale(1.05);
+    color: var(--accent-gold);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--accent-gold);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 20px;
+}
+
+.cart-icon {
+    position: relative;
+}
+
+.cart-count.hidden {
+    display: none;
+}
  
 .theme-toggle {
     background: var(--shadow-soft);

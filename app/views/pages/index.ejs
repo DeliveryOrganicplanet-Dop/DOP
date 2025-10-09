@@ -32,6 +32,10 @@
             </section>
  
             <section class="header-controls">
+                <a href="/carrinho" class="cart-icon" title="Carrinho de compras">
+                    <span>🛒</span>
+                    <span id="cart-count" class="cart-count">0</span>
+                </a>
                 <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
                     <span class="theme-icon">🌙</span>
                 </button>
@@ -89,12 +93,7 @@
                         <span class="nav-text">Favoritos</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
-                        <span class="nav-icon">🛒</span>
-                        <span class="nav-text">Carrinho</span>
-                    </a>
-                </li>
+
                 <% if (usuario) { %>
                 <li class="nav-item">
                     <a href="/logout" class="nav-link" title="Sair">

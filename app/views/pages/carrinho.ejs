@@ -13,32 +13,34 @@
                 <span>←</span> Voltar
             </a>
             <h1>🛒 Meu Carrinho</h1>
+
             <button id="clear-cart" aria-label="Limpar carrinho">🗑️</button>
         </nav>
     </header>
 
     <main>
-        <section class="cart-items">
-            <header>
-                <h2>Itens Selecionados</h2>
-                <span id="items-count">0 itens</span>
-            </header>
+        <div class="cart-container">
+            <section class="cart-items">
+                <header>
+                    <h2>Itens Selecionados</h2>
+                    <span id="items-count">0 itens</span>
+                </header>
 
-            <section id="empty-cart" class="empty-state">
-                <figure>
-                    <span>🛒</span>
-                </figure>
-                <h3>Seu carrinho está vazio</h3>
-                <p>Adicione produtos deliciosos ao seu carrinho</p>
-                <a href="/">Continuar Comprando →</a>
+                <section id="empty-cart" class="empty-state">
+                    <figure>
+                        <span>🛒</span>
+                    </figure>
+                    <h3>Seu carrinho está vazio</h3>
+                    <p>Adicione produtos deliciosos ao seu carrinho</p>
+                    <a href="/">Continuar Comprando →</a>
+                </section>
+
+                <ul id="cart-list" role="list">
+                    <!-- Itens serão inseridos dinamicamente -->
+                </ul>
             </section>
 
-            <ul id="cart-list" role="list">
-                <!-- Itens serão inseridos dinamicamente -->
-            </ul>
-        </section>
-
-        <aside class="order-summary">
+            <aside class="order-summary sticky-summary">
             <header>
                 <h2>Resumo do Pedido</h2>
             </header>
@@ -89,6 +91,7 @@
                 </button>
             </section>
         </aside>
+        </div>
 
         <section class="recommendations">
             <header>

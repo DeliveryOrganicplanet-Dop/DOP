@@ -9,6 +9,71 @@ body {
     background: #f5f5f5;
     color: #333;
     line-height: 1.6;
+    transition: all 0.3s ease;
+}
+
+body.dark {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark header {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark nav h1 {
+    color: #e0e0e0;
+}
+
+body.dark .cart-items,
+body.dark .order-summary,
+body.dark .recommendations {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark .cart-items h2,
+body.dark .order-summary h2,
+body.dark .recommendations h2 {
+    color: #e0e0e0;
+}
+
+body.dark .product-card {
+    background: #333;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark .product-card h3 {
+    color: #e0e0e0;
+}
+
+body.dark .coupon summary {
+    background: #333;
+    color: #e0e0e0;
+}
+
+body.dark .coupon input {
+    background: #333;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark #items-count {
+    background: #333;
+    color: #e0e0e0;
+}
+
+.theme-toggle {
+    background: #666;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 1rem;
+    font-size: 1.2rem;
 }
 
 header {
@@ -53,8 +118,18 @@ main {
     margin: 2rem auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
+}
+
+.cart-items {
+    margin-right: 370px;
+}
+
+@media (max-width: 768px) {
+    .cart-items {
+        margin-right: 0;
+    }
 }
 
 .cart-items {
@@ -120,14 +195,29 @@ main {
     list-style: none;
 }
 
-.order-summary {
+.sticky-summary {
     background: white;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     height: fit-content;
-    position: sticky;
-    top: 120px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    z-index: 10;
+}
+
+.cart-container {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .sticky-summary {
+        position: static;
+        width: auto;
+        right: auto;
+    }
 }
 
 .order-summary header {
@@ -247,6 +337,7 @@ main {
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     margin-top: 2rem;
+    clear: both;
 }
 
 .recommendations header {

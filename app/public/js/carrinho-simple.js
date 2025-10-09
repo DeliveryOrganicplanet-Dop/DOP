@@ -2,6 +2,7 @@
 class CarrinhoSimple {
     constructor() {
         this.carrinho = window.carrinhoData || [];
+        this.cupomAplicado = localStorage.getItem('cupom-aplicado') || null;
         this.init();
     }
 
@@ -42,6 +43,8 @@ class CarrinhoSimple {
             couponForm.addEventListener('submit', (e) => this.aplicarCupom(e));
         }
 
+
+
         // Produtos recomendados
         document.querySelectorAll('[data-product]').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -49,23 +52,29 @@ class CarrinhoSimple {
                 this.adicionarProduto(produto);
             });
         });
+        
+        // Carregar tema salvo
+        this.loadTheme();
     }
 
     renderizarCarrinho() {
         const cartList = document.getElementById('cart-list');
         const emptyCart = document.getElementById('empty-cart');
         const itemsCount = document.getElementById('items-count');
+        const recommendations = document.querySelector('.recommendations');
 
         if (this.carrinho.length === 0) {
             if (emptyCart) emptyCart.style.display = 'block';
             if (cartList) cartList.style.display = 'none';
             if (itemsCount) itemsCount.textContent = '0 itens';
+            if (recommendations) recommendations.style.marginTop = '2rem';
             this.atualizarResumo();
             return;
         }
 
         if (emptyCart) emptyCart.style.display = 'none';
         if (cartList) cartList.style.display = 'block';
+        if (recommendations) recommendations.style.marginTop = '200px';
 
         const totalItens = this.carrinho.reduce((sum, item) => sum + item.quantidade, 0);
         if (itemsCount) itemsCount.textContent = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;
@@ -97,17 +106,29 @@ class CarrinhoSimple {
     atualizarResumo() {
         const subtotal = this.carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
         const taxaEntrega = subtotal > 0 ? 5.00 : 0;
-        const total = subtotal + taxaEntrega;
+        const desconto = this.calcularDesconto(subtotal);
+        const total = subtotal + taxaEntrega - desconto;
 
         const subtotalEl = document.getElementById('subtotal');
         const deliveryFeeEl = document.getElementById('delivery-fee');
+        const descontoEl = document.getElementById('discount');
         const totalEl = document.getElementById('total');
         const checkoutBtn = document.getElementById('checkout-btn');
+        const discountRow = document.getElementById('discount-row');
 
         if (subtotalEl) subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
         if (deliveryFeeEl) deliveryFeeEl.textContent = `R$ ${taxaEntrega.toFixed(2).replace('.', ',')}`;
+        if (descontoEl) descontoEl.textContent = `- R$ ${desconto.toFixed(2).replace('.', ',')}`;
         if (totalEl) totalEl.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
         if (checkoutBtn) checkoutBtn.disabled = this.carrinho.length === 0;
+        if (discountRow) discountRow.style.display = desconto > 0 ? 'flex' : 'none';
+    }
+    
+    calcularDesconto(subtotal) {
+        if (this.cupomAplicado) {
+            return subtotal * 0.5; // 50% de desconto
+        }
+        return 0;
     }
 
     async adicionarProduto(produtoId) {
@@ -215,16 +236,24 @@ class CarrinhoSimple {
     aplicarCupom(e) {
         e.preventDefault();
         const input = document.getElementById('coupon-input');
-        const codigo = input.value.trim();
+        const codigo = input.value.trim().toUpperCase();
         
         if (!codigo) {
             this.mostrarToast('Digite um código de cupom', 'error');
             return;
         }
 
-        // Simular aplicação de cupom
-        this.mostrarToast('Cupom aplicado com sucesso!');
-        input.value = '';
+        const cuponsValidos = ['DOP', 'VINTELO'];
+        
+        if (cuponsValidos.includes(codigo)) {
+            this.cupomAplicado = codigo;
+            localStorage.setItem('cupom-aplicado', codigo);
+            this.atualizarResumo();
+            this.mostrarToast(`Cupom ${codigo} aplicado! 50% de desconto`);
+            input.value = '';
+        } else {
+            this.mostrarToast('Cupom inválido', 'error');
+        }
     }
 
     finalizarCompra() {
@@ -234,6 +263,18 @@ class CarrinhoSimple {
         }
 
         window.location.href = '/finalizar';
+    }
+
+
+    
+    loadTheme() {
+        // Carregar apenas o tema global definido na home
+        const globalTheme = localStorage.getItem('theme') || 'light';
+        const body = document.body;
+        
+        if (globalTheme === 'dark') {
+            body.classList.add('dark');
+        }
     }
 
     mostrarToast(mensagem, tipo = 'success') {

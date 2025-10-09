@@ -534,6 +534,8 @@ async function adicionarAoCarrinho(id, nome, preco) {
         const result = await response.json();
         
         if (result.success) {
+            // Atualizar contador do carrinho
+            atualizarContadorCarrinho();
             // Mostrar feedback visual
             mostrarNotificacao(`${nome} adicionado ao carrinho!`, 'success');
         } else {
@@ -544,6 +546,31 @@ async function adicionarAoCarrinho(id, nome, preco) {
         mostrarNotificacao('Erro ao adicionar produto', 'error');
     }
 }
+
+// Função para atualizar contador do carrinho
+async function atualizarContadorCarrinho() {
+    try {
+        const response = await fetch('/api/carrinho');
+        if (response.ok) {
+            const data = await response.json();
+            const carrinho = data.carrinho || [];
+            const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+            
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = totalItens;
+                cartCount.classList.toggle('hidden', totalItens === 0);
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar contador:', error);
+    }
+}
+
+// Carregar contador do carrinho ao inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    atualizarContadorCarrinho();
+});
 
 // Função para mostrar notificações
 function mostrarNotificacao(mensagem, tipo = 'info') {
