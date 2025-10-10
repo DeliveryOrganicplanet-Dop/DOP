@@ -34,6 +34,7 @@ const usuarioController = {
     }
   
     try {
+
       const usuario = await usuarioModel.findUserEmail({ email_usuario: email });
       console.log('Usuário encontrado:', usuario);
       

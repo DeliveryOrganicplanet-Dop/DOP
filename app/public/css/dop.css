@@ -958,31 +958,59 @@ body.dark .main-header {
     padding: 0 var(--spacing-xl) var(--spacing-3xl);
 }
 
-/* Botão adicionar ao carrinho */
+/* Botões de ação dos produtos */
+.product-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
 .add-to-cart-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--accent-gold), #e6940a);
-    color: white;
-    border: none;
+    flex: 1;
+    background: var(--shadow-soft);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: 12px;
     font-weight: 500;
     font-size: var(--font-size-sm);
     cursor: pointer;
     transition: all var(--transition-smooth);
-    margin-top: var(--spacing-md);
     letter-spacing: 0.3px;
 }
 
 .add-to-cart-btn:hover {
+    background: var(--shadow-medium);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px var(--shadow-medium);
+}
+
+.buy-now-btn {
+    flex: 1;
+    background: linear-gradient(135deg, var(--accent-gold), #e6940a);
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    letter-spacing: 0.3px;
+}
+
+.buy-now-btn:hover {
     background: linear-gradient(135deg, #e6940a, var(--accent-gold));
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
 }
 
-.add-to-cart-btn:active {
+.add-to-cart-btn:active,
+.buy-now-btn:active {
     transform: translateY(0);
 }
+
+
 
 /* Responsivo para filtros */
 @media (max-width: 768px) {
@@ -1005,6 +1033,16 @@ body.dark .main-header {
     
     .products-section {
         padding: 0 var(--spacing-lg) var(--spacing-2xl);
+    }
+    
+    .product-actions {
+        gap: var(--spacing-xs);
+    }
+    
+    .add-to-cart-btn,
+    .buy-now-btn {
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
 }
 

@@ -10,11 +10,23 @@ router.get('/google', (req, res, next) => {
     })(req, res, next);
 });
 
+// Rota de teste para debug
+router.get('/google/test', (req, res) => {
+    console.log('=== TESTE CALLBACK ===');
+    res.json({ message: 'Callback funcionando', query: req.query });
+});
+
 // Callback do Google - versão simplificada
 router.get('/google/callback', (req, res, next) => {
-    console.log('Callback Google recebido...');
+    console.log('=== CALLBACK GOOGLE RECEBIDO ===');
+    console.log('Query params:', req.query);
     
     passport.authenticate('google', (err, user, info) => {
+        console.log('=== RESULTADO AUTHENTICATE ===');
+        console.log('Erro:', err);
+        console.log('User:', user);
+        console.log('Info:', info);
+        
         if (err) {
             console.error('Erro na autenticação:', err);
             return res.redirect('/login?error=auth_failed');
@@ -37,10 +49,12 @@ router.get('/google/callback', (req, res, next) => {
                 id: user.ID_USUARIO,
                 nome: user.NOME_USUARIO,
                 email: user.EMAIL_USUARIO,
-                tipo: user.TIPO_USUARIO || 'cliente'
+                tipo: user.TIPO_USUARIO || 'C'
             };
             
-            console.log('Login Google bem-sucedido:', user.EMAIL_USUARIO);
+            console.log('=== LOGIN GOOGLE BEM-SUCEDIDO ===');
+            console.log('Usuário logado:', user.EMAIL_USUARIO);
+            console.log('Sessão criada:', req.session.usuario);
             res.redirect('/');
         });
     })(req, res, next);

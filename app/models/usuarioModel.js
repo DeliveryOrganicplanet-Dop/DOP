@@ -51,10 +51,10 @@ const usuarioModel = {
 
   async createGoogleUser(dados) {
     try {
-      const { nome_usuario, email_usuario, google_id } = dados;
+      const { nome_usuario, email_usuario } = dados;
       const [result] = await pool.query(
-        'INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, GOOGLE_ID, TIPO_USUARIO) VALUES (?, ?, ?, ?)',
-        [nome_usuario, email_usuario, google_id, 'C']
+        'INSERT INTO USUARIOS (NOME_USUARIO, EMAIL_USUARIO, CELULAR_USUARIO, CPF_USUARIO, LOGRADOURO_USUARIO, BAIRRO_USUARIO, CIDADE_USUARIO, UF_USUARIO, CEP_USUARIO, SENHA_USUARIO, TIPO_USUARIO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nome_usuario, email_usuario, '00000000000', `google${Date.now()}`, 'Google Login', 'Centro', 'São Paulo', 'SP', '00000000', 'google_auth', 'C']
       );
       
       // Criar registro na tabela CLIENTES

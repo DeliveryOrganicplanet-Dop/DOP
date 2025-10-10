@@ -74,7 +74,7 @@ class CarrinhoSimple {
 
         if (emptyCart) emptyCart.style.display = 'none';
         if (cartList) cartList.style.display = 'block';
-        if (recommendations) recommendations.style.marginTop = '200px';
+        if (recommendations) recommendations.style.marginTop = '300px';
 
         const totalItens = this.carrinho.reduce((sum, item) => sum + item.quantidade, 0);
         if (itemsCount) itemsCount.textContent = `${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`;

@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnGoogle = document.getElementById('btn-google');
     const errorMessages = document.getElementById('error-messages');
 
-    // Google login
+    // Google login via JavaScript
     btnGoogle.addEventListener('click', function() {
-        window.location.href = '/auth/google';
+        const redirectUri = window.location.origin + '/login';
+        const googleUrl = `https://accounts.google.com/oauth/authorize?client_id=417479200607-c9ir8kanlmbg7gdrm1cm0t8n4aaftoig.apps.googleusercontent.com&redirect_uri=${encodeURIComponent(redirectUri)}&scope=profile email&response_type=code`;
+        window.location.href = googleUrl;
     });
 
     // Form submission - usar submit padrão do formulário
@@ -23,9 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
         errorMessages.style.display = 'block';
     }
 
-    // Check for URL parameters (errors from server redirect)
+    // Verificar erros na URL
     const urlParams = new URLSearchParams(window.location.search);
     const error = urlParams.get('error');
+    
     if (error) {
         showErrors([decodeURIComponent(error)]);
     }

@@ -1,21 +1,11 @@
 Ignoring invalid configuration option passed to Connection: acquireTimeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
 Ignoring invalid configuration option passed to Connection: timeout. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
-Servidor ouvindo na porta 3000
-http://localhost:3000
-Webhook MP: {
-  type: 'payment',
-  action: 'payment.updated',
-  data: { id: '123456789' }
-}
-Erro no webhook: {
-  message: 'Payment not found',
-  error: 'not_found',
-  status: 404,
-  cause: [
-    {
-      code: 2000,
-      description: 'Payment not found',
-      data: '02-10-2025T13:41:56UTC;c7831c33-a5a6-41c6-ad7f-b9bb2c24840f'
-    }
-  ]
-}
+Servidor ouvindo na porta 3002
+http://localhost:3002
+Google OAuth configurado: true
+Obtendo carrinho - Session ID: Xg6Uugqdv_UemTRSTlWvDs7Ln-dEB--g
+Carrinho encontrado: []
+Iniciando autenticação Google...
+Obtendo carrinho - Session ID: Xg6Uugqdv_UemTRSTlWvDs7Ln-dEB--g
+Carrinho encontrado: []
+Iniciando autenticação Google...

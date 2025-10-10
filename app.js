@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const router = require('./app/routes/router');
 const authRoutes = require('./app/routes/simple-auth');
+const passport = require('./config/passport');
 
 // Tratamento global de erros não capturados
 process.on('uncaughtException', (err) => {
@@ -38,12 +39,15 @@ app.use(session({
   }
 }));
 
-// Passport removido - usando auth simples
+// Inicializar Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use('/auth', authRoutes);
+// app.use('/auth', require('./app/routes/auth')); // Removido para evitar conflito
 app.use('/', router);
 
 const PORT = process.env.APP_PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Servidor ouvindo na porta ${PORT}\nhttp://localhost:${PORT}`);
+  console.log('Google OAuth configurado:', !!process.env.GOOGLE_CLIENT_ID);
 });

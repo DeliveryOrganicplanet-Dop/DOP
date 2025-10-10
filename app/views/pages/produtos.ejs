@@ -158,9 +158,14 @@
                                     <span class="product-price">R$ <%= parseFloat(produto.valor_unitario || 0).toFixed(2).replace('.', ',') %></span>
                                 </header>
                             </a>
-                            <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, <%= produto.id_prod %>, '<%= produto.nome_prod %>', <%= produto.valor_unitario %>, '<%= produto.nome_imagem ? `imagens/${produto.nome_imagem}` : `imagens/${produto.nome_prod.toLowerCase()}.png` %>')">
-                                Adicionar ao Carrinho
-                            </button>
+                            <div class="product-actions">
+                                <button class="add-to-cart-btn" onclick="adicionarAoCarrinho(event, <%= produto.id_prod %>, '<%= produto.nome_prod %>', <%= produto.valor_unitario %>, '<%= produto.nome_imagem ? `imagens/${produto.nome_imagem}` : `imagens/${produto.nome_prod.toLowerCase()}.png` %>')">
+                                    Adicionar ao Carrinho
+                                </button>
+                                <button class="buy-now-btn" onclick="comprarAgora(event, <%= produto.id_prod %>, '<%= produto.nome_prod %>', <%= produto.valor_unitario %>, '<%= produto.nome_imagem ? `imagens/${produto.nome_imagem}` : `imagens/${produto.nome_prod.toLowerCase()}.png` %>')">
+                                    Comprar Agora
+                                </button>
+                            </div>
                         </section>
                     <% }); %>
                 <% } else { %>
@@ -242,6 +247,40 @@
             })
             .catch(error => {
                 console.error('Erro ao adicionar ao carrinho:', error);
+            });
+        }
+        
+        // Função para comprar agora
+        function comprarAgora(event, id, nome, preco, imagem) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Adicionar produto ao carrinho
+            fetch('/api/carrinho/adicionar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                    nome: nome,
+                    preco: preco,
+                    imagem: imagem,
+                    quantidade: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirecionar para finalização
+                    window.location.href = '/finalizar';
+                } else {
+                    alert('Erro ao adicionar produto. Tente novamente.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao comprar agora:', error);
+                alert('Erro ao processar compra. Tente novamente.');
             });
         }
         

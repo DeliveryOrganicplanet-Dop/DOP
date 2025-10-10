@@ -1,3 +1,15 @@
+// Google OAuth signup
+document.addEventListener('DOMContentLoaded', () => {
+    const btnGoogleSignup = document.getElementById('btn-google-signup');
+    if (btnGoogleSignup) {
+        btnGoogleSignup.addEventListener('click', () => {
+            const redirectUri = window.location.origin + '/cadastro';
+            const googleUrl = `https://accounts.google.com/oauth/authorize?client_id=417479200607-c9ir8kanlmbg7gdrm1cm0t8n4aaftoig.apps.googleusercontent.com&redirect_uri=${encodeURIComponent(redirectUri)}&scope=profile email&response_type=code`;
+            window.location.href = googleUrl;
+        });
+    }
+});
+
 // RedirectTo será gerenciado pelo servidor
 
 const form = document.getElementById('form');
