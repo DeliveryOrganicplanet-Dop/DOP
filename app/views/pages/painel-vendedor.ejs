@@ -28,34 +28,34 @@
         </section>
     </main>
 
-    <dialog id="addProductModal" class="modal">
-        <article class="modal-content">
+    <dialog id="addProductModal" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1000;">
+        <article class="modal-content" style="background: white; margin: 5% auto; padding: 20px; border-radius: 8px; max-width: 500px; max-height: 80vh; overflow-y: auto;">
             <header>
                 <h3>Adicionar Produto</h3>
-                <button class="close" onclick="closeAddProductModal()">&times;</button>
+                <button class="close" onclick="closeAddProductModal()" style="float: right; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
             </header>
             <form id="addProductForm">
-                <fieldset>
+                <fieldset style="border: none; padding: 0;">
                     <label for="nomeProduto">Nome:</label>
-                    <input type="text" id="nomeProduto" required>
+                    <input type="text" id="nomeProduto" required style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px;">
                     
                     <label for="precoProduto">Preço (R$):</label>
-                    <input type="number" id="precoProduto" step="0.01" required>
+                    <input type="number" id="precoProduto" step="0.01" required style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px;">
                     
                     <label for="estoqueProduto">Estoque:</label>
-                    <input type="number" id="estoqueProduto" value="999" required>
+                    <input type="number" id="estoqueProduto" value="999" required style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px;">
                     
                     <label for="categoriaProduto">Categoria:</label>
-                    <select id="categoriaProduto" required>
+                    <select id="categoriaProduto" required style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px;">
                         <option value="">Selecione uma categoria</option>
                     </select>
                     
                     <label for="imagemProduto">Imagem:</label>
-                    <input type="file" id="imagemProduto" accept="image/*">
+                    <input type="file" id="imagemProduto" accept="image/*" style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 4px;">
                 </fieldset>
-                <footer>
-                    <button type="button" onclick="closeAddProductModal()">Cancelar</button>
-                    <button type="submit">Adicionar</button>
+                <footer style="text-align: right; margin-top: 20px;">
+                    <button type="button" onclick="closeAddProductModal()" style="padding: 10px 20px; margin-right: 10px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer;">Cancelar</button>
+                    <button type="submit" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Adicionar</button>
                 </footer>
             </form>
         </article>
@@ -69,7 +69,7 @@
                 
                 const lista = document.getElementById('produtos-lista');
                 if (produtos.length === 0) {
-                    lista.innerHTML = '<p>Nenhum produto cadastrado. <button onclick="setupProdutosPadrao()">Criar produtos padrão</button></p>';
+                    lista.innerHTML = '<p>Nenhum produto cadastrado.</p>';
                 } else {
                     lista.innerHTML = produtos.map(produto => `
                         <div class="produto-item" style="border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;">
@@ -86,28 +86,11 @@
             }
         }
 
-        async function setupProdutosPadrao() {
-            try {
-                const response = await fetch('/api/setup-produtos', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'same-origin'
-                });
-                
-                const result = await response.json();
-                if (result.success) {
-                    alert('Produtos padrão criados com sucesso!');
-                    loadProdutos();
-                } else {
-                    alert('Erro: ' + result.error);
-                }
-            } catch (error) {
-                alert('Erro ao criar produtos padrão');
-            }
-        }
+
 
         function openAddProductModal() {
-            document.getElementById('addProductModal').style.display = 'block';
+            document.getElementById('addProductModal').style.display = 'flex';
+            document.getElementById('addProductModal').style.alignItems = 'flex-start';
         }
 
         function closeAddProductModal() {

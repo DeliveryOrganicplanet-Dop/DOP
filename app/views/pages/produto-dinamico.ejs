@@ -138,6 +138,51 @@
                 </div>
             </div>
         </section>
+
+        <% if (produto.nome_vendedor) { %>
+        <aside class="seller-info" style="background: white; padding: 2rem; margin: 2rem auto; max-width: 800px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <header style="margin-bottom: 1.5rem;">
+                <h3 style="color: #333; font-size: 1.5rem; margin: 0;">Informações do Vendedor</h3>
+            </header>
+            <div class="seller-card" style="display: flex; align-items: center; gap: 1.5rem;">
+                <figure class="seller-avatar" style="margin: 0;">
+                    <div class="avatar-circle" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #4CAF50, #45a049); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;"><%= produto.nome_vendedor.charAt(0).toUpperCase() %></div>
+                </figure>
+                <div class="seller-details" style="flex: 1;">
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.3rem; color: #333;"><%= produto.nome_vendedor %></h4>
+                    <div class="seller-rating" style="margin-bottom: 0.5rem;">
+                        <span class="stars" style="color: #ff9800; font-size: 1.1rem;">
+                            <% 
+                                const rating = Math.round(produto.media_avaliacao_vendedor || 0);
+                                for(let i = 1; i <= 5; i++) {
+                                    if(i <= rating) {
+                            %>★<% } else { %>☆<% } } %>
+                        </span>
+                        <small style="color: #666; margin-left: 0.5rem;"><%= parseFloat(produto.media_avaliacao_vendedor || 0).toFixed(1) %> (<%= produto.total_avaliacoes_vendedor || 0 %> avaliações)</small>
+                    </div>
+                    <% if (produto.cidade_vendedor && produto.uf_vendedor) { %>
+                    <address style="font-style: normal; color: #555; margin-bottom: 0.5rem;">
+                        📍 <%= produto.cidade_vendedor %> - <%= produto.uf_vendedor %>
+                    </address>
+                    <% } %>
+                    <% if (produto.celular_vendedor) { %>
+                    <div class="seller-contact" style="color: #555; margin-bottom: 0.5rem;">
+                        📞 <%= produto.celular_vendedor %>
+                    </div>
+                    <% } %>
+                    <time style="color: #666; font-size: 0.9rem; display: block; margin-bottom: 1rem;">
+                        🕰️ Na DOP desde 2024
+                    </time>
+                    <div class="seller-actions" style="display: flex; gap: 1rem;">
+                        <a href="/vendedores" class="view-profile" style="background: #4CAF50; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.9rem;">Ver Perfil</a>
+                        <% if (produto.email_vendedor) { %>
+                        <button class="contact-seller" onclick="window.location.href='mailto:<%= produto.email_vendedor %>'" style="background: #2196F3; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;">Contatar</button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <% } %>
     </main>
 
     <script src="/js/abacaxi.js"></script>

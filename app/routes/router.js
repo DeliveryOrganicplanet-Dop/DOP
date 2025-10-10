@@ -69,14 +69,7 @@ router.get('/', async (req, res) => {
     res.render('pages/index', { errors: null, produtos });
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
-    // Produtos de fallback quando banco não está disponível
-    const produtosFallback = [
-      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png' },
-      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png' },
-      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png' },
-      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png' }
-    ];
-    res.render('pages/index', { errors: null, produtos: produtosFallback });
+    res.render('pages/index', { errors: null, produtos: [] });
   }
 });
 
@@ -305,28 +298,10 @@ router.get('/produtos', async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao buscar produtos:', error);
-    // Produtos de fallback
-    const produtosFallback = [
-      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png', nome_categoria: 'Frutas' },
-      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png', nome_categoria: 'Verduras' },
-      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png', nome_categoria: 'Frutas' },
-      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png', nome_categoria: 'Verduras' }
-    ];
-    
-    let produtos = produtosFallback;
-    const termoBusca = req.query.busca;
-    
-    if (termoBusca) {
-      produtos = produtosFallback.filter(p => 
-        p.nome_prod.toLowerCase().includes(termoBusca.toLowerCase()) ||
-        p.nome_categoria.toLowerCase().includes(termoBusca.toLowerCase())
-      );
-    }
-    
     res.render('pages/produtos', { 
       errors: null, 
-      produtos, 
-      termoBusca: termoBusca || '' 
+      produtos: [], 
+      termoBusca: req.query.busca || '' 
     });
   }
 });
@@ -342,13 +317,7 @@ router.get('/ver-produtos', async (req, res) => {
     res.render('pages/produtos', { errors: null, produtos, termoBusca: '' });
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
-    const produtosFallback = [
-      { id_prod: 1, nome_prod: 'Abacaxi', valor_unitario: 9.70, qtde_estoque: 10, nome_imagem: 'abacaxi.png', nome_categoria: 'Frutas' },
-      { id_prod: 2, nome_prod: 'Alface', valor_unitario: 3.50, qtde_estoque: 15, nome_imagem: 'alface.png', nome_categoria: 'Verduras' },
-      { id_prod: 3, nome_prod: 'Ameixa', valor_unitario: 8.90, qtde_estoque: 8, nome_imagem: 'ameixa.png', nome_categoria: 'Frutas' },
-      { id_prod: 4, nome_prod: 'Brócolis', valor_unitario: 5.20, qtde_estoque: 12, nome_imagem: 'brocolis.png', nome_categoria: 'Verduras' }
-    ];
-    res.render('pages/produtos', { errors: null, produtos: produtosFallback, termoBusca: '' });
+    res.render('pages/produtos', { errors: null, produtos: [], termoBusca: '' });
   }
 });
 
@@ -501,41 +470,7 @@ router.get('/api/user-stats', verificarAuth, async (req, res) => {
   }
 });
 
-// Rota para inserir produtos do site
-router.post('/api/setup-produtos', async (req, res) => {
-  try {
-    const pool = require('../../config/pool_conexoes');
-    
-    // Inserir categoria padrão
-    await pool.query('INSERT IGNORE INTO CATEGORIAS (id_categoria, nome_categoria) VALUES (1, "Frutas e Verduras")');
-    
-    // Inserir imagem padrão
-    await pool.query('INSERT IGNORE INTO IMAGENS (id_imagem, nome_imagem) VALUES (1, "default.jpg")');
-    
-    // Produtos do site
-    const produtos = [
-      { id: 1, nome: 'Abacaxi', preco: 9.70 },
-      { id: 2, nome: 'Alface', preco: 3.50 },
-      { id: 3, nome: 'Ameixa', preco: 8.90 },
-      { id: 4, nome: 'Brócolis', preco: 5.20 }
-    ];
 
-    for (const produto of produtos) {
-      await pool.query(`
-        INSERT INTO PRODUTOS (id_prod, nome_prod, valor_unitario, qtde_estoque, id_categoria, id_imagem, ativo) 
-        VALUES (?, ?, ?, 999, 1, 1, TRUE)
-        ON DUPLICATE KEY UPDATE 
-        nome_prod = VALUES(nome_prod), 
-        valor_unitario = VALUES(valor_unitario)
-      `, [produto.id, produto.nome, produto.preco]);
-    }
-
-    res.json({ success: true, message: 'Produtos inseridos com sucesso!' });
-  } catch (error) {
-    console.error('Erro ao inserir produtos:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // Rota para converter usuário em vendedor
 router.post('/api/converter-vendedor', verificarAuth, async (req, res) => {
@@ -554,10 +489,16 @@ router.post('/api/converter-vendedor', verificarAuth, async (req, res) => {
       ['V', userId]
     );
     
-    // Criar registro na tabela VENDEDORES
+    // Buscar CPF do usuário
+    const [usuario] = await pool.query(
+      'SELECT CPF_USUARIO FROM USUARIOS WHERE ID_USUARIO = ?',
+      [userId]
+    );
+    
+    // Criar registro na tabela VENDEDORES com CPF do usuário
     await pool.query(
       'INSERT INTO VENDEDORES (tipo_pessoa, digito_pessoa, id_usuario) VALUES (?, ?, ?)',
-      ['PF', '00000000000', userId]
+      ['PF', usuario[0].CPF_USUARIO, userId]
     );
     
     // Atualizar sessão
@@ -617,6 +558,32 @@ router.post('/api/upload-imagem', verificarAuth, upload.single('imagem'), async 
     );
     
     res.json({ id_imagem: result.insertId, nome_imagem: filename });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota para adicionar coluna id_vendedor
+router.post('/api/add-vendedor-column', async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    await pool.query('ALTER TABLE PRODUTOS ADD COLUMN id_vendedor INT');
+    res.json({ success: true, message: 'Coluna id_vendedor adicionada!' });
+  } catch (error) {
+    if (error.code === 'ER_DUP_FIELDNAME') {
+      res.json({ success: true, message: 'Coluna já existe!' });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
+  }
+});
+
+// Rota para limpar todos os produtos
+router.delete('/api/limpar-produtos', async (req, res) => {
+  try {
+    const pool = require('../../config/pool_conexoes');
+    await pool.query('DELETE FROM PRODUTOS');
+    res.json({ success: true, message: 'Todos os produtos removidos!' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -873,6 +840,12 @@ router.get('/api/produto/:id/avaliacoes', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Rotas para endereços e frete
+const enderecoController = require('../controllers/enderecoController');
+router.get('/api/enderecos/:id_usuario', verificarAuth, enderecoController.getEnderecosByUsuario);
+router.post('/api/enderecos', verificarAuth, enderecoController.criarEndereco);
+router.post('/api/calcular-frete', enderecoController.calcularFrete);
 
 // Google OAuth funcionando
 router.get('/google-success', (req, res) => {

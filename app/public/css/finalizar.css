@@ -29,3 +29,92 @@
 .finalizacao-compra .btn-voltar:hover {
    background-color: #e69500;
 }
+
+/* Estilos para seleção de endereço */
+.endereco-section {
+   margin: 20px 0;
+   padding: 20px;
+   border: 1px solid #ddd;
+   border-radius: 8px;
+   background-color: #f9f9f9;
+}
+
+.endereco-container {
+   display: flex;
+   gap: 10px;
+   align-items: center;
+   margin-bottom: 15px;
+}
+
+.endereco-select {
+   flex: 1;
+   padding: 10px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   font-size: 14px;
+}
+
+.btn-calcular-frete {
+   padding: 10px 20px;
+   background-color: #28a745;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 14px;
+}
+
+.btn-calcular-frete:disabled {
+   background-color: #ccc;
+   cursor: not-allowed;
+}
+
+.btn-calcular-frete:hover:not(:disabled) {
+   background-color: #218838;
+}
+
+.endereco-detalhes {
+   padding: 15px;
+   background-color: #e9ecef;
+   border-radius: 4px;
+   margin-top: 10px;
+}
+
+#frete-info {
+   margin-top: 10px;
+   padding-top: 10px;
+   border-top: 1px solid #ddd;
+}
+
+.form-novo-endereco {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 10px;
+   margin-top: 15px;
+   padding: 15px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   background-color: #fff;
+}
+
+.form-novo-endereco input {
+   padding: 8px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   font-size: 14px;
+}
+
+.btn-salvar-endereco {
+   grid-column: span 2;
+   padding: 10px;
+   background-color: #007bff;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 14px;
+}
+
+.btn-salvar-endereco:hover {
+   background-color: #0056b3;
+}

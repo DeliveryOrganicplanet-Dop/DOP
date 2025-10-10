@@ -1,3 +1,33 @@
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, #4CAF50, #d4af37);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.page-header p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+}
+
+.page-header button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
 * {
     margin: 0;
     padding: 0;

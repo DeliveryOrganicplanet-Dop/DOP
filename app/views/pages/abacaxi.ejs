@@ -4,18 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abacaxi Pérola - DOP</title>
+    <link rel="stylesheet" href="css/dop.css">
     <link rel="stylesheet" href="css/abacaxi.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/imagens/logo  dop 2.png" type="image/x-icon">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/" class="back-button">&#8249;</a>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-        </nav>
-        <figure>
-            <img src="imagens/dopimg.png" alt="DOP Logo" class="logo">
-        </figure>
-    </header>
+    <%- include('../partials/header') %>
 
     <main>
         <article class="product-showcase">
@@ -213,6 +210,10 @@
         </aside>
     </main>
 
+    <script>
+        window.usuario = <%- JSON.stringify(typeof usuario !== 'undefined' ? usuario : null) %>;
+    </script>
+    <script src="js/carrinho-comum.js"></script>
     <script src="js/abacaxi.js"></script>
 </body>
 </html>

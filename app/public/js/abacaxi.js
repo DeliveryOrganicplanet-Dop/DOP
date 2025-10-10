@@ -6,6 +6,7 @@ function adicionarProduto(nome, preco, imagem) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
             nome: nome,
             preco: preco,
@@ -125,7 +126,9 @@ function showNotification(message, type = 'info') {
 function updateCartIcon() {
     const cartCounter = document.querySelector('.cart-counter');
     if (cartCounter) {
-        fetch('/api/carrinho')
+        fetch('/api/carrinho', {
+            credentials: 'same-origin'
+        })
             .then(response => response.json())
             .then(data => {
                 const totalItems = data.carrinho?.reduce((acc, item) => acc + item.quantidade, 0) || 0;

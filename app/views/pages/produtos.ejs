@@ -30,6 +30,10 @@
             </section>
  
             <section class="header-controls">
+                <a href="/carrinho" class="cart-icon" title="Carrinho de compras">
+                    <span>🛒</span>
+                    <span id="cart-count" class="cart-count">0</span>
+                </a>
                 <button id="toggle-dark" class="theme-toggle" aria-pressed="false" aria-label="Alternar tema">
                     <span class="theme-icon">🌙</span>
                 </button>
@@ -87,12 +91,7 @@
                         <span class="nav-text">Favoritos</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/carrinho" class="nav-link" title="Carrinho de compras">
-                        <span class="nav-icon">🛒</span>
-                        <span class="nav-text">Carrinho</span>
-                    </a>
-                </li>
+
                 <% if (usuario) { %>
                 <li class="nav-item">
                     <a href="/logout" class="nav-link" title="Sair">
@@ -156,6 +155,9 @@
                                         Estoque: <%= produto.qtde_estoque %>
                                     </p>
                                     <span class="product-price">R$ <%= parseFloat(produto.valor_unitario || 0).toFixed(2).replace('.', ',') %></span>
+                                    <% if (produto.nome_vendedor) { %>
+                                        <p class="product-seller">Vendedor: <%= produto.nome_vendedor %></p>
+                                    <% } %>
                                 </header>
                             </a>
                             <div class="product-actions">
@@ -304,6 +306,7 @@
             }
         });
     </script>
+    <script src="/js/carrinho-comum.js"></script>
     <script src="/js/inicio.js"></script>
 </body>
 </html>

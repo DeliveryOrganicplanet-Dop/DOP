@@ -51,9 +51,39 @@ header nav {
     position: absolute;
     top: 1rem;
     left: 1rem;
+    right: 1rem;
     display: flex;
     gap: 1rem;
     align-items: center;
+    justify-content: space-between;
+}
+
+.cart-icon {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    font-size: 1.5rem;
+    transition: transform 0.2s;
+}
+
+.cart-icon:hover {
+    transform: scale(1.1);
+}
+
+.cart-counter {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .back-button {

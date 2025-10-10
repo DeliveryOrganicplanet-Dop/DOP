@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Compra - DOP</title>
     <link rel="stylesheet" href="/css/dop.css">
+    <link rel="stylesheet" href="/css/finalizar.css">
 </head>
 <body>
     <header class="main-header">
@@ -34,8 +35,34 @@
                     <% }); %>
                 </div>
                 <div class="total-pedido">
-                    <h3>Total: R$ <%= totalPreco.toFixed(2) %></h3>
+                    <h3>Subtotal: R$ <%= totalPreco.toFixed(2) %></h3>
+                    <div id="frete-info" style="display: none;">
+                        <p>Frete: R$ <span id="valor-frete">0,00</span></p>
+                        <hr>
+                        <h3>Total: R$ <span id="total-final"><%= totalPreco.toFixed(2) %></span></h3>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="endereco-section">
+                <h2 class="section-title">Endereço de Entrega</h2>
+                <div class="endereco-container">
+                    <select id="endereco-select" class="endereco-select">
+                        <option value="">Carregando endereços...</option>
+                    </select>
+                    <button id="btn-calcular-frete" class="btn-calcular-frete" disabled>Calcular Frete</button>
+                </div>
+                
+                <div id="form-novo-endereco" class="form-novo-endereco" style="display: none;">
+                    <input type="text" id="cep" placeholder="CEP" maxlength="9">
+                    <input type="text" id="logradouro" placeholder="Logradouro">
+                    <input type="text" id="bairro" placeholder="Bairro">
+                    <input type="text" id="cidade" placeholder="Cidade">
+                    <input type="text" id="uf" placeholder="UF" maxlength="2">
+                    <button id="btn-salvar-endereco" class="btn-salvar-endereco">Salvar Endereço</button>
+                </div>
+                
+                <div id="endereco-detalhes" class="endereco-detalhes" style="display: none;"></div>
             </div>
             
             <div class="pagamento-section">
